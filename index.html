@@ -7,16 +7,15 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="stylesheets/jquery-video-lightbox.css">
+    <link rel="stylesheet" href="stylesheets/jquery-video-lightbox-page.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
   </head>
   <body>
     <div class="wrapper">
       <header>
         <h1>jQuery Video Lightbox</h1>
-        <p>Simple jQuery plugin that turns any element into a lightbox link for Youtube and Vimeo videos. </p>
+        <p>Simple jQuery plugin that turns any element into a lightbox link for <span class="video-link" data-video-id="y-PKffm2uI4dk">Youtube</span> and <span class="video-link" data-video-id="v-29749357">Vimeo</span> videos. </p>
 
         <p class="view"><a href="https://github.com/musocrat/jquery-video-lightbox">View the Project on GitHub <small>musocrat/jquery-video-lightbox</small></a></p>
 
@@ -36,21 +35,18 @@
 <h2>
 <a name="why" class="anchor" href="#why"><span class="octicon octicon-link"></span></a>Why?</h2>
 
-<p>Lots of reasons. The most obvious one, and the reason we built it, is for quick video explainers in the approporiate places. This little plugin bootstraps getting those helpful little videos in place. </p>
-
-<p>Performance. Don't initialize embedded videos on page load, it kills load times. Load them when they are needed, that is when someone actually clicks on a link.</p>
-
-<p>Convention. Simplify your workflow and customize your video experience with little effort.</p>
+<p>Lots of reasons. The main one, and the reason we built it, is for quick video explainers in the appropriate places. This little plugin bootstraps getting those helpful little videos in place. </p>
 
 <h2>
 <a name="how" class="anchor" href="#how"><span class="octicon octicon-link"></span></a>How?</h2>
 
-<p>Simple. Add the js and css to your project (along with jQuery), add the class <code>.video-link</code>, add the appropriate data atrributes like so <code>data-video-id="XbTtgr8J8uU"</code>, and enjoy your video lightbox enhanced element!</p>
+<p>Simple. Add the js and css to your project (along with jQuery), add the class <code>.video-link</code>, add the appropriate data attributes like so <code>data-video-id="XbTtgr8J8uU"</code>, and enjoy your video lightbox enhanced element!</p>
 
 <h2>
-<a name="where-is-it" class="anchor" href="#where-is-it"><span class="octicon octicon-link"></span></a>Where is it?</h2>
+<a name="demos" class="anchor" href="#demos"><span class="octicon octicon-link"></span></a>Demos</h2>
 
-<p>We got the cart before the horse, so if you still see this it's not here ;). We're still finishing up some things before the initial commit. Check back in the next day or two.</p>
+<p>For now those little green links in the description will have to do. We'll get you something better soon, promise ;)</p>
+
 
 <h2>
 <a name="docs" class="anchor" href="#docs"><span class="octicon octicon-link"></span></a>Docs</h2>
@@ -81,6 +77,14 @@
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="javascripts/jquery-video-lightbox.js"></script>
+    <script>
+        $(function() {
+            $(".video-link").jqueryVideoLightbox({
+                autoplay: 1
+            });
+        });
+    </script>
   </body>
 </html>
