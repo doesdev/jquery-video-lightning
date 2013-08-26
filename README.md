@@ -5,19 +5,15 @@ Simple jQuery plugin that turns any element into a lightbox link for Youtube and
 
 Why?
 ----
-Lots of reasons. The most obvious one, and the reason we built it, is for quick video explainers in the approporiate places. This little plugin bootstraps getting those helpful little videos in place. 
-
-Performance. Don't initialize embedded videos on page load, it kills load times. Load them when they are needed, that is when someone actually clicks on a link.
-
-Convention. Simplify your workflow and customize your video experience with little effort.
+Lots of reasons. The main one, and the reason we built it, is for quick video explainers in the appropriate places. This little plugin bootstraps getting those helpful little videos in place.
 
 How?
 ----
 Simple. Add the js and css to your project (along with jQuery), add the class `.video-link`, add the appropriate data atrributes like so `data-video-id="XbTtgr8J8uU"`, and enjoy your video lightbox enhanced element!
 
-Where is it?
+Demos
 ----
-We got the cart before the horse, so if you still see this it's not here ;). We're still finishing up some things before the initial commit. Check back in the next day or two.
+Check the [GH Project Page](http://musocrat.github.io/jquery-video-lightbox/) for demos.
 
 Docs
 ----
@@ -25,9 +21,8 @@ Soon to come.
 
 ToDo
 ----
-1. Add options for lightbox styles
-2. Add popover option instead of lightbox
-3. Enable all Youtube and Vimeo API features as options
+1. Diversify styling / effects options
+2. Add popover option in addition to lightbox
 
 Contributing
 ----
