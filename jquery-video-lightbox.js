@@ -1,9 +1,5 @@
 (function($, window, document, undefined) {
 
-//    $(function() {
-//        $("video-link").jqueryVideoLightbox();
-//    });
-
     var pluginName = "jqueryVideoLightbox",
         defaults = {
             id: "y-dQw4w9WgXcQ",
