@@ -1,10 +1,6 @@
 (function($, window, document, undefined) {
 
-//    $(function() {
-//        $("video-link").jqueryVideoLightbox();
-//    });
-
-    var pluginName = "jqueryVideoLightbox",
+    var pluginName = "jqueryVideoLightning",
         defaults = {
             id: "y-dQw4w9WgXcQ",
             width: "640px",
@@ -18,7 +14,7 @@
             playlist: "",
             related: 0,
             showinfo: 1,
-            shart_time: 0,
+            start_time: 0,
             theme: "dark",
             color: "",
             byline: 1,
@@ -28,7 +24,7 @@
             easeOut: 0
         };
 
-    function JQVideoLightbox ( element, options ) {
+    function JQVideoLightning ( element, options ) {
         this.element = element;
         this.settings = $.extend( {}, defaults, options );
         this._defaults = defaults;
@@ -36,7 +32,7 @@
         this.init();
     }
 
-    JQVideoLightbox.prototype = {
+    JQVideoLightning.prototype = {
         init: function () {
 
             $(this.element).on( "click", $.proxy(function(){
@@ -90,7 +86,7 @@
     $.fn[ pluginName ] = function ( options ) {
         return this.each(function() {
             if ( !$.data( this, "plugin_" + pluginName ) ) {
-                $.data( this, "plugin_" + pluginName, new JQVideoLightbox( this, options ) );
+                $.data( this, "plugin_" + pluginName, new JQVideoLightning( this, options ) );
             }
         });
     };
