@@ -32,7 +32,7 @@
         <h1>
             <a name="jquery-video-lightning" class="anchor" href="#jquery-video-lightning"><span class="octicon octicon-link"></span></a>jQuery Video Lightning</h1>
 
-        <p>Simple jQuery plugin that turns any element into a lightbox link for Youtube and Vimeo videos. </p>
+        <p>Simple jQuery plugin that turns any element into a lightbox link for Youtube and Vimeo videos. Includes access to all embed API options for both providers as well as a healthy set of style options.</p>
 
         <h2>
             <a name="why" class="anchor" href="#why"><span class="octicon octicon-link"></span></a>Why?</h2>
@@ -42,7 +42,7 @@
         <h2>
             <a name="how" class="anchor" href="#how"><span class="octicon octicon-link"></span></a>How?</h2>
 
-        <p>Simple. Add the js and css to your project (along with jQuery), add the class <code>.video-link</code>, add the appropriate data attributes like so <code>data-video-id="XbTtgr8J8uU"</code>, and enjoy your video lightbox enhanced element!</p>
+        <p>Simple. Add the js and css to your project (along with jQuery), add the appropriate data atrributes like so <code>`data-video-id="y-XbTtgr8J8uU"`</code>, then initialize on the target and enjoy your video lightbox enhanced element!</p>
 
         <h2>
             <a name="demos" class="anchor" href="#demos"><span class="octicon octicon-link"></span></a>Demos</h2>
@@ -53,16 +53,9 @@
         <h2>
             <a name="docs" class="anchor" href="#docs"><span class="octicon octicon-link"></span></a>Docs</h2>
 
-        <p>Docs can be found at the repo: <a href="https://github.com/musocrat/jquery-video-lightning#docs">here</a></p>
+        <p><a href="https://github.com/musocrat/jquery-video-lightning#docs">Docs can be found at the repo.</a></p>
 
         <h2>
-            <a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>ToDo</h2>
-
-        <ol>
-            <li>Add options for lightbox styles</li>
-            <li>Add popover option instead of lightbox</li>
-            <li>Enable all Youtube and Vimeo API features as options</li>
-        </ol><h2>
         <a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
         <ol>
@@ -84,7 +77,11 @@
 <script>
     $(function() {
         $(".video-link").jqueryVideoLightning({
-            autoplay: 1
+            autoplay: 1,
+            backdrop_color: '#ddd',
+            backdrop_opacity: 0.6,
+            glow: 20,
+            glow_color: '#000'
         });
     });
 </script>
