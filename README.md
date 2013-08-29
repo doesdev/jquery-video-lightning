@@ -100,7 +100,7 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 - **theme** *(default="dark")*
 	Y: player theme ("dark","light")
 - **color** *(default="")*
-	Y: player controls color ("red","white") V: player controls color (hex code minus the "#", default is "00adef")
+	Y: player controls color ("red","white") V: player controls color (hex code default is "#00adef")
 - **byline** *(default=1)*
 	V: display byline (0,1)
 - **portrait** *(default=1)*
@@ -109,6 +109,14 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 	Time in ms of lightbox fade in
 - **easeOut** *(default=1)*
 	Time in ms of lightbox fade out
+- **backdrop_color** *(default="#000")*
+	Color of page overlay
+- **backdrop_opacity** *(default=1)*
+	Opacity of page overlay
+- **glow** *(default=0)*
+	Glow around video frame
+- **glow_color** *(default="#fff")*
+	Glow color around video frame
 
 ToDo
 ----
