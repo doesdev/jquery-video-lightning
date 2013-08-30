@@ -122,7 +122,8 @@ ToDo
 ----
 1. Diversify styling / effects options
 2. Add popover option in addition to lightbox
-3. Dry up params
+3. Add auto close option
+4. Refactor
 
 Contributing
 ----
