@@ -38,7 +38,7 @@ Docs
 ```html
 <script src="javascripts/jquery-video-lightning.js"></script>
 ```
-**iii.** Add vendor prefixed video id to target element *(i.e. Youtube:* `data-video-id="y-PKffm2uI4dk"`, *Vimeo:* `data-video-id=""v-29749357"`)
+**iii.** Add vendor prefixed video id to target element *(i.e. Youtube:* `data-video-id="y-PKffm2uI4dk"`, *Vimeo:* `data-video-id="v-29749357"`)
 ```html
 <span class="video-link" data-video-id="y-PKffm2uI4dk">Youtube</span>
 ```
