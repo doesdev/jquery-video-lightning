@@ -105,9 +105,9 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 	V: display byline (0,1)
 - **portrait** *(default=1)*
 	V: display user's portrait (0,1)
-- **easeIn** *(default=300)*
+- **ease_in** *(default=300)*
 	Time in ms of lightbox fade in
-- **easeOut** *(default=1)*
+- **ease_out** *(default=1)*
 	Time in ms of lightbox fade out
 - **backdrop_color** *(default="#000")*
 	Color of page overlay
