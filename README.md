@@ -1,7 +1,7 @@
 ![alt text](http://musocrat.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "jQuery Video Lightning Logo") jQuery Video Lightning 
 ======================
 
-Simple jQuery plugin that turns any element into a lightbox / popover link for Youtube and Vimeo videos.
+Simple jQuery plugin that turns any element into a lightbox link for Youtube and Vimeo videos.
 
 ### Table of Contents
 - [Why](#why)    
