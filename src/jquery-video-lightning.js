@@ -63,7 +63,7 @@
         },
 
         player: function ( target, settings, void_target ) {
-            var id, video_autohide, video_autoplay, video_byline, video_color, video_controls, video_height, video_id, video_iv_load_policy, video_loop, video_modestbranding, video_playlist, video_portrait, video_related, video_showinfo, video_start_time, video_theme, video_vendor, video_width, vimeo_player, youtube_player, ease_in, glow, glow_color, backdrop_color, backdrop_opacity, red, green, blue, effect_in;
+            var id, video_autohide, video_autoplay, video_byline, video_color, video_controls, video_height, video_id, video_iv_load_policy, video_loop, video_modestbranding, video_playlist, video_portrait, video_related, video_showinfo, video_start_time, video_theme, video_vendor, video_width, vimeo_player, youtube_player, ease_in, glow, glow_color, backdrop_color, backdrop_opacity, red, green, blue, effect_in, display_ratio;
 
             settings = this.settings;
 
@@ -84,6 +84,11 @@
                 video_id = id.split("-")[1]; // Youtube: "y-XbTtgr8J8uU" Vimeo: "v-32187194"
                 video_width = target.data("videoWidth") || settings.width; // Y&V: video width in px
                 video_height = target.data("videoHeight") || settings.height; // Y&V: video height in px
+                display_ratio = parseInt(video_height) / parseInt(video_width);
+                if (parseInt(video_width) > $(document).width() - 20) {
+                    video_width = $(document).width() - 20 + "px";
+                    video_height = display_ratio * parseInt(video_width) + "px";
+                }
                 video_autoplay = target.data("videoAutoplay") || settings.autoplay; // Y&V: start playback immediately (0,1)
                 video_autohide = target.data("videoAutohide") || settings.autohide; // Y: auto hide controls after video load (0,1,2)
                 video_controls = target.data("videoControls") || settings.controls; // Y: display controls (0,1,2)
