@@ -120,11 +120,9 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 
 ToDo
 ----
-1. Diversify styling / effects options
-2. Add popover option in addition to lightbox
-3. Add auto close option
-4. Make responsive
-5. Refactor
+1. Add popover option in addition to lightbox
+2. Add auto close option
+3. Refactor
 
 Contributing
 ----
