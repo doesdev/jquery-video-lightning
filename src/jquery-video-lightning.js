@@ -65,6 +65,30 @@
         player: function ( target, settings, void_target ) {
             var id, video_autohide, video_autoplay, video_byline, video_color, video_controls, video_height, video_id, video_iv_load_policy, video_loop, video_modestbranding, video_playlist, video_portrait, video_related, video_showinfo, video_start_time, video_theme, video_vendor, video_width, vimeo_player, youtube_player, ease_in, glow, glow_color, backdrop_color, backdrop_opacity, red, green, blue, effect_in, display_ratio;
 
+            function colorConverter(hex){
+                red = parseInt((prepHex(hex)).substring(0,2),16);
+                blue = parseInt((prepHex(hex)).substring(2,4),16);
+                green = parseInt((prepHex(hex)).substring(4,6),16);
+                return {
+                    red: red,
+                    blue: blue,
+                    green: green
+                };
+            }
+
+            function fullHex(hex){
+                hex = "#" + prepHex(hex);
+                return hex;
+            }
+
+            function prepHex(hex){
+                hex = (hex.charAt(0)=="#") ? hex.split("#")[1]:hex;
+                if (hex.length == 3){
+                    hex = hex + hex;
+                }
+                return hex;
+            }
+
             settings = this.settings;
 
             if (target.find(".video-wrapper").is(':visible')) {
@@ -107,7 +131,7 @@
                 }
                 video_byline = target.data("videoByline") || settings.byline; // V: display byline (0,1)
                 video_portrait = target.data("videoPortrait") || settings.portrait; // V: display user's portrait (0,1)
-                youtube_player = $("<embed src=\"https://www.youtube.com/embed/" + video_id + "?autoplay=" + video_autoplay + "&autohide=" + video_autohide + "&controls=" + video_controls + "&iv_load_policy=" + video_iv_load_policy + "&loop=" + video_loop + "&modestbranding=" + video_modestbranding + "&playlist=" + video_playlist + "&rel=" + video_related + "&showinfo=" + video_showinfo + "&start=" + video_start_time + "&theme=" + video_theme + "&color=" + video_color + "\" width=\"" + video_width + "\" height=\"" + video_height + "\" frameborder=\"0\" allowfullscreen></embed>");
+                youtube_player = $("<iframe src=\"https://www.youtube.com/embed/" + video_id + "?autoplay=" + video_autoplay + "&autohide=" + video_autohide + "&controls=" + video_controls + "&iv_load_policy=" + video_iv_load_policy + "&loop=" + video_loop + "&modestbranding=" + video_modestbranding + "&playlist=" + video_playlist + "&rel=" + video_related + "&showinfo=" + video_showinfo + "&start=" + video_start_time + "&theme=" + video_theme + "&color=" + video_color + "\" width=\"" + video_width + "\" height=\"" + video_height + "\" frameborder=\"0\" allowfullscreen></iframe>");
                 vimeo_player = $("<iframe src=\"http://player.vimeo.com/video/" + video_id + "?autoplay=" + video_autoplay + "&loop=" + video_loop + "&title=" + video_showinfo + "&byline=" + video_byline + "&portrait=" + video_portrait + "&color=" + video_color + "\" width=\"" + video_width + "\" height=\"" + video_height + "\" frameborder=\"0\" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
                 effect_in = settings.effect_in;
                 ease_in = settings.ease_in;
@@ -115,30 +139,6 @@
                 glow_color = settings.glow_color;
                 backdrop_color = settings.backdrop_color;
                 backdrop_opacity = settings.backdrop_opacity;
-
-                function colorConverter(hex){
-                    red = parseInt((prepHex(hex)).substring(0,2),16);
-                    blue = parseInt((prepHex(hex)).substring(2,4),16);
-                    green = parseInt((prepHex(hex)).substring(4,6),16);
-                    return {
-                        red: red,
-                        blue: blue,
-                        green: green
-                    };
-                }
-
-                function fullHex(hex){
-                    hex = "#" + prepHex(hex);
-                    return hex;
-                }
-
-                function prepHex(hex){
-                    hex = (hex.charAt(0)=="#") ? hex.split("#")[1]:hex;
-                    if (hex.length == 3){
-                        hex = hex + hex;
-                    }
-                    return hex;
-                }
 
                 target.append('<div class="video-wrapper"><div class="video-frame"><div class="video"></div></div></div>');
                 target.find(".video-wrapper").css({
