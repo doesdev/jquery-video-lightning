@@ -38,31 +38,19 @@
 
     JQVideoLightning.prototype = {
         init: function () {
-            var void_target, void_elements, target, target_class;
-            void_elements = [ "AREA", "BASE", "BR", "COL", "COMMAND", "EMBED", "HR", "IMG", "INPUT", "KEYGEN", "LINK", "META", "PARAM", "SOURCE", "TRACK", "WBR" ];
-            void_target = 0;
-            target_class = ".video-target";
-
-            $(this.element).css( "cursor", "pointer" );
-
-            if (($.inArray($(this.element).prop('tagName'), void_elements)) == -1) {
-                target = $(this.element);
-                target.addClass("video-target");
-            }
-            else {
-                $("body").append('<div class="video-target">' + '</div>');
-                target = $(target_class);
-                void_target = 1;
-            }
+            var target, target_wrapper;
+            target = $(this.element);
+            target_wrapper = target.wrap("<span class='video-target'></span>").parent(".video-target");
+            target_wrapper.css( "cursor", "pointer" );
 
             function callPlayer() {
-                $(this.player(target, $(this).settings), void_target);
+                $(this.player(target, target_wrapper, $(this).settings));
             }
 
-            $(this.element).on( "click", $.proxy(callPlayer, this));
+            target_wrapper.on( "click", $.proxy(callPlayer, this));
         },
 
-        player: function ( target, settings, void_target ) {
+        player: function ( target, target_wrapper, settings ) {
             var id, video_autohide, video_autoplay, video_byline, video_color, video_controls, video_height, video_id, video_iv_load_policy, video_loop, video_modestbranding, video_playlist, video_portrait, video_related, video_showinfo, video_start_time, video_theme, video_vendor, video_width, vimeo_player, youtube_player, ease_in, glow, glow_color, backdrop_color, backdrop_opacity, red, green, blue, effect_in, display_ratio;
 
             function colorConverter(hex){
@@ -91,11 +79,10 @@
 
             settings = this.settings;
 
-            if (target.find(".video-wrapper").is(':visible')) {
-                target.find(".video").remove();
-                target.find(".video-wrapper").hide((settings.easeOut));
-                target.find(".video-wrapper").remove();
-                if (void_target == 1){target.remove()}
+            if (target_wrapper.find(".video-wrapper").is(':visible')) {
+                target_wrapper.find(".video").remove();
+                target_wrapper.find(".video-wrapper").hide((settings.easeOut));
+                target_wrapper.find(".video-wrapper").remove();
                 return $(this).destroy;
             } else {
                 id = (typeof target.data("videoId") === 'undefined') ? settings.id : target.data("videoId");
@@ -140,22 +127,22 @@
                 backdrop_color = settings.backdrop_color;
                 backdrop_opacity = settings.backdrop_opacity;
 
-                target.append('<div class="video-wrapper"><div class="video-frame"><div class="video"></div></div></div>');
-                target.find(".video-wrapper").css({
+                target_wrapper.append('<div class="video-wrapper"><div class="video-frame"><div class="video"></div></div></div>');
+                target_wrapper.find(".video-wrapper").css({
                     backgroundColor: "rgba(" + colorConverter(backdrop_color).red + "," + colorConverter(backdrop_color).blue + "," + colorConverter(backdrop_color).green + "," + backdrop_opacity + ")"
                 });
-                target.find(".video-frame").css({
+                target_wrapper.find(".video-frame").css({
                     width:  video_width,
                     height: video_height,
                     marginTop: '-' + ((video_height.split("p")[0])/2) + 'px',
                     marginLeft: '-' + ((video_width.split("p")[0])/2) + 'px',
                     boxShadow: '0px 0px ' + glow + 'px ' + (glow/5) + 'px ' + fullHex(glow_color)
                 });
-                target.find(".video-wrapper")[effect_in](ease_in);
+                target_wrapper.find(".video-wrapper")[effect_in](ease_in);
                 if (video_vendor === "Vimeo") {
-                    return target.find(".video").append(vimeo_player);
+                    return target_wrapper.find(".video").append(vimeo_player);
                 } else {
-                    return target.find(".video").append(youtube_player);
+                    return target_wrapper.find(".video").append(youtube_player);
                 }
             }
         },
