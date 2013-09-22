@@ -25,7 +25,8 @@
             backdrop_color: "#000",
             backdrop_opacity: 1,
             glow: 0,
-            glow_color: "#fff"
+            glow_color: "#fff",
+            rick_roll: 0
         };
 
     function JQVideoLightning(element, options) {
@@ -49,12 +50,16 @@
         },
 
         player: function (target, target_wrapper) {
-            if (target_wrapper.find(".video-wrapper").is(':visible')) {
-                return this.destroy(target_wrapper);
-            }
             var vendor, settings;
             settings = this.settings();
-            vendor = settings.videoId.split("-")[0];
+            vendor = (settings.videoId.split("-")[0].toLowerCase() === "v") ? "vimeo" : "youtube";
+
+            if (target_wrapper.find(".video-wrapper").is(':visible')) {
+                if (settings.videoRickRoll !== 1) {
+                    return this.destroy(target_wrapper);
+                }
+                return;
+            }
 
             target_wrapper.append('<div class="video-wrapper"><div class="video-frame"><div class="video"></div></div></div>');
             target_wrapper.find(".video-wrapper").css({
@@ -69,11 +74,7 @@
             });
             target_wrapper.find(".video-wrapper")[settings.videoEffectIn](settings.videoEaseIn);
 
-            if (vendor === "v" || vendor === "V") {
-                return target_wrapper.find(".video").append(this.vimeoPlayer(settings));
-            }
-
-            return target_wrapper.find(".video").append(this.youtubePlayer(settings));
+            return target_wrapper.find(".video").append(this[vendor + "Player"](settings));
         },
 
         settings: function () {
