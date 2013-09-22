@@ -117,6 +117,8 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 	Glow around video frame
 - **glow_color** *(default="#fff")*
 	Glow color around video frame
+- **rick_roll** *(default=0)*
+	Make video un-closable (0,1)
 
 ToDo
 ----
