@@ -31,7 +31,7 @@
 
     function JQVideoLightning(element, options) {
         this.element = element;
-        this.settings = $.extend({}, defaults, options);
+        this.base_settings = $.extend({}, defaults, options);
         this.init();
     }
 
@@ -43,38 +43,47 @@
             target_wrapper.css("cursor", "pointer");
 
             function callPlayer() {
-                $(this.player(target, target_wrapper, this.settings));
+                $(this.player(target, target_wrapper));
             }
 
             target_wrapper.on("click", $.proxy(callPlayer, this));
         },
 
-        player: function (target, target_wrapper, settings) {
-            var setting_key, vendor, video_id, vimeo_player, youtube_player, red, green, blue, video_width, video_height, display_ratio;
+        player: function (target, target_wrapper) {
+            if (target_wrapper.find(".video-wrapper").is(':visible')) {
+                return this.destroy(target_wrapper);
+            }
+            var vendor, video_id, vimeo_player, youtube_player, settings;
+            settings = this.settings();
+            vendor = settings.videoId.split("-")[0];
+            video_id = settings.videoId.split("-")[1];
+            vimeo_player = $("<iframe src=\"http://player.vimeo.com/video/" + video_id + "?autoplay=" + settings.videoAutoplay + "&loop=" + settings.videoLoop + "&title=" + settings.videoShowinfo + "&byline=" + settings.videoByline + "&portrait=" + settings.videoPortrait + "&color=" + this.prepHex(settings.videoColor) + "\" width=\"" + settings.videoWidth + "\"px height=\"" + settings.videoHeight + "\"px frameborder=\"0\" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
+            youtube_player = $("<iframe src=\"https://www.youtube.com/embed/" + video_id + "?autoplay=" + settings.videoAutoplay + "&autohide=" + settings.videoAutohide + "&controls=" + settings.videoControls + "&iv_load_policy=" + settings.videoIvLoadPolicy + "&loop=" + settings.videoLoop + "&modestbranding=" + settings.videoModestbranding + "&playlist=" + settings.videoPlaylist + "&rel=" + settings.videoRelated + "&showinfo=" + settings.videoShowinfo + "&start=" + settings.videoStartTime + "&theme=" + settings.videoTheme + "&color=" + settings.videoColor + "\" width=\"" + settings.videoWidth + "\"px height=\"" + settings.videoHeight + "\"px frameborder=\"0\" allowfullscreen></iframe>");
 
-            function prepHex(hex) {
-                hex = (hex.charAt(0) === "#") ? hex.split("#")[1] : hex;
-                if (hex.length === 3) {
-                    hex = hex + hex;
-                }
-                return hex;
+            target_wrapper.append('<div class="video-wrapper"><div class="video-frame"><div class="video"></div></div></div>');
+            target_wrapper.find(".video-wrapper").css({
+                backgroundColor: "rgba(" + this.colorConverter(settings.videoBackdropColor).red + "," + this.colorConverter(settings.videoBackdropColor).blue + "," + this.colorConverter(settings.videoBackdropColor).green + "," + settings.videoBackdropOpacity + ")"
+            });
+            target_wrapper.find(".video-frame").css({
+                width:  settings.videoWidth,
+                height: settings.videoHeight,
+                marginTop: '-' + (settings.videoHeight / 2) + 'px',
+                marginLeft: '-' + (settings.videoWidth / 2) + 'px',
+                boxShadow: '0px 0px ' + settings.videoGlow + 'px ' + (settings.videoGlow / 5) + 'px ' + this.fullHex(settings.videoGlowColor)
+            });
+            target_wrapper.find(".video-wrapper")[settings.videoEffectIn](settings.videoEaseIn);
+
+            if (vendor === "v" || vendor === "V") {
+                return target_wrapper.find(".video").append(vimeo_player);
             }
 
-            function colorConverter(hex) {
-                red = parseInt((prepHex(hex)).substring(0, 2), 16);
-                blue = parseInt((prepHex(hex)).substring(2, 4), 16);
-                green = parseInt((prepHex(hex)).substring(4, 6), 16);
-                return {
-                    red: red,
-                    blue: blue,
-                    green: green
-                };
-            }
+            return target_wrapper.find(".video").append(youtube_player);
+        },
 
-            function fullHex(hex) {
-                hex = "#" + prepHex(hex);
-                return hex;
-            }
+        settings: function () {
+            var target, settings, setting_key, display_ratio;
+            target = $(this.element);
+            settings = this.base_settings;
 
             function remapSettings(settings) {
                 $.each(settings,
@@ -90,48 +99,48 @@
 
             settings = target.extend({}, remapSettings(settings), target.data());
 
-            if (target_wrapper.find(".video-wrapper").is(':visible')) {
-                target_wrapper.find(".video").remove();
-                target_wrapper.find(".video-wrapper").hide((settings.easeOut));
-                target_wrapper.find(".video-wrapper").remove();
-                return $(this).destroy;
+            settings.videoWidth = parseInt(settings.videoWidth, 10);
+            settings.videoHeight = parseInt(settings.videoHeight, 10);
+            display_ratio = settings.videoHeight / settings.videoWidth;
+
+            if (settings.videoWidth > $(document).width() - 30) {
+                settings.videoWidth = $(document).width() - 30;
+                settings.videoHeight = display_ratio * settings.videoWidth;
             }
 
-            vendor = settings.videoId.split("-")[0];
-            video_id = settings.videoId.split("-")[1];
-            video_width = parseInt(settings.videoWidth, 10);
-            video_height = parseInt(settings.videoHeight, 10);
-            display_ratio = video_height / video_width;
-
-            if (video_width > $(document).width() - 30) {
-                video_width = $(document).width() - 30;
-                video_height = display_ratio * video_width;
-            }
-
-            target_wrapper.append('<div class="video-wrapper"><div class="video-frame"><div class="video"></div></div></div>');
-            target_wrapper.find(".video-wrapper").css({
-                backgroundColor: "rgba(" + colorConverter(settings.videoBackdropColor).red + "," + colorConverter(settings.videoBackdropColor).blue + "," + colorConverter(settings.videoBackdropColor).green + "," + settings.videoBackdropOpacity + ")"
-            });
-            target_wrapper.find(".video-frame").css({
-                width:  video_width,
-                height: video_height,
-                marginTop: '-' + (video_height / 2) + 'px',
-                marginLeft: '-' + (video_width / 2) + 'px',
-                boxShadow: '0px 0px ' + settings.videoGlow + 'px ' + (settings.videoGlow / 5) + 'px ' + fullHex(settings.videoGlowColor)
-            });
-            target_wrapper.find(".video-wrapper")[settings.videoEffectIn](settings.videoEaseIn);
-
-            vimeo_player = $("<iframe src=\"http://player.vimeo.com/video/" + video_id + "?autoplay=" + settings.videoAutoplay + "&loop=" + settings.videoLoop + "&title=" + settings.videoShowinfo + "&byline=" + settings.videoByline + "&portrait=" + settings.videoPortrait + "&color=" + prepHex(settings.videoColor) + "\" width=\"" + video_width + "\"px height=\"" + video_height + "\"px frameborder=\"0\" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
-            youtube_player = $("<iframe src=\"https://www.youtube.com/embed/" + video_id + "?autoplay=" + settings.videoAutoplay + "&autohide=" + settings.videoAutohide + "&controls=" + settings.videoControls + "&iv_load_policy=" + settings.videoIvLoadPolicy + "&loop=" + settings.videoLoop + "&modestbranding=" + settings.videoModestbranding + "&playlist=" + settings.videoPlaylist + "&rel=" + settings.videoRelated + "&showinfo=" + settings.videoShowinfo + "&start=" + settings.videoStartTime + "&theme=" + settings.videoTheme + "&color=" + settings.videoColor + "\" width=\"" + video_width + "\"px height=\"" + video_height + "\"px frameborder=\"0\" allowfullscreen></iframe>");
-
-            if (vendor === "v" || vendor === "V") {
-                return target_wrapper.find(".video").append(vimeo_player);
-            }
-
-            return target_wrapper.find(".video").append(youtube_player);
+            return settings;
         },
 
-        destroy: function () {
+        colorConverter: function (hex) {
+            var  red, green, blue;
+
+            red = parseInt((this.prepHex(hex)).substring(0, 2), 16);
+            blue = parseInt((this.prepHex(hex)).substring(2, 4), 16);
+            green = parseInt((this.prepHex(hex)).substring(4, 6), 16);
+            return {
+                red: red,
+                blue: blue,
+                green: green
+            };
+        },
+
+        prepHex: function (hex) {
+            hex = (hex.charAt(0) === "#") ? hex.split("#")[1] : hex;
+            if (hex.length === 3) {
+                hex = hex + hex;
+            }
+            return hex;
+        },
+
+        fullHex: function (hex) {
+            hex = "#" + this.prepHex(hex);
+            return hex;
+        },
+
+        destroy: function (target_wrapper) {
+            target_wrapper.find(".video").remove();
+            target_wrapper.find(".video-wrapper").hide((this.settings().videoEaseOut));
+            target_wrapper.find(".video-wrapper").remove();
             $(this).off();
             $(this).removeData();
         }
