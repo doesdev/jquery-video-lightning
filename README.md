@@ -122,7 +122,6 @@ ToDo
 ----
 1. Add popover option in addition to lightbox
 2. Add auto close option
-3. Refactor
 
 Contributing
 ----
