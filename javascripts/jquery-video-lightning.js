@@ -43,8 +43,8 @@
             target_wrapper = target.wrap("<span class='video-target'></span>").parent(".video-target");
             target_wrapper.css("cursor", "pointer");
             settings = this.settings();
-            video_id = settings.videoId.split("-")[1];
-            vendor = (settings.videoId.split("-")[0].toLowerCase() === "v") ? "vimeo" : "youtube";
+            video_id = settings.videoId.substring(2);
+            vendor = (settings.videoId.charAt(0).toLowerCase() === "v") ? "vimeo" : "youtube";
 
             if (settings.videoCover === 1) {
                 this.coverImage(vendor, video_id, target_wrapper);
