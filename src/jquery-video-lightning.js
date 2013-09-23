@@ -26,7 +26,8 @@
             backdrop_opacity: 1,
             glow: 0,
             glow_color: "#fff",
-            rick_roll: 0
+            rick_roll: 0,
+            cover: 0
         };
 
     function JQVideoLightning(element, options) {
@@ -37,22 +38,28 @@
 
     JQVideoLightning.prototype = {
         init: function () {
-            var target, target_wrapper;
+            var target, target_wrapper, settings, video_id, vendor;
             target = $(this.element);
             target_wrapper = target.wrap("<span class='video-target'></span>").parent(".video-target");
             target_wrapper.css("cursor", "pointer");
+            settings = this.settings();
+            video_id = settings.videoId.split("-")[1];
+            vendor = (settings.videoId.split("-")[0].toLowerCase() === "v") ? "vimeo" : "youtube";
+
+            if (settings.videoCover === 1) {
+                this.coverImage(vendor, video_id, target_wrapper);
+            }
 
             function callPlayer() {
-                $(this.player(target, target_wrapper));
+                $(this.player(target, target_wrapper, video_id, vendor));
             }
 
             target_wrapper.on("click", $.proxy(callPlayer, this));
         },
 
-        player: function (target, target_wrapper) {
-            var vendor, settings;
+        player: function (target, target_wrapper, video_id, vendor) {
+            var settings;
             settings = this.settings();
-            vendor = (settings.videoId.split("-")[0].toLowerCase() === "v") ? "vimeo" : "youtube";
 
             if (target_wrapper.find(".video-wrapper").is(':visible')) {
                 if (settings.videoRickRoll !== 1) {
@@ -74,7 +81,7 @@
             });
             target_wrapper.find(".video-wrapper")[settings.videoEffectIn](settings.videoEaseIn);
 
-            return target_wrapper.find(".video").append(this[vendor + "Player"](settings));
+            return target_wrapper.find(".video").append(this[vendor + "Player"](settings, video_id));
         },
 
         settings: function () {
@@ -136,8 +143,23 @@
             return hex;
         },
 
-        youtubePlayer: function (settings) {
-            return $("<iframe src=\"https://www.youtube.com/embed/" + settings.videoId.split("-")[1] +
+        coverImage: function (vendor, video_id, target_wrapper) {
+            var vimeo_api_url, youtube_img_url;
+            vimeo_api_url = 'http://www.vimeo.com/api/v2/video/' + video_id + '.json?callback=?';
+            youtube_img_url = 'http://img.youtube.com/vi/' + video_id + '/hqdefault.jpg';
+
+            if (vendor === "youtube") {
+                $("<img class='video-cover'>").attr("src", youtube_img_url).appendTo(target_wrapper);
+            } else {
+                $.getJSON(vimeo_api_url, {format: "jsonp"})
+                    .done(function (data) {
+                        $("<img class='video-cover'>").attr("src", data[0].thumbnail_large).appendTo(target_wrapper);
+                    });
+            }
+        },
+
+        youtubePlayer: function (settings, video_id) {
+            return $("<iframe src=\"https://www.youtube.com/embed/" + video_id +
                 "?autoplay=" + settings.videoAutoplay +
                 "&autohide=" + settings.videoAutohide +
                 "&controls=" + settings.videoControls +
@@ -155,8 +177,8 @@
                 "\"px frameborder=\"0\" allowfullscreen></iframe>");
         },
 
-        vimeoPlayer: function (settings) {
-            return $("<iframe src=\"http://player.vimeo.com/video/" + settings.videoId.split("-")[1] +
+        vimeoPlayer: function (settings, video_id) {
+            return $("<iframe src=\"http://player.vimeo.com/video/" + video_id +
                 "?autoplay=" + settings.videoAutoplay +
                 "&loop=" + settings.videoLoop +
                 "&title=" + settings.videoShowinfo +
