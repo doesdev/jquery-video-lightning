@@ -8,7 +8,7 @@
 		"url" : "https://github.com/musocrat/jquery-video-lightning.git"
 	},
 	"homepage": "https://github.com/musocrat/jquery-video-lightning/",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"devDependencies": {
 		"grunt": "~0.4.1",
 		"grunt-cli": "~0.1.7",
