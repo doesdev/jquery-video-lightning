@@ -1,4 +1,4 @@
-![alt text](http://musocrat.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "jQuery Video Lightning Logo") jQuery Video Lightning [![Build Status](https://travis-ci.org/[musocrat]/[jquery-video-lightning].png)](https://travis-ci.org/[musocrat]/[jquery-video-lightning])
+![alt text](http://musocrat.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "jQuery Video Lightning Logo") jQuery Video Lightning [![Build Status](https://travis-ci.org/musocrat/jquery-video-lightning.png)](https://travis-ci.org/musocrat/jquery-video-lightning)
 ======================
 
 Simple jQuery plugin that turns any element into a lightbox link for Youtube and Vimeo videos.
