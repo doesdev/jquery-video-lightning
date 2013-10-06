@@ -20,7 +20,7 @@ Lots of reasons. The main one, and the reason we built it, is for quick video ex
 
 How?
 ----
-Simple. Add the js and css to your project (along with jQuery), add the appropriate data atrributes like so `data-video-id="y-XbTtgr8J8uU"`, then initialize on the target and enjoy your video lightbox enhanced element!
+Simple. Add the js to your project (along with jQuery), add the appropriate data atrributes like so `data-video-id="y-XbTtgr8J8uU"`, then initialize on the target and enjoy your video lightbox enhanced element!
 
 Demos
 ----
@@ -30,19 +30,15 @@ Docs
 ----
 
 ### Getting Started
-**i.**   Add stylesheet in head
-```html
-<link rel="stylesheet" href="stylesheets/jquery-video-lightning-page.css">
-```
-**ii.**  Add script where you desire *(bottom of body is recommended)*
+**i.**  Add script where you desire *(bottom of body is recommended)*
 ```html
 <script src="javascripts/jquery-video-lightning.js"></script>
 ```
-**iii.** Add vendor prefixed video id to target element *(i.e. Youtube:* `data-video-id="y-PKffm2uI4dk"`, *Vimeo:* `data-video-id="v-29749357"`)
+**ii.** Add vendor prefixed video id to target element *(i.e. Youtube:* `data-video-id="y-PKffm2uI4dk"`, *Vimeo:* `data-video-id="v-29749357"`)
 ```html
 <span class="video-link" data-video-id="y-PKffm2uI4dk">Youtube</span>
 ```
-**iv.**  Initialize it on the desired elements with any options you please *(options can also be passed as data attributes)*
+**iii.**  Initialize it on the desired elements with any options you please *(options can also be passed as data attributes)*
 ```html
 <script>
     $(function() {

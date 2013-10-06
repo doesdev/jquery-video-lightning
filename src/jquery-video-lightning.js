@@ -38,26 +38,38 @@
 
     JQVideoLightning.prototype = {
         init: function () {
-            var target, target_wrapper, settings, video_id, vendor;
-            target = $(this.element);
-            target_wrapper = target.wrap("<span class='video-target'></span>").parent(".video-target");
+            var target_wrapper, settings, video_id, vendor;
+            target_wrapper = $(this.element).wrap("<span class='video-target'></span>").parent(".video-target");
             target_wrapper.css("cursor", "pointer");
             settings = this.settings();
             video_id = settings.videoId.substring(2);
             vendor = (settings.videoId.charAt(0).toLowerCase() === "v") ? "vimeo" : "youtube";
+            if ($("style:contains('.video-wrapper')").length < 1) {
+                $("<style type='text/css'>" +
+                    ".video-wrapper{ " +
+                    "display: none; " +
+                    "position: fixed; " +
+                    "min-width: 100%; " +
+                    "min-height: 100%; " +
+                    "top: 0; " +
+                    "bottom: 0; " +
+                    "left: 0; " +
+                    "z-index: 21000; " +
+                    "} </style>").appendTo("head");
+            }
 
             if (settings.videoCover === 1) {
                 this.coverImage(vendor, video_id, target_wrapper);
             }
 
             function callPlayer() {
-                $(this.player(target, target_wrapper, video_id, vendor));
+                $(this.player(target_wrapper, video_id, vendor));
             }
 
             target_wrapper.on("click", $.proxy(callPlayer, this));
         },
 
-        player: function (target, target_wrapper, video_id, vendor) {
+        player: function (target_wrapper, video_id, vendor) {
             var settings;
             settings = this.settings();
 
@@ -73,6 +85,9 @@
                 backgroundColor: "rgba(" + this.colorConverter(settings.videoBackdropColor).red + "," + this.colorConverter(settings.videoBackdropColor).blue + "," + this.colorConverter(settings.videoBackdropColor).green + "," + settings.videoBackdropOpacity + ")"
             });
             target_wrapper.find(".video-frame").css({
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
                 width:  settings.videoWidth,
                 height: settings.videoHeight,
                 marginTop: '-' + (settings.videoHeight / 2) + 'px',
@@ -99,7 +114,7 @@
                             });
                         $(this).data(setting_key, value);
                     }, this)
-                    );
+                );
                 return $(this).data();
             }
 
