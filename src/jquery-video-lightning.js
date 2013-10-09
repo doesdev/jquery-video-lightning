@@ -27,7 +27,8 @@
             glow: 0,
             glow_color: "#fff",
             rick_roll: 0,
-            cover: 0
+            cover: 0,
+            popover: 0
         };
 
     function JQVideoLightning(element, options) {
@@ -38,12 +39,14 @@
 
     JQVideoLightning.prototype = {
         init: function () {
-            var target_wrapper, settings, video_id, vendor;
-            target_wrapper = $(this.element).wrap("<span class='video-target'></span>").parent(".video-target");
+            var target, target_wrapper, settings, video_id, vendor, popover;
+            target = $(this.element);
+            target_wrapper = target.wrap("<span class='video-target'></span>").parent(".video-target");
             target_wrapper.css("cursor", "pointer");
             settings = this.settings();
             video_id = settings.videoId.substring(2);
             vendor = (settings.videoId.charAt(0).toLowerCase() === "v") ? "vimeo" : "youtube";
+            popover = settings.videoPopover;
             if ($("style:contains('.video-wrapper')").length < 1) {
                 $("<style type='text/css'>" +
                     ".video-wrapper{ " +
@@ -63,15 +66,15 @@
             }
 
             function callPlayer() {
-                $(this.player(target_wrapper, video_id, vendor));
+                $(this.player(target, target_wrapper, video_id, vendor, popover));
             }
 
             target_wrapper.on("click", $.proxy(callPlayer, this));
         },
 
-        player: function (target_wrapper, video_id, vendor) {
+        player: function (target, target_wrapper, video_id, vendor, popover) {
             var settings;
-            settings = this.settings();
+            settings = (popover === 1) ? this.popover() : this.settings();
 
             if (target_wrapper.find(".video-wrapper").is(':visible')) {
                 if (settings.videoRickRoll !== 1) {
@@ -86,12 +89,12 @@
             });
             target_wrapper.find(".video-frame").css({
                 position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width:  settings.videoWidth,
-                height: settings.videoHeight,
-                marginTop: '-' + (settings.videoHeight / 2) + 'px',
-                marginLeft: '-' + (settings.videoWidth / 2) + 'px',
+                top: settings.videoFrameTop,
+                left: settings.videoFrameLeft,
+                width:  settings.videoWidth + 'px',
+                height: settings.videoHeight + 'px',
+                marginTop: settings.videoFrameMarginTop,
+                marginLeft: settings.videoFrameMarginLeft,
                 boxShadow: '0px 0px ' + settings.videoGlow + 'px ' + (settings.videoGlow / 5) + 'px ' + this.fullHex(settings.videoGlowColor)
             });
             target_wrapper.find(".video-wrapper")[settings.videoEffectIn](settings.videoEaseIn);
@@ -114,7 +117,7 @@
                             });
                         $(this).data(setting_key, value);
                     }, this)
-                );
+                    );
                 return $(this).data();
             }
 
@@ -124,10 +127,97 @@
             settings.videoHeight = parseInt(settings.videoHeight, 10);
             display_ratio = settings.videoHeight / settings.videoWidth;
 
-            if (settings.videoWidth > $(document).width() - 30) {
-                settings.videoWidth = $(document).width() - 30;
-                settings.videoHeight = display_ratio * settings.videoWidth;
+            if (settings.videoWidth > $(window).width() - 30) {
+                settings.videoWidth = $(window).width() - 30;
+                settings.videoHeight = Math.round(display_ratio * settings.videoWidth);
             }
+
+            settings.videoFrameTop = '50%';
+            settings.videoFrameLeft = '50%';
+            settings.videoFrameMarginTop = '-' + settings.videoHeight / 2 + 'px';
+            settings.videoFrameMarginLeft = '-' + settings.videoWidth / 2 + 'px';
+
+            return settings;
+        },
+
+        popover: function () {
+            var target,
+                target_position_x,
+                target_position_y,
+                settings,
+                display_ratio_x,
+                display_ratio_y,
+                window_center_x,
+                window_center_y,
+                video_center_x,
+                video_center_y,
+                positions,
+                old_dimension,
+                position_x,
+                position_y;
+
+            target = $(this.element);
+            settings = this.settings();
+
+            target_position_x = target.position().left - $(window).scrollLeft();
+            target_position_y = target.position().top - $(window).scrollTop();
+            window_center_x = $(window).width() / 2;
+            window_center_y = $(window).height() / 2;
+            video_center_x = settings.videoWidth / 2;
+            video_center_y = settings.videoHeight / 2;
+            display_ratio_x = settings.videoHeight / settings.videoWidth;
+            display_ratio_y = settings.videoWidth / settings.videoHeight;
+
+            function getClosest(positions, video_center, window_center) {
+                var temp_positions;
+                temp_positions = [];
+                $.each(positions, function (index, value) {
+                    temp_positions[index] = Math.abs((value + video_center) - window_center);
+                });
+                return temp_positions.indexOf(Math.min.apply(Math, temp_positions));
+            }
+            function videoPopoverX() {
+                positions = [
+                    Math.round(target_position_x - settings.videoWidth),
+                    Math.round(target_position_x + (target.outerWidth() / 2) - video_center_x),
+                    Math.round(target_position_x + target.outerWidth())
+                ];
+                return positions[(getClosest(positions, video_center_x, window_center_x))];
+            }
+            function videoPopoverY() {
+                positions = [
+                    Math.round(target_position_y - settings.videoHeight),
+                    Math.round(target_position_y + (target.outerHeight() / 2) - video_center_y),
+                    Math.round(target_position_y + target.outerHeight())
+                ];
+                return positions[(getClosest(positions, video_center_y, window_center_y))];
+            }
+
+            position_x = videoPopoverX();
+            position_y = videoPopoverY();
+
+            if (position_x < 0) {
+                old_dimension = settings.videoWidth;
+                settings.videoWidth = settings.videoWidth + position_x - 10;
+                settings.videoHeight = Math.round(display_ratio_x * settings.videoWidth);
+                settings.videoFrameLeft = (position_x < target_position_x - video_center_x) ? (position_x + old_dimension) - settings.videoWidth + 'px' : position_x + (old_dimension / 2) - (settings.videoWidth / 2) + 'px';
+            } else {
+                settings.videoFrameLeft = position_x + 'px';
+            }
+
+            if (position_y < 0) {
+                old_dimension = settings.videoHeight;
+                settings.videoHeight = settings.videoHeight + position_y - 10;
+                settings.videoHeight = Math.round(display_ratio_y * settings.videoHeight);
+                settings.videoFrameTop = (position_y < target_position_y - video_center_y) ? (position_y + old_dimension) - settings.videoHeight + 'px' : position_y + (old_dimension / 2) - (settings.videoHeight / 2) + 'px';
+            } else {
+                settings.videoFrameTop = position_y + 'px';
+            }
+
+            settings.videoFrameMarginTop = '0';
+            settings.videoFrameMarginLeft = '0';
+            settings.videoBackdropOpacity = 0;
+            settings.videoGlow = 0;
 
             return settings;
         },
