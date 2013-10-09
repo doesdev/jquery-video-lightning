@@ -9,6 +9,6 @@
 	"onevar": true,
 	"smarttabs": true,
 	"trailing": true,
-	"unused": true,
+	"unused": false,
 	"node": true
 }
