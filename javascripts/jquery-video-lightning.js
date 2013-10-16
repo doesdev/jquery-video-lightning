@@ -166,15 +166,15 @@
             video_center_y = settings.videoHeight / 2;
 
             positions_x = {
-                left: Math.round(target_position_x - settings.videoWidth),
+                left: Math.round(target_position_x - settings.videoWidth) - 15,
                 center: Math.round(target_position_x + (target.outerWidth() / 2) - video_center_x),
-                right: Math.round(target_position_x + target.outerWidth())
+                right: Math.round(target_position_x + target.outerWidth()) + 15
             };
 
             positions_y = {
-                top: Math.round(target_position_y - settings.videoHeight),
+                top: Math.round(target_position_y - settings.videoHeight) - 15,
                 center: Math.round(target_position_y + (target.outerHeight() / 2) - video_center_y),
-                bottom: Math.round(target_position_y + target.outerHeight())
+                bottom: Math.round(target_position_y + target.outerHeight()) + 15
             };
 
             function positionValues(positions) {
