@@ -154,8 +154,11 @@
                 old_dimension,
                 positions_x,
                 positions_y,
+                optimal_positions_x,
+                optimal_positions_y,
                 position_x,
-                position_y;
+                position_y,
+                tempValues;
 
             target = $(this.element);
             settings = this.settings();
@@ -169,26 +172,47 @@
             display_ratio_x = settings.videoHeight / settings.videoWidth;
             display_ratio_y = settings.videoWidth / settings.videoHeight;
 
-            positions_x = [
-                Math.round(target_position_x - settings.videoWidth),
-                Math.round(target_position_x + (target.outerWidth() / 2) - video_center_x),
-                Math.round(target_position_x + target.outerWidth())
-            ];
+            positions_x = {
+                left: Math.round(target_position_x - settings.videoWidth),
+                center: Math.round(target_position_x + (target.outerWidth() / 2) - video_center_x),
+                right: Math.round(target_position_x + target.outerWidth())
+            };
 
-            positions_y = [
-                Math.round(target_position_y - settings.videoHeight),
-                Math.round(target_position_y + (target.outerHeight() / 2) - video_center_y),
-                Math.round(target_position_y + target.outerHeight())
-            ];
+            positions_y = {
+                top: Math.round(target_position_y - settings.videoHeight),
+                center: Math.round(target_position_y + (target.outerHeight() / 2) - video_center_y),
+                bottom: Math.round(target_position_y + target.outerHeight())
+            };
 
-            function optimalPosition(positions, video_center, window_center) {
-                return positions.sort(function (a, b) {
-                    return (Math.abs((a + video_center) - window_center)) - (Math.abs((b + video_center) - window_center));
-                })[0];
+            function positionValues(positions) {
+                tempValues = $.map(positions, function (value) {
+                    return value;
+                });
+                return tempValues;
             }
 
-            position_x = optimalPosition(positions_x, video_center_x, window_center_x);
-            position_y = optimalPosition(positions_y, video_center_y, window_center_y);
+            function optimalPosition(positions, video_center, window_center) {
+                var tempPositions;
+                tempPositions = [];
+                tempValues = positionValues(positions).sort(function (a, b) {
+                    return (Math.abs((a + video_center) - window_center)) - (Math.abs((b + video_center) - window_center));
+                });
+
+                $.each(tempValues, function (i, value) {
+                    $.each(positions, function (list_key, list_value) {
+                        if (list_value  === value) {
+                            tempPositions.push(list_key);
+                        }
+                    });
+                });
+                return tempPositions;
+            }
+
+            optimal_positions_x = optimalPosition(positions_x, video_center_x, window_center_x);
+            optimal_positions_y = optimalPosition(positions_y, video_center_y, window_center_y);
+
+            position_x = positions_x[optimal_positions_x[0]];
+            position_y = positions_y[optimal_positions_y[0]];
 
             if (position_x < 0) {
                 old_dimension = settings.videoWidth;
