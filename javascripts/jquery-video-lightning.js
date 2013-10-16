@@ -145,19 +145,14 @@
                 target_position_x,
                 target_position_y,
                 settings,
-                display_ratio_x,
-                display_ratio_y,
                 window_center_x,
                 window_center_y,
                 video_center_x,
                 video_center_y,
-                old_dimension,
                 positions_x,
                 positions_y,
                 optimal_positions_x,
                 optimal_positions_y,
-                position_x,
-                position_y,
                 tempValues;
 
             target = $(this.element);
@@ -169,8 +164,6 @@
             window_center_y = $(window).height() / 2;
             video_center_x = settings.videoWidth / 2;
             video_center_y = settings.videoHeight / 2;
-            display_ratio_x = settings.videoHeight / settings.videoWidth;
-            display_ratio_y = settings.videoWidth / settings.videoHeight;
 
             positions_x = {
                 left: Math.round(target_position_x - settings.videoWidth),
@@ -185,15 +178,13 @@
             };
 
             function positionValues(positions) {
-                tempValues = $.map(positions, function (value) {
+                return $.map(positions, function (value) {
                     return value;
                 });
-                return tempValues;
             }
 
             function optimalPosition(positions, video_center, window_center) {
-                var tempPositions;
-                tempPositions = [];
+                var tempPositions = [];
                 tempValues = positionValues(positions).sort(function (a, b) {
                     return (Math.abs((a + video_center) - window_center)) - (Math.abs((b + video_center) - window_center));
                 });
@@ -211,27 +202,25 @@
             optimal_positions_x = optimalPosition(positions_x, video_center_x, window_center_x);
             optimal_positions_y = optimalPosition(positions_y, video_center_y, window_center_y);
 
-            position_x = positions_x[optimal_positions_x[0]];
-            position_y = positions_y[optimal_positions_y[0]];
+            function popoverSizing(positions, optimal_positions, target_position, video_center, primary_dimension, secondary_dimension, frame_dimension) {
+                var position, old_dimension, display_ratio;
+                position = positions[optimal_positions[0]];
+                display_ratio = secondary_dimension / primary_dimension;
 
-            if (position_x < 0) {
-                old_dimension = settings.videoWidth;
-                settings.videoWidth = settings.videoWidth + position_x - 10;
-                settings.videoHeight = Math.round(display_ratio_x * settings.videoWidth);
-                settings.videoFrameLeft = (position_x < target_position_x - video_center_x) ? (position_x + old_dimension) - settings.videoWidth + 'px' : position_x + (old_dimension / 2) - (settings.videoWidth / 2) + 'px';
-            } else {
-                settings.videoFrameLeft = position_x + 'px';
+                if (position < 0) {
+                    old_dimension = settings["video" + primary_dimension];
+                    settings["video" + primary_dimension] = settings["video" + primary_dimension] + position - 10;
+                    settings["video" + secondary_dimension] = Math.round(display_ratio * settings["video" + primary_dimension]);
+                    settings["videoFrame" + frame_dimension] = (position < target_position - video_center) ? (position + old_dimension) - settings["video" + primary_dimension] + 'px' : position + (old_dimension / 2) - (settings["video" + primary_dimension] / 2) + 'px';
+                } else {
+                    settings["videoFrame" + frame_dimension] = position + 'px';
+                }
             }
 
-            if (position_y < 0) {
-                old_dimension = settings.videoHeight;
-                settings.videoHeight = settings.videoHeight + position_y - 10;
-                settings.videoHeight = Math.round(display_ratio_y * settings.videoHeight);
-                settings.videoFrameTop = (position_y < target_position_y - video_center_y) ? (position_y + old_dimension) - settings.videoHeight + 'px' : position_y + (old_dimension / 2) - (settings.videoHeight / 2) + 'px';
-            } else {
-                settings.videoFrameTop = position_y + 'px';
-            }
+            popoverSizing(positions_x, optimal_positions_x, target_position_x, video_center_x, "Width", "Height", "Left");
+            popoverSizing(positions_y, optimal_positions_y, target_position_y, video_center_y, "Height", "Width", "Top");
 
+            settings.videoFrameTop = (optimal_positions_x[0] === "center" && optimal_positions_y[0] === "center") ? positions_y[optimal_positions_y[1]] : settings.videoFrameTop;
             settings.videoFrameMarginTop = '0';
             settings.videoFrameMarginLeft = '0';
             settings.videoBackdropOpacity = 0;
