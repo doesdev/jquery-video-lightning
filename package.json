@@ -1,14 +1,14 @@
 {
 	"name": "jquery-video-lightning",
 	"title": "jQuery Video Lightning",
-	"description": "Simple jQuery plugin that turns any element into a lightbox / popover link for Youtube and Vimeo videos.",
+	"description": "Turn any element into a lightbox or popover link for Youtube and Vimeo videos.",
 	"author": "Andrew Carpenter",
 	"repository": {
 		"type" : "git",
 		"url" : "https://github.com/musocrat/jquery-video-lightning.git"
 	},
 	"homepage": "https://github.com/musocrat/jquery-video-lightning/",
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"devDependencies": {
 		"grunt": "~0.4.1",
 		"grunt-cli": "~0.1.7",

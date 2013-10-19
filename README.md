@@ -1,12 +1,13 @@
 ![alt text](http://musocrat.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "jQuery Video Lightning Logo") jQuery Video Lightning [![Build Status](https://travis-ci.org/musocrat/jquery-video-lightning.png)](https://travis-ci.org/musocrat/jquery-video-lightning)
 ======================
 
-Simple jQuery plugin that turns any element into a lightbox link for Youtube and Vimeo videos.
+Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
 
 ### Table of Contents
 - [Why](#why)    
 - [How](#how)    
-- [Demos](#demos)    
+- [Features](#features)
+- [Demos](#demos)
 - [Docs](#docs)
   - [Getting Started](#getting-started)    
   - [Passing in Options](#passing-in-options)    
@@ -20,7 +21,15 @@ Lots of reasons. The main one, and the reason we built it, is for quick video ex
 
 How?
 ----
-Simple. Add the js to your project (along with jQuery), add the appropriate data atrributes like so `data-video-id="y-XbTtgr8J8uU"`, then initialize on the target and enjoy your video lightbox enhanced element!
+Simple. Add the js to your project (along with jQuery), add the appropriate data atrributes like so `data-video-id="y-XbTtgr8J8uU"`, then initialize on the target and enjoy your video lightbox / popover enhanced element!
+
+Features
+----
+- Simple access to all embed API options for both providers
+- Lots of options to customize nd beautify your lightboxes
+- Intelligent popover auto positioning gravitates to page center
+- Lazy loading of videos prevents slow page load due to video embeds
+- Rick Roll with ease (don't pass video id, add rick_roll option to prevent closing)
 
 Demos
 ----
@@ -67,7 +76,7 @@ Or they can be passed as data attributes: *(Note that data attributes are all pr
 ```
 
 ### Available Options
-jQuery Video Lightning exposes all available basic API options for both Youtube and Vimeo. There are also a number of effect and behavior options that are available or will soon be added. The following is the current list of available options.
+jQuery Video Lightning exposes all available basic API options for both Youtube and Vimeo. There are also a number of effect and behavior options that are available. The following is the current list of available options.
 
 - **width** *(default="640px")*
 	Y&V: video width in px
@@ -117,11 +126,16 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 	Make video un-closable (0,1)
 - **cover** *(default=0)*
 	Display cover image (0,1)
+- **popover** *(default=0)*
+	Open in popover instead of lightbox (0,1)
+- **popover_x** *(default="auto")*
+	X position of popover ("auto","left","center","right")
+- **popover_y** *(default="auto")*
+	Y position of popover ("auto","top","center","bottom")
 
 ToDo
 ----
-1. Add popover option in addition to lightbox
-2. Add auto close option
+1. Add auto close option
 
 Contributing
 ----
