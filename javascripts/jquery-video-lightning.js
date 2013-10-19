@@ -45,7 +45,7 @@
             target = $(this.element);
             target_wrapper = target.wrap("<span class='video-target'></span>").parent(".video-target");
             target_wrapper.css("cursor", "pointer");
-            settings = this.settings();
+            settings = (popover === 1) ? this.popover() : this.settings();
             video_id = settings.videoId.substring(2);
             vendor = (settings.videoId.charAt(0).toLowerCase() === "v") ? "vimeo" : "youtube";
             popover = settings.videoPopover;
@@ -74,7 +74,29 @@
                 $(this.player(target, target_wrapper, video_id, vendor, popover));
             }
 
+            function resizeTail() {
+                function tailPosition() {
+                    var position_returns, sticky;
+                    position_returns = this.popoverPosition(settings);
+                    sticky = target_wrapper.find(".video-popover-tail").attr("points");
+                    if (sticky !== undefined) {
+                        sticky = sticky.substring(sticky.indexOf(' ') + 1);
+                        return settings.videoTargetPositionsX[position_returns[0]] + "," +
+                            settings.videoTargetPositionsY[position_returns[1]] + " " +
+                            sticky;
+                    }
+                }
+
+                target_wrapper.find(".video-popover-tail").attr({
+                    points: $.proxy(tailPosition, this)
+                });
+            }
+
             target_wrapper.on("click", $.proxy(callPlayer, this));
+
+            $(document).on("scroll mousewheel DOMMouseScroll MozMousePixelScroll", $.proxy(resizeTail, this));
+
+
         },
 
         player: function (target, target_wrapper, video_id, vendor, popover) {
@@ -148,22 +170,7 @@
         popover: function () {
             var target,
                 target_wrapper,
-                target_position_x,
-                target_position_y,
-                target_positions_x,
-                target_positions_y,
-                settings,
-                window_center_x,
-                window_center_y,
-                video_center_x,
-                video_center_y,
-                positions_x,
-                positions_y,
-                optimal_positions_x,
-                optimal_positions_y,
-                position_x,
-                position_y,
-                tempValues;
+                settings;
 
             target = $(this.element);
             target_wrapper = target.parent(".video-target");
@@ -183,32 +190,57 @@
                 "z-index": 0
             });
 
-            target_position_x = target.offset().left - $(window).scrollLeft();
-            target_position_y = target.offset().top - $(window).scrollTop();
+            this.popoverTail(settings);
+
+            settings.videoFrameMarginTop = '0';
+            settings.videoFrameMarginLeft = '0';
+            settings.videoBackdropOpacity = 0;
+            settings.videoEaseIn = 0;
+
+            return settings;
+        },
+
+        popoverPosition: function (settings) {
+            var target,
+                target_wrapper,
+                target_position_x,
+                target_position_y,
+                position_x,
+                position_y,
+                window_center_x,
+                window_center_y,
+                video_center_x,
+                video_center_y,
+                tempValues;
+
+            target = $(this.element);
+            target_wrapper = target.parent(".video-target");
+            target_position_x = target_wrapper.offset().left - $(window).scrollLeft();
+            target_position_y = target_wrapper.offset().top - $(window).scrollTop();
             window_center_x = $(window).width() / 2;
             window_center_y = $(window).height() / 2;
             video_center_x = settings.videoWidth / 2;
             video_center_y = settings.videoHeight / 2;
 
-            target_positions_x = {
+            settings.videoTargetPositionsX = {
                 left: Math.round(target_position_x),
-                center: Math.round(target_position_x + (target.outerWidth() / 2)),
-                right: Math.round(target_position_x + target.outerWidth())
+                center: Math.round(target_position_x + (target_wrapper.outerWidth() / 2)),
+                right: Math.round(target_position_x + target_wrapper.outerWidth())
             };
-            target_positions_y = {
+            settings.videoTargetPositionsY = {
                 top: Math.round(target_position_y),
-                center: Math.round(target_position_y + (target.outerHeight() / 2)),
-                bottom: Math.round(target_position_y + target.outerHeight())
+                center: Math.round(target_position_y + (target_wrapper.outerHeight() / 2)),
+                bottom: Math.round(target_position_y + target_wrapper.outerHeight())
             };
-            positions_x = {
-                left: target_positions_x.left - settings.videoWidth - 15,
-                center: target_positions_x.center - video_center_x,
-                right: target_positions_x.right + 15
+            settings.videoPositionsX = {
+                left: settings.videoTargetPositionsX.left - settings.videoWidth - 15,
+                center: settings.videoTargetPositionsX.center - video_center_x,
+                right: settings.videoTargetPositionsX.right + 15
             };
-            positions_y = {
-                top: target_positions_y.top - settings.videoHeight - 15,
-                center: target_positions_y.center - video_center_y,
-                bottom: target_positions_y.bottom + 15
+            settings.videoPositionsY = {
+                top: settings.videoTargetPositionsY.top - settings.videoHeight - 15,
+                center: settings.videoTargetPositionsY.center - video_center_y,
+                bottom: settings.videoTargetPositionsY.bottom + 15
             };
 
             function positionValues(positions) {
@@ -233,20 +265,20 @@
                 return tempPositions;
             }
 
-            optimal_positions_x = optimalPosition(positions_x, video_center_x, window_center_x);
-            optimal_positions_y = optimalPosition(positions_y, video_center_y, window_center_y);
+            settings.videoOptimalPositionsX = optimalPosition(settings.videoPositionsX, video_center_x, window_center_x);
+            settings.videoOptimalPositionsY = optimalPosition(settings.videoPositionsY, video_center_y, window_center_y);
 
-            position_x = (settings.videoPopoverX === "auto") ? optimal_positions_x[0] : settings.videoPopoverX;
-            if (optimal_positions_x[0] === "center" && optimal_positions_y[0] === "center") {
-                position_y = (settings.videoPopoverY === "auto") ? optimal_positions_y[1] : settings.videoPopoverY;
+            position_x = (settings.videoPopoverX === "auto") ? settings.videoOptimalPositionsX[0] : settings.videoPopoverX;
+            if (settings.videoOptimalPositionsX[0] === "center" && settings.videoOptimalPositionsY[0] === "center") {
+                position_y = (settings.videoPopoverY === "auto") ? settings.videoOptimalPositionsY[1] : settings.videoPopoverY;
             } else {
-                position_y = (settings.videoPopoverY === "auto") ? optimal_positions_y[0] : settings.videoPopoverY;
+                position_y = (settings.videoPopoverY === "auto") ? settings.videoOptimalPositionsY[0] : settings.videoPopoverY;
             }
 
             function popoverSizing(positions, optimal_position, target_position, video_center, primary_dimension, secondary_dimension, frame_dimension) {
                 var position, old_dimension, display_ratio;
                 position = positions[optimal_position];
-                display_ratio = secondary_dimension / primary_dimension;
+                display_ratio = settings["video" + secondary_dimension] / settings["video" + primary_dimension];
 
                 if (position < 0) {
                     old_dimension = settings["video" + primary_dimension];
@@ -258,52 +290,65 @@
                 }
             }
 
-            popoverSizing(positions_x, position_x, target_position_x, video_center_x, "Width", "Height", "Left");
-            popoverSizing(positions_y, position_y, target_position_y, video_center_y, "Height", "Width", "Top");
+            popoverSizing(settings.videoPositionsX, position_x, target_position_x, video_center_x, "Width", "Height", "Left");
+            popoverSizing(settings.videoPositionsY, position_y, target_position_y, video_center_y, "Height", "Width", "Top");
+
+            return [position_x, position_y, video_center_x, video_center_y];
+        },
+
+        popoverTail: function (settings) {
+            var target,
+                target_wrapper,
+                position_x,
+                position_y,
+                video_center_x,
+                video_center_y,
+                position_return;
+
+            target = $(this.element);
+            target_wrapper = target.parent(".video-target");
+            position_return = this.popoverPosition(settings);
+            position_x = position_return[0];
+            position_y = position_return[1];
+            video_center_x = position_return[2];
+            video_center_y = position_return[3];
 
             function tailPosition() {
                 var x, x2, y, y2;
                 if (position_x === "left") {
-                    x = positions_x[position_x] + settings.videoWidth;
-                    x2 = positions_x[position_x] + settings.videoWidth - 25;
+                    x = settings.videoPositionsX[position_x] + settings.videoWidth;
+                    x2 = settings.videoPositionsX[position_x] + settings.videoWidth - 25;
                 } else if (position_x === "right") {
-                    x = positions_x[position_x];
-                    x2 = positions_x[position_x] + 25;
+                    x = settings.videoPositionsX[position_x];
+                    x2 = settings.videoPositionsX[position_x] + 25;
                 } else {
-                    x = positions_x[position_x] + video_center_x - 30;
-                    x2 = positions_x[position_x] + video_center_x + 15;
+                    x = settings.videoPositionsX[position_x] + video_center_x - 30;
+                    x2 = settings.videoPositionsX[position_x] + video_center_x + 15;
                 }
                 if (position_y === "top") {
-                    y = positions_y[position_y] + settings.videoHeight;
-                    y2 = positions_y[position_y] + settings.videoHeight - 25;
+                    y = settings.videoPositionsY[position_y] + settings.videoHeight;
+                    y2 = settings.videoPositionsY[position_y] + settings.videoHeight - 25;
                 } else if (position_y === "bottom") {
-                    y = positions_y[position_y];
-                    y2 = positions_y[position_y] + 25;
+                    y = settings.videoPositionsY[position_y];
+                    y2 = settings.videoPositionsY[position_y] + 25;
                 } else {
-                    y = positions_y[position_y] + video_center_y - 30;
-                    y2 = positions_y[position_y] + video_center_y + 15;
+                    y = settings.videoPositionsY[position_y] + video_center_y - 30;
+                    y2 = settings.videoPositionsY[position_y] + video_center_y + 15;
                 }
-                return target_positions_x[position_x] + "," +
-                    target_positions_y[position_y] + " " +
+                return settings.videoTargetPositionsX[position_x] + "," +
+                    settings.videoTargetPositionsY[position_y] + " " +
                     x + "," +
                     y2 + " " +
                     x2 + "," +
                     y;
             }
 
-            target_wrapper.find(".video-popover-tail").hide().attr({
+            target_wrapper.find(".video-popover-tail").attr({
                 points: tailPosition(),
                 fill: "black",
                 stroke: "black",
                 "stroke-width": 0
-            }).show(100);
-
-            settings.videoFrameMarginTop = '0';
-            settings.videoFrameMarginLeft = '0';
-            settings.videoBackdropOpacity = 0;
-            settings.videoEaseIn = 0;
-
-            return settings;
+            });
         },
 
         colorConverter: function (hex) {
