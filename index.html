@@ -16,7 +16,7 @@
 <div class="wrapper">
     <header>
         <img class="video-link" data-video-rick-roll="1" src="images/JqueryVideoLightningIcon144.png" alt="jQuery Video Lightning Icon"/><h1>jQuery Video Lightning</h1>
-        <p>Simple jQuery plugin that turns any element into a lightbox link for <span class="video-link" data-video-id="y-PKffm2uI4dk">Youtube</span> and <span class="video-link2" data-video-id="v-29749357">Vimeo</span> videos. </p>
+        <p>Turn any element into a lightbox or popover link for <span class="video-link" data-video-id="y-PKffm2uI4dk">Youtube</span> and <span class="video-link2" data-video-id="v-29749357">Vimeo</span> videos. </p>
 
         <p class="view"><a href="https://github.com/musocrat/jquery-video-lightning">View the Project on GitHub <small>musocrat/jquery-video-lightning</small></a></p>
 
@@ -31,7 +31,7 @@
         <h1>
             <a name="jquery-video-lightning" class="anchor" href="#jquery-video-lightning"><span class="octicon octicon-link"></span></a>jQuery Video Lightning</h1>
 
-        <p>Simple jQuery plugin that turns any element into a <span class="video-link4" data-video-id="y-z1bAh193Iwc">lightbox</span> link for Youtube and Vimeo videos. Includes access to all embed API options for both providers as well as a healthy set of style options.</p>
+        <p>Turn any element into a <span class="video-link4" data-video-id="y-z1bAh193Iwc">lightbox</span>  or <span class="video-link6" data-video-id="y-UU2KMm9HTZg">popover</span>  link for Youtube and Vimeo videos. Includes access to all embed API options for both providers as well as a healthy set of style options.</p>
 
         <h2>
             <a name="why" class="anchor" href="#why"><span class="octicon octicon-link"></span></a>Why?</h2>
@@ -97,12 +97,11 @@
         $(".video-link3").jqueryVideoLightning({
             autoplay: 1,
             controls: 0,
-            modestbranding: 1,
             backdrop_color: "#000",
             backdrop_opacity: 0.9,
-            glow: 60,
+            glow: 40,
             glow_color: "#ff9900",
-            color: "#fff"
+            color: "white"
         });
     });
     $(function() {
@@ -125,7 +124,15 @@
             glow: 50,
             glow_color: "#000",
             color: "#fff",
-            cover: 1
+            cover: 1,
+            popover: 1
+        });
+    });
+    $(function() {
+        $(".video-link6").jqueryVideoLightning({
+            autoplay: 1,
+            controls: 0,
+            popover: 1
         });
     });
 </script>
