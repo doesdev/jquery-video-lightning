@@ -28,7 +28,9 @@
             glow_color: "#fff",
             rick_roll: 0,
             cover: 0,
-            popover: 0
+            popover: 0,
+            popover_x: "auto",
+            popover_y: "auto"
         };
 
     function JQVideoLightning(element, options) {
@@ -58,7 +60,10 @@
                     "bottom: 0; " +
                     "left: 0; " +
                     "z-index: 21000; " +
-                    "} </style>").appendTo("head");
+                    "} " +
+                    ".video-frame{ " +
+                    "background: #000000;" +
+                    "</style>").appendTo("head");
             }
 
             if (settings.videoCover === 1) {
@@ -142,8 +147,11 @@
 
         popover: function () {
             var target,
+                target_wrapper,
                 target_position_x,
                 target_position_y,
+                target_positions_x,
+                target_positions_y,
                 settings,
                 window_center_x,
                 window_center_y,
@@ -153,10 +161,27 @@
                 positions_y,
                 optimal_positions_x,
                 optimal_positions_y,
+                position_x,
+                position_y,
                 tempValues;
 
             target = $(this.element);
+            target_wrapper = target.parent(".video-target");
             settings = this.settings();
+
+            target_wrapper.append('<div class="video-popover-tail-wrapper">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">' +
+                '<polygon class="video-popover-tail" points="" fill="" stroke="" stroke-width="" />' +
+                '</svg></div>');
+
+            target_wrapper.find(".video-popover-tail-wrapper").css({
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                "z-index": 0
+            });
 
             target_position_x = target.offset().left - $(window).scrollLeft();
             target_position_y = target.offset().top - $(window).scrollTop();
@@ -165,16 +190,25 @@
             video_center_x = settings.videoWidth / 2;
             video_center_y = settings.videoHeight / 2;
 
-            positions_x = {
-                left: Math.round(target_position_x - settings.videoWidth) - 15,
-                center: Math.round(target_position_x + (target.outerWidth() / 2) - video_center_x),
-                right: Math.round(target_position_x + target.outerWidth()) + 15
+            target_positions_x = {
+                left: Math.round(target_position_x),
+                center: Math.round(target_position_x + (target.outerWidth() / 2)),
+                right: Math.round(target_position_x + target.outerWidth())
             };
-
+            target_positions_y = {
+                top: Math.round(target_position_y),
+                center: Math.round(target_position_y + (target.outerHeight() / 2)),
+                bottom: Math.round(target_position_y + target.outerHeight())
+            };
+            positions_x = {
+                left: target_positions_x.left - settings.videoWidth - 15,
+                center: target_positions_x.center - video_center_x,
+                right: target_positions_x.right + 15
+            };
             positions_y = {
-                top: Math.round(target_position_y - settings.videoHeight) - 15,
-                center: Math.round(target_position_y + (target.outerHeight() / 2) - video_center_y),
-                bottom: Math.round(target_position_y + target.outerHeight()) + 15
+                top: target_positions_y.top - settings.videoHeight - 15,
+                center: target_positions_y.center - video_center_y,
+                bottom: target_positions_y.bottom + 15
             };
 
             function positionValues(positions) {
@@ -202,9 +236,16 @@
             optimal_positions_x = optimalPosition(positions_x, video_center_x, window_center_x);
             optimal_positions_y = optimalPosition(positions_y, video_center_y, window_center_y);
 
-            function popoverSizing(positions, optimal_positions, target_position, video_center, primary_dimension, secondary_dimension, frame_dimension) {
+            position_x = (settings.videoPopoverX === "auto") ? optimal_positions_x[0] : settings.videoPopoverX;
+            if (optimal_positions_x[0] === "center" && optimal_positions_y[0] === "center") {
+                position_y = (settings.videoPopoverY === "auto") ? optimal_positions_y[1] : settings.videoPopoverY;
+            } else {
+                position_y = (settings.videoPopoverY === "auto") ? optimal_positions_y[0] : settings.videoPopoverY;
+            }
+
+            function popoverSizing(positions, optimal_position, target_position, video_center, primary_dimension, secondary_dimension, frame_dimension) {
                 var position, old_dimension, display_ratio;
-                position = positions[optimal_positions[0]];
+                position = positions[optimal_position];
                 display_ratio = secondary_dimension / primary_dimension;
 
                 if (position < 0) {
@@ -217,14 +258,50 @@
                 }
             }
 
-            popoverSizing(positions_x, optimal_positions_x, target_position_x, video_center_x, "Width", "Height", "Left");
-            popoverSizing(positions_y, optimal_positions_y, target_position_y, video_center_y, "Height", "Width", "Top");
+            popoverSizing(positions_x, position_x, target_position_x, video_center_x, "Width", "Height", "Left");
+            popoverSizing(positions_y, position_y, target_position_y, video_center_y, "Height", "Width", "Top");
 
-            settings.videoFrameTop = (optimal_positions_x[0] === "center" && optimal_positions_y[0] === "center") ? positions_y[optimal_positions_y[1]] : settings.videoFrameTop;
+            function tailPosition() {
+                var x, x2, y, y2;
+                if (position_x === "left") {
+                    x = positions_x[position_x] + settings.videoWidth;
+                    x2 = positions_x[position_x] + settings.videoWidth - 25;
+                } else if (position_x === "right") {
+                    x = positions_x[position_x];
+                    x2 = positions_x[position_x] + 25;
+                } else {
+                    x = positions_x[position_x] + video_center_x - 30;
+                    x2 = positions_x[position_x] + video_center_x + 15;
+                }
+                if (position_y === "top") {
+                    y = positions_y[position_y] + settings.videoHeight;
+                    y2 = positions_y[position_y] + settings.videoHeight - 25;
+                } else if (position_y === "bottom") {
+                    y = positions_y[position_y];
+                    y2 = positions_y[position_y] + 25;
+                } else {
+                    y = positions_y[position_y] + video_center_y - 30;
+                    y2 = positions_y[position_y] + video_center_y + 15;
+                }
+                return target_positions_x[position_x] + "," +
+                    target_positions_y[position_y] + " " +
+                    x + "," +
+                    y2 + " " +
+                    x2 + "," +
+                    y;
+            }
+
+            target_wrapper.find(".video-popover-tail").hide().attr({
+                points: tailPosition(),
+                fill: "black",
+                stroke: "black",
+                "stroke-width": 0
+            }).show(100);
+
             settings.videoFrameMarginTop = '0';
             settings.videoFrameMarginLeft = '0';
             settings.videoBackdropOpacity = 0;
-            settings.videoGlow = 0;
+            settings.videoEaseIn = 0;
 
             return settings;
         },
@@ -304,6 +381,7 @@
 
         destroy: function (target_wrapper) {
             target_wrapper.find(".video").remove();
+            target_wrapper.find(".video-popover-tail-wrapper").remove();
             target_wrapper.find(".video-wrapper").hide((this.settings().videoEaseOut));
             target_wrapper.find(".video-wrapper").remove();
             $(this).off();
