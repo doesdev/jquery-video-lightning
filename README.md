@@ -95,9 +95,9 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 - **modestbranding** *(default=0)*
 	Y: hide large Youtube logo (0,1)
 - **playlist** *(default="")*
-	Y: comma-separated list of video IDs to play
+	Y: comma-separated list of video IDs to play (ex. "WkgWvaFrJv8,VZPxHUpdAGw")
 - **related** *(default=0)*
-	Y: show related videos when playback id finished (0,1)
+	Y: show related videos when playback is finished (0,1)
 - **showinfo** *(default=1)*
 	Y: display title, uploader (0,1)  V: display title (0,1)
 - **start_time** *(default=0)*
