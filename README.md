@@ -26,7 +26,7 @@ Simple. Add the js to your project (along with jQuery), add the appropriate data
 Features
 ----
 - Simple access to all embed API options for both providers
-- Lots of options to customize nd beautify your lightboxes
+- Lots of options to customize and beautify your lightboxes
 - Intelligent popover auto positioning gravitates to page center
 - Lazy loading of videos prevents slow page load due to video embeds
 - Rick Roll with ease (don't pass video id, add rick_roll option to prevent closing)
