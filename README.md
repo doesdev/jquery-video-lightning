@@ -114,6 +114,8 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 	Time in ms of lightbox fade in
 - **ease_out** *(default=1)*
 	Time in ms of lightbox fade out
+- **z_index** *(default=21000)*
+	Z-index of page overlay
 - **backdrop_color** *(default="#000")*
 	Color of page overlay
 - **backdrop_opacity** *(default=1)*
