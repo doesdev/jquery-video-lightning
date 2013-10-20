@@ -1,6 +1,6 @@
 /*
- *  jQuery Video Lightning - v1.1.0
- *  Simple jQuery plugin that turns any element into a lightbox / popover link for Youtube and Vimeo videos.
+ *  jQuery Video Lightning - v2.0.0
+ *  Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
  *  https://github.com/musocrat/jquery-video-lightning
  *
  *  Made by Andrew Carpenter
@@ -30,6 +30,7 @@
             effect_in: "fadeIn",
             ease_in: 300,
             ease_out: 0,
+            z_index: 21000,
             backdrop_color: "#000",
             backdrop_opacity: 1,
             glow: 0,
@@ -53,7 +54,7 @@
             target = $(this.element);
             target_wrapper = target.wrap("<span class='video-target'></span>").parent(".video-target");
             target_wrapper.css("cursor", "pointer");
-            settings = (popover === 1) ? this.popover() : this.settings();
+            settings = this.settings();
             video_id = settings.videoId.substring(2);
             vendor = (settings.videoId.charAt(0).toLowerCase() === "v") ? "vimeo" : "youtube";
             popover = settings.videoPopover;
@@ -67,7 +68,7 @@
                     "top: 0; " +
                     "bottom: 0; " +
                     "left: 0; " +
-                    "z-index: 21000; " +
+                    "z-index: " + settings.videoZIndex + "; " +
                     "} " +
                     ".video-frame{ " +
                     "background: #000000;" +
