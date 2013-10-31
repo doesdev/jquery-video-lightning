@@ -144,6 +144,7 @@
 <script src="javascripts/scale.fix.js"></script>
 <script src="javascripts/jquery.min.js"></script>
 <script src="javascripts/jquery-video-lightning.js"></script>
+<script src="javascripts/jqvl-page.js"></script>
 <script>
     $(function () {
         $(".video-link").jqueryVideoLightning({
@@ -203,14 +204,6 @@
             height: "320px",
             popover: 1
         });
-    });
-</script>
-<script>
-    $(window).on("resize", function () {
-        var calculate_font, font_size;
-        calculate_font = Math.abs(100 - $(window).outerWidth() / 10) + 100;
-        font_size = (calculate_font < 120) ? calculate_font : 120;
-        $('body').css("font-size", font_size + "%");
     });
 </script>
 </body>
