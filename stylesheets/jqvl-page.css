@@ -19,7 +19,6 @@ time, mark, audio, video {
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
     vertical-align: baseline;
 }
 
@@ -40,7 +39,7 @@ h1, h2, h3 {
 p, li, a {
     text-decoration: none;
     font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
+    font-size: 0.7em;
     font-weight: 600;
     color: #0C0A0D;
     -webkit-margin-before: 0;
@@ -121,6 +120,7 @@ body {
 .github-links a {
     color: #F1D6F5;
     text-shadow: 0px 0px 1px rgba(1, 1, 39, 1);
+    font-size: 1.2em;
 }
 
 .box {
@@ -131,7 +131,11 @@ body {
     width: 60%;
 }
 
-.box p, .box h1, .box h2, .box h3 {
+.box h2, .box h3 {
+    margin: 25px;
+}
+
+.box p {
     margin: 30px;
 }
 
@@ -143,7 +147,7 @@ body {
 .intro p {
     margin: 20px;
     color: #ffffff;
-    font-size: 2em;
+    font-size: 1.8em;
     font-weight: 400;
 }
 

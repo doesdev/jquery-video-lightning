@@ -46,11 +46,11 @@
     </div>
 
     <section class="box main-content">
-        <h1>
+        <h2>
             <a name="jquery-video-lightning" class="anchor" href="#jquery-video-lightning">
                 <span class="octicon octicon-link"></span></a>
             jQuery Video Lightning
-        </h1>
+        </h2>
 
         <p>Turn any element into a
             <span class="video-link4 demo-link" data-video-id="y-z1bAh193Iwc">
@@ -157,10 +157,11 @@
     $(function () {
         $(".video-link2").jqueryVideoLightning({
             autoplay: 1,
-            color: "#fff",
-            width: "480px",
-            height: "320px",
-            popover: 1
+            backdrop_color: "#7FFF00",
+            backdrop_opacity: 0.7,
+            glow: 150,
+            glow_color: "#fff",
+            color: "#fff"
         });
     });
     $(function () {
@@ -202,6 +203,14 @@
             height: "320px",
             popover: 1
         });
+    });
+</script>
+<script>
+    $(window).on("resize", function () {
+        var calculate_font, font_size;
+        calculate_font = Math.abs(100 - $(window).outerWidth() / 10) + 100;
+        font_size = (calculate_font < 120) ? calculate_font : 120;
+        $('body').css("font-size", font_size + "%");
     });
 </script>
 </body>
