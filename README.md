@@ -12,7 +12,8 @@ Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
   - [Getting Started](#getting-started)    
   - [Passing in Options](#passing-in-options)    
   - [Available Options](#available-options)
-- [ToDo](#todo)           
+- [ToDo](#todo) 
+- [Alternate Builds](#alternate-builds)
 - [Contributing](#contributing)        
 
 Why?
@@ -138,6 +139,10 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 ToDo
 ----
 1. Add auto close option
+
+Alternate Builds
+----
+[1.1.0 minified](https://github.com/musocrat/jquery-video-lightning/blob/87c0b9370dd3ea3ad09a82541ad295a543139e32/dist/jquery-video-lightning.min.js) (pre-popover, lightbox only) (4.646 kb)
 
 Contributing
 ----
