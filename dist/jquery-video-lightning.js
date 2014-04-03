@@ -434,12 +434,14 @@
         },
 
         destroy: function (target_wrapper) {
-            target_wrapper.find(".video").remove();
-            target_wrapper.find(".video-popover-tail-wrapper").remove();
             target_wrapper.find(".video-wrapper").hide((this.settings().videoEaseOut));
-            target_wrapper.find(".video-wrapper").remove();
-            $(this).off();
-            $(this).removeData();
+            setTimeout(function () {
+                target_wrapper.find(".video").remove();
+                target_wrapper.find(".video-popover-tail-wrapper").remove();
+                target_wrapper.find(".video-wrapper").remove();
+                $(this).off();
+                $(this).removeData();
+            }, this.settings().videoEaseOut);
         }
     };
 
