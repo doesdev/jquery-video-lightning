@@ -31,7 +31,8 @@
             cover: 0,
             popover: 0,
             popover_x: "auto",
-            popover_y: "auto"
+            popover_y: "auto",
+			hover_plays: 0
         };
 
     function JQVideoLightning(element, options) {
@@ -92,7 +93,11 @@
                     points: $.proxy(tailPosition, this)
                 });
             }
-
+            
+			if (settings.videoHoverPlays === 1) {
+				target_wrapper.hover($.proxy(callPlayer, this), this.destroy(target_wrapper));
+			}
+			
             target_wrapper.on("click", $.proxy(callPlayer, this));
 
             $(document).on("scroll mousewheel DOMMouseScroll MozMousePixelScroll", $.proxy(resizeTail, this));

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>jQuery Video Lightning by musocrat</title>
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -15,7 +15,7 @@
 <img class="video-link main-logo demo-link" data-video-rick-roll="1" src="images/JqueryVideoLightningIconPurple144.png" alt="jQuery Video Lightning Icon"/>
 <div class="wrapper">
     <header>
-        <span class="header-title"><h1>jQuery Video Lightning</h1></span>
+        <h1 class="header-title">jQuery Video Lightning</h1>
     </header>
 
     <ul class="github-links">
@@ -143,7 +143,8 @@
 </div>
 <script src="javascripts/scale.fix.js"></script>
 <script src="javascripts/jquery.min.js"></script>
-<script src="javascripts/jquery-video-lightning.js"></script>
+<!--<script src="javascripts/jquery-video-lightning.js"></script>-->
+<script src="src/jqvl.js"></script>
 <script src="javascripts/jqvl-page.js"></script>
 <script>
     $(function () {
@@ -188,13 +189,14 @@
     $(function () {
         $(".video-link5").jqueryVideoLightning({
             autoplay: 1,
-            playlist: "AxvjkPAiUdU,WkgWvaFrJv8",
+            playlist: "PL0941E3B0A7410341",
             backdrop_color: "#3A0372",
             backdrop_opacity: 0.8,
             glow: 50,
             glow_color: "#F1D6F5",
             color: "#fff",
-            cover: 1
+            cover: 1,
+            purelist: true
         });
     });
     $(function () {
@@ -203,7 +205,9 @@
             controls: 0,
             width: "480px",
             height: "320px",
-            popover: 1
+            popover: 1,
+			hover_plays: 1,
+            peek: 1
         });
     });
 </script>
