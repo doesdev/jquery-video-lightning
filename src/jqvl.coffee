@@ -69,15 +69,16 @@
         "
         $(styles).appendTo("head")
       @coverImage(@vendor, @video_id, @target_wrapper) if @settings.videoCover == 1
-      @target_wrapper.on "click", => @player()
+      @target_wrapper.on "click", @player
+      $(document).keydown((e) => @destroy() if e.which == 27) unless @settings.videoRickRoll == 1
       if @settings.videoPeek == 1
-        @target_wrapper.on 'mouseenter', => @player()
-        @target_wrapper.on 'mouseleave', => @player()
+        @target_wrapper.on 'mouseenter', @player
+        @target_wrapper.on 'mouseleave', @player
       if @settings.videoPopover == 1
-        $(document).on "scroll mousewheel DOMMouseScroll MozMousePixelScroll", => @popoverPosition()
-        $(window).on 'resize', => @popoverPosition()
+        $(document).on "scroll mousewheel DOMMouseScroll MozMousePixelScroll", @popoverPosition
+        $(window).on 'resize', @popoverPosition
 
-    player: =>
+    player: (event = {type: null}) =>
       if @target_wrapper.find('.video-frame').is(':visible') || @target_wrapper.find('.video-wrapper').is(':visible')
         @destroy() unless @settings.videoRickRoll == 1
         return
@@ -182,6 +183,47 @@
           format: "jsonp"
         ).done (data) ->
           $("<img class='video-cover'>").attr("src", data[0].thumbnail_large).appendTo(@target_wrapper)
+
+    getYoutubeAPI: =>
+      tag = document.createElement('script')
+      tag.src = "https://www.youtube.com/iframe_api"
+      firstScriptTag = document.getElementsByTagName('script')[0]
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+
+#    youtubePlayerExt: =>
+#      onPlayerReady = (event) -> event.target.playVideo()
+#      done = false
+#      onPlayerStateChange = (event) ->
+#        if event.data == YT.PlayerState.PLAYING and !done
+#          setTimeout stopVideo, 6000
+#          done = true
+#        return
+#
+#      onYouTubeIframeAPIReady = () =>
+#        player = new YT.Player('player', =>
+#          height: @settings.videoHeight
+#          width: @settings.videoWidth
+#          videoId: @video_id
+#          autoplay: @settings.videoAutoplay
+#          autohide: @settings.videoAutohide
+#          controls: @settings.videoControls
+#          controls: @settings.videoControls
+#          iv_load_policy: @settings.videoIvLoadPolicy
+#          loop: @settings.videoLoop
+#          modestbranding: @settings.videoModestbranding
+#          playlist: @settings.videoPlaylist
+#          rel: @settings.videoRelated
+#          showinfo: @settings.videoShowinfo
+#          start: @settings.videoStartTime
+#          theme: @settings.videoTheme
+#          color: @prepHex(@settings.videoColor)
+#          events:
+#            'onReady': onPlayerReady,
+#            'onStateChange': onPlayerStateChange
+#
+#      stopVideo = ->
+#        player.stopVideo()
+#        return
 
     youtubePlayer: =>
       params = "width='#{@settings.videoWidth}' height='#{@settings.videoHeight}' frameborder='0' allowfullscreen"

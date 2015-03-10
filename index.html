@@ -144,72 +144,74 @@
 <script src="javascripts/scale.fix.js"></script>
 <script src="javascripts/jquery.min.js"></script>
 <!--<script src="javascripts/jquery-video-lightning.js"></script>-->
-<script src="src/jqvl.js"></script>
+<!--<script src="src/jqvl.js"></script>-->
+<script src="src/jqvl2.js"></script>
 <script src="javascripts/jqvl-page.js"></script>
 <script>
-    $(function () {
-        $(".video-link").jqueryVideoLightning({
-            autoplay: 1,
-            ease_out: 1000,
-            backdrop_color: "#ddd",
-            backdrop_opacity: 0.6,
-            glow: 20,
-            glow_color: "#000"
-        });
-    });
-    $(function () {
-        $(".video-link2").jqueryVideoLightning({
-            autoplay: 1,
-            backdrop_color: "#7FFF00",
-            backdrop_opacity: 0.7,
-            glow: 150,
-            glow_color: "#fff",
-            color: "#fff"
-        });
-    });
-    $(function () {
-        $(".video-link3").jqueryVideoLightning({
-            autoplay: 1,
-            controls: 0,
-            backdrop_color: "#000",
-            backdrop_opacity: 0.9,
-            glow: 40,
-            glow_color: "#ff9900",
-            color: "white"
-        });
-    });
-    $(function () {
-        $(".video-link4").jqueryVideoLightning({
-            autoplay: 1,
-            ease_in: 0,
-            controls: 0,
-            color: "white"
-        });
-    });
-    $(function () {
-        $(".video-link5").jqueryVideoLightning({
-            autoplay: 1,
-            playlist: "PL0941E3B0A7410341",
-            backdrop_color: "#3A0372",
-            backdrop_opacity: 0.8,
-            glow: 50,
-            glow_color: "#F1D6F5",
-            color: "#fff",
-            cover: 1,
-            purelist: true
-        });
-    });
-    $(function () {
-        $(".video-link6").jqueryVideoLightning({
-            autoplay: 1,
-            controls: 0,
-            width: "480px",
-            height: "320px",
-            popover: 1,
-			hover_plays: 1,
-            peek: 1
-        });
-    });
+    videoLightning({element: ".video-link4"});
+//    $(function () {
+//        $(".video-link").jqueryVideoLightning({
+//            autoplay: 1,
+//            ease_out: 1000,
+//            backdrop_color: "#ddd",
+//            backdrop_opacity: 0.6,
+//            glow: 20,
+//            glow_color: "#000"
+//        });
+//    });
+//    $(function () {
+//        $(".video-link2").jqueryVideoLightning({
+//            autoplay: 1,
+//            backdrop_color: "#7FFF00",
+//            backdrop_opacity: 0.7,
+//            glow: 150,
+//            glow_color: "#fff",
+//            color: "#fff"
+//        });
+//    });
+//    $(function () {
+//        $(".video-link3").jqueryVideoLightning({
+//            autoplay: 1,
+//            controls: 0,
+//            backdrop_color: "#000",
+//            backdrop_opacity: 0.9,
+//            glow: 40,
+//            glow_color: "#ff9900",
+//            color: "white"
+//        });
+//    });
+//    $(function () {
+//        $(".video-link4").jqueryVideoLightning({
+//            autoplay: 1,
+//            ease_in: 0,
+//            controls: 0,
+//            color: "white"
+//        });
+//    });
+//    $(function () {
+//        $(".video-link5").jqueryVideoLightning({
+//            autoplay: 1,
+//            playlist: "PL0941E3B0A7410341",
+//            backdrop_color: "#3A0372",
+//            backdrop_opacity: 0.8,
+//            glow: 50,
+//            glow_color: "#F1D6F5",
+//            color: "#fff",
+//            cover: 1,
+//            purelist: true
+//        });
+//    });
+//    $(function () {
+//        $(".video-link6").jqueryVideoLightning({
+//            autoplay: 1,
+//            controls: 0,
+//            width: "480px",
+//            height: "320px",
+//            popover: 1,
+//			hover_plays: 1,
+//            peek: 1
+//        });
+//    });
 </script>
 </body>
 </html>

@@ -43,6 +43,7 @@
         this.destroy = __bind(this.destroy, this);
         this.vimeoPlayer = __bind(this.vimeoPlayer, this);
         this.youtubePlayer = __bind(this.youtubePlayer, this);
+        this.getYoutubeAPI = __bind(this.getYoutubeAPI, this);
         this.coverImage = __bind(this.coverImage, this);
         this.fullHex = __bind(this.fullHex, this);
         this.prepHex = __bind(this.prepHex, this);
@@ -76,39 +77,33 @@
         if (this.settings.videoCover === 1) {
           this.coverImage(this.vendor, this.video_id, this.target_wrapper);
         }
-        this.target_wrapper.on("click", (function(_this) {
-          return function() {
-            return _this.player();
-          };
-        })(this));
-        if (this.settings.videoPeek === 1) {
-          this.target_wrapper.on('mouseenter', (function(_this) {
-            return function() {
-              return _this.player();
-            };
-          })(this));
-          this.target_wrapper.on('mouseleave', (function(_this) {
-            return function() {
-              return _this.player();
+        this.target_wrapper.on("click", this.player);
+        if (this.settings.videoRickRoll !== 1) {
+          $(document).keydown((function(_this) {
+            return function(e) {
+              if (e.which === 27) {
+                return _this.destroy();
+              }
             };
           })(this));
         }
+        if (this.settings.videoPeek === 1) {
+          this.target_wrapper.on('mouseenter', this.player);
+          this.target_wrapper.on('mouseleave', this.player);
+        }
         if (this.settings.videoPopover === 1) {
-          $(document).on("scroll mousewheel DOMMouseScroll MozMousePixelScroll", (function(_this) {
-            return function() {
-              return _this.popoverPosition();
-            };
-          })(this));
-          return $(window).on('resize', (function(_this) {
-            return function() {
-              return _this.popoverPosition();
-            };
-          })(this));
+          $(document).on("scroll mousewheel DOMMouseScroll MozMousePixelScroll", this.popoverPosition);
+          return $(window).on('resize', this.popoverPosition);
         }
       };
 
-      JQVideoLightning.prototype.player = function() {
+      JQVideoLightning.prototype.player = function(event) {
         var divs, vBdColor, video_wrapper;
+        if (event == null) {
+          event = {
+            type: null
+          };
+        }
         if (this.target_wrapper.find('.video-frame').is(':visible') || this.target_wrapper.find('.video-wrapper').is(':visible')) {
           if (this.settings.videoRickRoll !== 1) {
             this.destroy();
@@ -250,6 +245,14 @@
             return $("<img class='video-cover'>").attr("src", data[0].thumbnail_large).appendTo(this.target_wrapper);
           });
         }
+      };
+
+      JQVideoLightning.prototype.getYoutubeAPI = function() {
+        var firstScriptTag, tag;
+        tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        firstScriptTag = document.getElementsByTagName('script')[0];
+        return firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       };
 
       JQVideoLightning.prototype.youtubePlayer = function() {
