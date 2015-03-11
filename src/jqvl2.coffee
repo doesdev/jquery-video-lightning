@@ -21,31 +21,51 @@
 
   # VideoLightning Class
   class VideoLightning
-    constructor: (@elObj, @settings) ->
+    constructor: (@elObj, @opts) ->
       @inst = _randar()
       @el = @elObj.el
-      console.log(@el)
-      @buildOpts()
+      _extObj(@opts, @elObj.opts)
       @buildEls()
-
-    buildOpts: => _extObj(@settings, @elObj.opts)
+      @regEvents()
 
     buildEls: =>
-      (@wrapper = dom.createElement('span')).className = 'video-wrapper'
-      @wrapper.innerHTML = _domStr(
-        tag: 'div',
-        attrs: {class: 'video-frame'},
+      (@target = dom.createElement('span')).className = 'video-target'
+      @target.style.cursor = 'pointer'
+      @el.parentNode.insertBefore(@target, @el)
+      @target.appendChild(@el)
+      bdc = _cc(@opts.bdColor || '#000')
+      bdo = @opts.bdOpacity || 1
+      @target.insertAdjacentHTML 'beforeend', _domStr(
+        tag: 'div'
+        attrs:
+          id: "wrap_#{@inst}"
+          class: 'video-wrapper'
+          style: "#{_wrapCss}; background: rgba(#{bdc.r}, #{bdc.g}, #{bdc.b}, #{bdo})}; z-index: #{@opts.zIndex||2100}"
         children: [
-          tag: 'div',
-          attrs: {class: 'video'},
+          tag: 'div'
+          attrs: {class: 'video-frame', style: 'background:#000000;'}
           children: [
-            tag: 'iframe',
-            attrs: {id: @inst, class: 'video-iframe'}
+            tag: 'div'
+            attrs: {class: 'video'}
+            children: [
+              tag: 'iframe'
+              attrs: {id: "iframe_#{@inst}", class: 'video-iframe'}
+            ]
           ]
-        ])
-      @el.parentNode.insertBefore(@wrapper, @el)
-      @wrapper.appendChild(@el)
+        ]
+      )
+      @wrapper = dom.getElementById("wrap_#{@inst}")
 
+    regEvents: =>
+      @target.addEventListener('mouseup', @clicked)
+      @target.addEventListener('mouseover', @hovered) if @opts.peek
+
+    clicked: (e) => @show(); return true
+
+    hovered: (e) => return true
+
+    show: => @wrapper.style.display = 'block'; return
+    hide: => @wrapper.style.display = 'none'; return
 
   # HELPERS
   _domStr = (o) ->
@@ -63,6 +83,12 @@
     els = if el.charAt(0) == '#' then dom.getElementById(el.substr(1)) else dom.getElementsByClassName(el.substr(1))
     return if _isAry(els) && els.length == 0 then null else els
   _randar = -> (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).substring(0, 16)
+  _prepHex = (hex) -> hex = hex.replace(/^#/, ''); return if hex.length == 3 then "#{hex}#{hex}" else hex
+  _cc = (hex) ->
+    r: parseInt((_prepHex(hex)).substring(0, 2), 16)
+    g: parseInt((_prepHex(hex)).substring(2, 4), 16)
+    b: parseInt((_prepHex(hex)).substring(4, 6), 16)
+  _wrapCss = 'display: none; position: fixed; min-width: 100%; min-height: 100%; top: 0; right: 0; bottom: 0; left: 0;'
 
   # INIT
   this.videoLightning = videoLightning
