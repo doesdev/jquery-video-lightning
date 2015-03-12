@@ -24,26 +24,37 @@
     constructor: (@elObj, @opts) ->
       @inst = _randar()
       @el = @elObj.el
-      _extObj(@opts, @elObj.opts)
+      @buildOpts()
       @buildEls()
       @regEvents()
+
+    buildOpts: =>
+      _extObj(@opts, @elObj.opts)
+      @opts.width ?= 640
+      @opts.height ?= 390
 
     buildEls: =>
       (@target = dom.createElement('span')).className = 'video-target'
       @target.style.cursor = 'pointer'
       @el.parentNode.insertBefore(@target, @el)
       @target.appendChild(@el)
-      bdc = _cc(@opts.bdColor || '#000')
-      bdo = @opts.bdOpacity || 1
+      bdc = _cc(@opts.bdColor || '#ddd')
+      bdo = @opts.bdOpacity || 0.6
+      bdbg = "background: rgba(#{bdc.r}, #{bdc.g}, #{bdc.b}, #{bdo})};"
+      fdim = "width: #{@opts.width}px; height: #{@opts.height}px;"
+      fmar = "margin-top: -#{@opts.height/2}px; margin-left: -#{@opts.width/2}px;"
+      fglo = "box-shadow: 0px 0px #{@opts.glow||20}px #{(@opts.glow||20) / 5}px #{_fullHex(@opts.glowColor||'#000')};"
       @target.insertAdjacentHTML 'beforeend', _domStr(
         tag: 'div'
         attrs:
           id: "wrap_#{@inst}"
           class: 'video-wrapper'
-          style: "#{_wrapCss}; background: rgba(#{bdc.r}, #{bdc.g}, #{bdc.b}, #{bdo})}; z-index: #{@opts.zIndex||2100}"
+          style: "#{_wrapCss} #{bdbg} z-index: #{@opts.zIndex||2100}; opacity: 0;"
         children: [
           tag: 'div'
-          attrs: {class: 'video-frame', style: 'background:#000000;'}
+          attrs:
+            class: 'video-frame'
+            style: "#{_frameCss} #{fdim} #{fmar} #{fglo}"
           children: [
             tag: 'div'
             attrs: {class: 'video'}
@@ -60,12 +71,17 @@
       @target.addEventListener('mouseup', @clicked)
       @target.addEventListener('mouseover', @hovered) if @opts.peek
 
-    clicked: (e) => @show(); return true
+    clicked: => return if @playing then @stop() else @play()
 
     hovered: (e) => return true
 
-    show: => @wrapper.style.display = 'block'; return
-    hide: => @wrapper.style.display = 'none'; return
+    play: => @show(); @playing = true; return
+
+    stop: => @hide(); @playing = false; return
+
+    show: => _fadeIn(@wrapper, @opts.fadeIn || 300); return
+
+    hide: => _fadeOut(@wrapper, @opts.fadeOut || 0); return
 
   # HELPERS
   _domStr = (o) ->
@@ -84,11 +100,16 @@
     return if _isAry(els) && els.length == 0 then null else els
   _randar = -> (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).substring(0, 16)
   _prepHex = (hex) -> hex = hex.replace(/^#/, ''); return if hex.length == 3 then "#{hex}#{hex}" else hex
+  _fullHex = (hex) -> return "#" + _prepHex(hex)
   _cc = (hex) ->
     r: parseInt((_prepHex(hex)).substring(0, 2), 16)
     g: parseInt((_prepHex(hex)).substring(2, 4), 16)
     b: parseInt((_prepHex(hex)).substring(4, 6), 16)
   _wrapCss = 'display: none; position: fixed; min-width: 100%; min-height: 100%; top: 0; right: 0; bottom: 0; left: 0;'
+  _frameCss = 'position: absolute; top: 50%; left: 50%; background: #000000;'
+  _fadeCss = (el, t) -> el.style.transition = el.style.mozTransition = el.style.webkitTransition = "opacity #{t}ms ease"
+  _fadeIn = (el, t) -> _fadeCss(el, t); el.style.display = 'block'; setTimeout((-> el.style.opacity = 1), 20)
+  _fadeOut = (el, t) -> _fadeCss(el, t); el.style.opacity = 0; setTimeout((-> el.style.display = 'none'), t)
 
   # INIT
   this.videoLightning = videoLightning
