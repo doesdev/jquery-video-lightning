@@ -2,7 +2,8 @@
   dom = document
 
   # SETUP
-  videoLightning = (opts) ->
+  videoLightning = (opts) =>
+    @vlData.instances = []
     noElErr = -> console.error('VideoLightning was initialized without elements.'); return
     optEls = opts.elements || opts.element
     return noElErr() unless optEls
@@ -16,7 +17,7 @@
         (if _isElAry(domEls) then (els.push(el: de, opts: el.opts) for de in domEls) else els.push(el: domEls, el.opts))
     return noElErr() unless els.length > 0
     settings = opts.settings || {}
-    (new VideoLightning(el, settings)) for el in els
+    (@vlData.instances.push(new VideoLightning(el, settings))) for el in els
     return
 
   # VideoLightning Class
@@ -26,16 +27,19 @@
       @el = @elObj.el
       @buildOpts()
       @buildEls()
-      @regEvents()
+      @initAPI()
 
     buildOpts: =>
       _extObj(@opts, @elObj.opts)
+      elDataSet = @el.dataset
+      (@opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v) for k, v of elDataSet
       @opts.width ?= 640
       @opts.height ?= 390
+      @vendor = if @opts.id.match(/^v/) then "vimeo" else "youtube"
+      @id = @opts.id.replace(/([vy]-)/i, '')
 
     buildEls: =>
       (@target = dom.createElement('span')).className = 'video-target'
-      @target.style.cursor = 'pointer'
       @el.parentNode.insertBefore(@target, @el)
       @target.appendChild(@el)
       bdc = _cc(@opts.bdColor || '#ddd')
@@ -66,8 +70,10 @@
         ]
       )
       @wrapper = dom.getElementById("wrap_#{@inst}")
+      @iframe = dom.getElementById("iframe_#{@inst}")
 
     regEvents: =>
+      @target.style.cursor = 'pointer'
       @target.addEventListener('mouseup', @clicked)
       @target.addEventListener('mouseover', @hovered) if @opts.peek
 
@@ -82,6 +88,20 @@
     show: => _fadeIn(@wrapper, @opts.fadeIn || 300); return
 
     hide: => _fadeOut(@wrapper, @opts.fadeOut || 0); return
+
+    initAPI: => if @vendor == "youtube" then @initYt()
+
+    initYt: =>
+      return if dom.getElementById('ytScript')
+      scriptA = dom.getElementsByTagName('script')[0]
+      ytrScript = document.createElement('script')
+      ytrScript.innerHTML = 'function onYouTubeIframeAPIReady() {vlData.ready()};'
+      scriptA.parentNode.insertBefore(ytrScript, scriptA)
+      ytScript = document.createElement('script')
+      ytScript.id = 'ytScript'
+      ytScript.src = "https://www.youtube.com/iframe_api"
+      ytrScript.parentNode.insertBefore(ytScript, ytrScript.nextSibling)
+      return
 
   # HELPERS
   _domStr = (o) ->
@@ -112,5 +132,7 @@
   _fadeOut = (el, t) -> _fadeCss(el, t); el.style.opacity = 0; setTimeout((-> el.style.display = 'none'), t)
 
   # INIT
-  this.videoLightning = videoLightning
+  @videoLightning = videoLightning
+  @vlData = {}
+  @vlData.ready = () => i.regEvents() for i in @vlData.instances
 ) document
