@@ -148,7 +148,14 @@
 <script src="src/jqvl2.js"></script>
 <script src="javascripts/jqvl-page.js"></script>
 <script>
-    videoLightning({element: ".video-link4"});
+    videoLightning({elements: [
+        {".video-link": {autoclose: true, autoplay: true, fadeOut: 600}},
+        ".video-link2",
+        ".video-link3",
+        ".video-link4",
+        ".video-link5",
+        ".video-link6"
+    ]});
 //    videoLightning({element: {".video-link4": {fadeOut: 3000}}});
 //    $(function () {
 //        $(".video-link").jqueryVideoLightning({

@@ -2,10 +2,10 @@
   dom = document
 
   # SETUP
-  videoLightning = (opts) =>
+  videoLightning = (obj) =>
     @vlData.instances = []
     noElErr = -> console.error('VideoLightning was initialized without elements.'); return
-    optEls = opts.elements || opts.element
+    optEls = obj.elements || obj.element
     return noElErr() unless optEls
     rawEls = []; els = []
     pushRawEls = (e) ->
@@ -16,18 +16,22 @@
       if (domEls = _getEl(el.el))
         (if _isElAry(domEls) then (els.push(el: de, opts: el.opts) for de in domEls) else els.push(el: domEls, el.opts))
     return noElErr() unless els.length > 0
-    settings = opts.settings || {}
+    settings = obj.settings || {}
     (@vlData.instances.push(new VideoLightning(el, settings))) for el in els
+    _initYT() if @vlData.youtube
     return
 
   # VideoLightning Class
   class VideoLightning
-    constructor: (@elObj, @opts) ->
+    constructor: (@elObj, opts) ->
+      @opts = _extObj({}, opts)
       @inst = _randar()
       @el = @elObj.el
       @buildOpts()
       @buildEls()
-      @initAPI()
+
+    initPlayer: =>
+      @regEvents()
 
     buildOpts: =>
       _extObj(@opts, @elObj.opts)
@@ -35,7 +39,9 @@
       (@opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v) for k, v of elDataSet
       @opts.width ?= 640
       @opts.height ?= 390
+      @opts.id ?= 'y-dQw4w9WgXcQ'
       @vendor = if @opts.id.match(/^v/) then "vimeo" else "youtube"
+      window.vlData[@vendor] = true
       @id = @opts.id.replace(/([vy]-)/i, '')
 
     buildEls: =>
@@ -63,7 +69,7 @@
             tag: 'div'
             attrs: {class: 'video'}
             children: [
-              tag: 'iframe'
+              tag: 'div'
               attrs: {id: "iframe_#{@inst}", class: 'video-iframe'}
             ]
           ]
@@ -77,39 +83,80 @@
       @target.addEventListener('mouseup', @clicked)
       @target.addEventListener('mouseover', @hovered) if @opts.peek
 
-    clicked: => return if @playing then @stop() else @play()
+    clicked: (e) =>
+      return if (e.buttons && e.buttons != 1) || (e.which && e.which != 1) || (e.button && e.button != 1)
+      return if @playing then @stop() else @play()
 
     hovered: (e) => return true
 
-    play: => @show(); @playing = true; return
+    play: =>
+      @show()
+      @initPlayerYT() if @vendor == 'youtube'
+      @playing = true
+      return
 
-    stop: => @hide(); @playing = false; return
+    stop: =>
+      @hide()
+      @ytStop() if @vendor == 'youtube'
+      @playing = false
+      return
 
     show: => _fadeIn(@wrapper, @opts.fadeIn || 300); return
 
     hide: => _fadeOut(@wrapper, @opts.fadeOut || 0); return
 
-    initAPI: => if @vendor == "youtube" then @initYt()
+    initPlayerYT: =>
+      return @ytPlayer.playVideo() if @ytPlayer && _boolify(@opts.autoplay, true)
+      @ytPlayer = new YT.Player "iframe_#{@inst}", {
+        width: @opts.width
+        height: @opts.height
+        videoId: @id
+        playerVars:
+          'enablejsapi': 1,
+          'autohide': @opts.autohide || 2,
+          'cc_load_policy': @opts.ccLoadPolicy || 0,
+          'color': @opts.color || null,
+          'controls': @opts.controls || 2,
+          'disablekb': @opts.disablekb || 0,
+          'end': @opts.endTime || null,
+          'fs': @opts.fs || 1,
+          'hl': @opts.hl || 'en',
+          'iv_load_policy': @opts.ivLoadPolicy || 1,
+          'list': @opts.list || null,
+          'listType': @opts.listType || null,
+          'loop': @opts.loop || 0,
+          'modestbranding': @opts.modestbranding || 0,
+          'origin': @opts.origin || window.location.host,
+          'playerapiid': @inst,
+          'playlist': @opts.playlist || null,
+          'playsinline': @opts.playsinline || 0,
+          'rel': @opts.rel || 0,
+          'showinfo': @opts.showinfo || 1,
+          'start': @opts.startTime || 0,
+          'theme': @opts.theme || null
+        events:
+          'onReady': @ytPlay,
+          'onStateChange': @ytState
+      }
 
-    initYt: =>
-      return if dom.getElementById('ytScript')
-      scriptA = dom.getElementsByTagName('script')[0]
-      ytrScript = document.createElement('script')
-      ytrScript.innerHTML = 'function onYouTubeIframeAPIReady() {vlData.ready()};'
-      scriptA.parentNode.insertBefore(ytrScript, scriptA)
-      ytScript = document.createElement('script')
-      ytScript.id = 'ytScript'
-      ytScript.src = "https://www.youtube.com/iframe_api"
-      ytrScript.parentNode.insertBefore(ytScript, ytrScript.nextSibling)
-      return
+    ytPlay: (e) =>
+      e.target.playVideo() if _boolify(@opts.autoplay, true)
+
+    ytStop: =>
+      @ytPlayer.stopVideo()
+      @ytPlayer.clearVideo()
+
+    ytState: (e) =>
+      @stop() if e.data == 0 && _boolify(@opts.autoclose, false)
 
   # HELPERS
+  _boolify = (prop, def) -> return if !prop then def else if prop == false || prop == 'false' then false else true
   _domStr = (o) ->
     attrs = ''; children = '';
     ((attrs += ' ' + k + '="' + v + '"') for k, v of o.attrs) if o.attrs
     ((children += if _isObj(c) then _domStr(c) else c) for c in o.children) if o.children
     return '<' + o.tag + attrs + '>' + children + '</' + o.tag + '>'
-  _extObj = (baseObj, extObj) -> (baseObj[k] = v) for k, v of extObj
+  _extObj = (baseObj, extObj) -> (baseObj[k] = v) for k, v of extObj; return baseObj
   _isStr = (obj) -> return typeof obj == 'string'
   _isAry = (obj) -> return obj instanceof Array
   _isElAry = (obj) -> return obj instanceof HTMLCollection
@@ -130,9 +177,22 @@
   _fadeCss = (el, t) -> el.style.transition = el.style.mozTransition = el.style.webkitTransition = "opacity #{t}ms ease"
   _fadeIn = (el, t) -> _fadeCss(el, t); el.style.display = 'block'; setTimeout((-> el.style.opacity = 1), 20)
   _fadeOut = (el, t) -> _fadeCss(el, t); el.style.opacity = 0; setTimeout((-> el.style.display = 'none'), t)
+  _initYT = ->
+    return if dom.getElementById('ytScript')
+    scriptA = dom.getElementsByTagName('script')[0]
+    ytrScript = document.createElement('script')
+    ytrScript.innerHTML = 'function onYouTubeIframeAPIReady() {vlData.ready()};'
+    scriptA.parentNode.insertBefore(ytrScript, scriptA)
+    ytScript = document.createElement('script')
+    ytScript.id = 'ytScript'
+    ytScript.async = true
+    ytScript.src = "https://www.youtube.com/iframe_api"
+    ytrScript.parentNode.insertBefore(ytScript, ytrScript.nextSibling)
+    return
 
   # INIT
   @videoLightning = videoLightning
   @vlData = {}
-  @vlData.ready = () => i.regEvents() for i in @vlData.instances
+  @vlData.ready = () => i.initPlayer() for i in @vlData.instances
+  @vlData.youtube = @vlData.vimeo = false
 ) document
