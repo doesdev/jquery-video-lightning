@@ -36,8 +36,8 @@
       _extObj(@opts, @elObj.opts)
       elDataSet = @el.dataset
       (@opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v) for k, v of elDataSet
-      @opts.width ?= 640
-      @opts.height ?= 390
+      @opts.width = if @opts.width then parseInt(@opts.width) else 640
+      @opts.height = if @opts.height then parseInt(@opts.height) else 390
       @opts.id ?= 'y-dQw4w9WgXcQ'
       if @opts.id.match(/^v/) then (@vendor = 'vimeo'; @vm = true) else (@vendor = 'youtube'; @yt = true)
       window.vlData[@vendor] = true
@@ -96,8 +96,8 @@
       @playing = true
       return
 
-    stop: =>
-      @hide()
+    stop: (fade = 0) =>
+      @hide(fade)
       @ytStop() if @yt
       @vmStop() if @vm
       @playing = false
@@ -105,7 +105,7 @@
 
     show: => _fadeIn(@wrapper, @opts.fadeIn || 300); return
 
-    hide: => _fadeOut(@wrapper, @opts.fadeOut || 0); return
+    hide: (fade = 0) => _fadeOut(@wrapper, @opts.fadeOut || fade); return
 
     cover: => if @yt then @coverYT(); return
 
@@ -117,26 +117,26 @@
         playerVars:
           'enablejsapi': 1,
           'autoplay': 0,
-          'autohide': @opts.autohide || 2,
-          'cc_load_policy': @opts.ccLoadPolicy || 0,
-          'color': @opts.color || null,
-          'controls': @opts.controls || 2,
-          'disablekb': @opts.disablekb || 0,
-          'end': @opts.endTime || null,
-          'fs': @opts.fs || 1,
-          'hl': @opts.hl || 'en',
-          'iv_load_policy': @opts.ivLoadPolicy || 1,
-          'list': @opts.list || null,
-          'listType': @opts.listType || null,
-          'loop': @opts.loop || 0,
-          'modestbranding': @opts.modestbranding || 0,
-          'origin': @opts.origin || "#{location.protocol}//#{location.host}",
+          'autohide': _val(@opts.autohide, 2),
+          'cc_load_policy': _val(@opts.ccLoadPolicy, 0),
+          'color': _val(@opts.color, null),
+          'controls': _val(@opts.controls, 2),
+          'disablekb': _val(@opts.disablekb, 0),
+          'end': _val(@opts.endTime, null),
+          'fs': _val(@opts.fs, 1),
+          'hl': _val(@opts.hl, 'en'),
+          'iv_load_policy': _val(@opts.ivLoadPolicy, 1),
+          'list': _val(@opts.list, null),
+          'listType': _val(@opts.listType, null),
+          'loop': _val(@opts.loop, 0),
+          'modestbranding': _val(@opts.modestbranding, 0),
+          'origin': _val(@opts.origin, "#{location.protocol}//#{location.host}"),
           'playerapiid': @inst,
-          'playlist': @opts.playlist || null,
-          'playsinline': @opts.playsinline || 0,
-          'rel': @opts.rel || 0,
-          'showinfo': @opts.showinfo || 1,
-          'start': @opts.startTime || 0,
+          'playlist': _val(@opts.playlist, null),
+          'playsinline': _val(@opts.playsinline, 0),
+          'rel': _val(@opts.rel, 0),
+          'showinfo': _val(@opts.showinfo, 1),
+          'start': _val(@opts.startTime, 0),
           'theme': @opts.theme || null
         events:
           'onReady': @regEvents,
@@ -150,7 +150,7 @@
       @ytPlayer.stopVideo()
       @ytPlayer.clearVideo()
 
-    ytState: (e) => @stop() if e.data == 0 && _boolify(@opts.autoclose, false)
+    ytState: (e) => @stop(1000) if e.data == 0 && _boolify(@opts.autoclose, true)
 
     coverYT: => @ytCover = _coverEl(@target, "//img.youtube.com/vi/#{@id}/hqdefault.jpg"); return
 
@@ -178,7 +178,7 @@
         when 'ready'
           @regEvents()
           _postToVM(@vmPlayer, @id, 'addEventListener', 'finish')
-        when 'finish' then @stop()
+        when 'finish' then @stop(1000)
       return
 
     vmPlay: => _postToVM(@vmPlayer, @id, 'play'); return
@@ -186,6 +186,7 @@
     vmStop: => _postToVM(@vmPlayer, @id, 'pause'); return
 
   # HELPERS
+  _val = (p, d) -> return if p in [false, 'false', 0, '0'] then p else p || d
   _boolify = (p, d) -> return if p in [false, 'false', 0, '0'] then false else !!p || d
   _domStr = (o) ->
     attrs = ''; children = '';
@@ -235,6 +236,46 @@
     cover.src = src
     target.appendChild(cover)
     return cover
+  _testEl = () ->
+    unless (test = document.getElementById('vl-size-test'))
+      test = document.createElement("div")
+      test.id = 'vl-size-test'
+      test.style.cssText = "position:fixed;top:0;left:0;bottom:0;right:0;visibility:hidden;"
+      document.body.appendChild(test)
+    height: test.offsetHeight
+    width: test.offsetWidth
+  _coords = (el) ->
+    rect = el.getBoundingClientRect()
+    hl_border = 0
+    top: rect.top - hl_border
+    right: rect.right + hl_border
+    bottom: rect.bottom + hl_border
+    left: rect.left - hl_border
+    width: rect.width || rect.right - rect.left
+    height: rect.height || rect.bottom - rect.top
+  _gravity = (coords, height, width) ->
+    center = x: (page_width = _testEl().width) / 2, y: (page_height = _testEl().height) / 2
+    box_center = x: width / 2, y: height / 2
+    points = []
+    for x in [coords.left..(coords.right + width)] by 30
+      points.push([x - width, coords.top - height])
+      points.push([x - width, coords.bottom])
+    for y in [coords.top..(coords.bottom + height)] by 30
+      points.push([coords.left - width, y - height])
+      points.push([coords.right, y - height])
+    sort = (a, b) ->
+      for ary in [[a, obja = {}], [b, objb = {}]]
+        x = ary[0][0]
+        y = ary[0][1]
+        ary[1].diffx = if (dax = (x + box_center.x)) > center.x then dax - center.x else center.x - dax
+        ary[1].diffy = if (day = (y + box_center.y)) > center.y then day - center.y else center.y - day
+        ary[1].diff = ary[1].diffx + ary[1].diffy
+        if x < 0 || x + width > page_width then ary[1].diff =+ 10000
+        if y < 0 || y + height > page_height then ary[1].diff =+ 10000
+      obja.diff - objb.diff
+    points.sort(sort)
+    x: if (x = points[0][0]) < 0 || x + width > page_width then null else x
+    y: if (y = points[0][1]) < 0 || y + height > page_height then null else y
 
   # INIT
   @videoLightning = videoLightning
