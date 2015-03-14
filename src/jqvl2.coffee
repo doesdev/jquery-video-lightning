@@ -18,7 +18,7 @@
     return noElErr() unless els.length > 0
     settings = obj.settings || {}
     (@vlData.instances.push(new VideoLightning(el, settings))) for el in els
-    _initYT() if @vlData.youtube
+    _initYTAPI()
     return
 
   # VideoLightning Class
@@ -29,9 +29,8 @@
       @el = @elObj.el
       @buildOpts()
       @buildEls()
-
-    initPlayer: =>
-      @regEvents()
+      @cover() if _boolify(@opts.cover, false)
+      @initPlayerVM() if @vm
 
     buildOpts: =>
       _extObj(@opts, @elObj.opts)
@@ -40,7 +39,7 @@
       @opts.width ?= 640
       @opts.height ?= 390
       @opts.id ?= 'y-dQw4w9WgXcQ'
-      @vendor = if @opts.id.match(/^v/) then "vimeo" else "youtube"
+      if @opts.id.match(/^v/) then (@vendor = 'vimeo'; @vm = true) else (@vendor = 'youtube'; @yt = true)
       window.vlData[@vendor] = true
       @id = @opts.id.replace(/([vy]-)/i, '')
 
@@ -69,7 +68,7 @@
             tag: 'div'
             attrs: {class: 'video'}
             children: [
-              tag: 'div'
+              tag: "#{if @yt then 'div' else 'iframe'}"
               attrs: {id: "iframe_#{@inst}", class: 'video-iframe'}
             ]
           ]
@@ -91,13 +90,16 @@
 
     play: =>
       @show()
-      @initPlayerYT() if @vendor == 'youtube'
+      if _boolify(@opts.autoplay, true)
+        @ytPlay() if @yt
+        @vmPlay() if @vm
       @playing = true
       return
 
     stop: =>
       @hide()
-      @ytStop() if @vendor == 'youtube'
+      @ytStop() if @yt
+      @vmStop() if @vm
       @playing = false
       return
 
@@ -105,14 +107,16 @@
 
     hide: => _fadeOut(@wrapper, @opts.fadeOut || 0); return
 
+    cover: => if @yt then @coverYT(); return
+
     initPlayerYT: =>
-      return @ytPlayer.playVideo() if @ytPlayer && _boolify(@opts.autoplay, true)
       @ytPlayer = new YT.Player "iframe_#{@inst}", {
         width: @opts.width
         height: @opts.height
         videoId: @id
         playerVars:
           'enablejsapi': 1,
+          'autoplay': 0,
           'autohide': @opts.autohide || 2,
           'cc_load_policy': @opts.ccLoadPolicy || 0,
           'color': @opts.color || null,
@@ -126,7 +130,7 @@
           'listType': @opts.listType || null,
           'loop': @opts.loop || 0,
           'modestbranding': @opts.modestbranding || 0,
-          'origin': @opts.origin || window.location.host,
+          'origin': @opts.origin || "#{location.protocol}//#{location.host}",
           'playerapiid': @inst,
           'playlist': @opts.playlist || null,
           'playsinline': @opts.playsinline || 0,
@@ -135,22 +139,54 @@
           'start': @opts.startTime || 0,
           'theme': @opts.theme || null
         events:
-          'onReady': @ytPlay,
+          'onReady': @regEvents,
           'onStateChange': @ytState
       }
 
-    ytPlay: (e) =>
-      e.target.playVideo() if _boolify(@opts.autoplay, true)
+    ytPlay: => @ytPlayer.playVideo()
 
     ytStop: =>
+      _ytReset(@ytPlayer, @opts.startTime)
       @ytPlayer.stopVideo()
       @ytPlayer.clearVideo()
 
-    ytState: (e) =>
-      @stop() if e.data == 0 && _boolify(@opts.autoclose, false)
+    ytState: (e) => @stop() if e.data == 0 && _boolify(@opts.autoclose, false)
+
+    coverYT: => @ytCover = _coverEl(@target, "//img.youtube.com/vi/#{@id}/hqdefault.jpg"); return
+
+    initPlayerVM: =>
+      src =
+        "http://player.vimeo.com/video/#{@id}?" +
+          "autoplay=0&" +
+          "loop=#{@opts.loop || 0}&title=#{@opts.showinfo || 1}&" +
+          "byline=#{@opts.byline || 1}&" +
+          "portrait=#{@opts.portrait || 1}&" +
+          "color=#{_prepHex(@opts.color || '#00adef')}" +
+          "api=1&player_id=#{@inst}"
+      @iframe.setAttribute('allowFullScreen', '1')
+      @iframe.width = @opts.width
+      @iframe.height = @opts.height
+      @iframe.frameBorder = 0
+      @iframe.src = src
+      window.addEventListener('message', @vmListen, false)
+      @vmPlayer = @iframe
+
+    vmListen: (msg) =>
+      data = JSON.parse(msg.data)
+      return unless data.player_id == @inst
+      switch data.event
+        when 'ready'
+          @regEvents()
+          _postToVM(@vmPlayer, @id, 'addEventListener', 'finish')
+        when 'finish' then @stop()
+      return
+
+    vmPlay: => _postToVM(@vmPlayer, @id, 'play'); return
+
+    vmStop: => _postToVM(@vmPlayer, @id, 'pause'); return
 
   # HELPERS
-  _boolify = (prop, def) -> return if !prop then def else if prop == false || prop == 'false' then false else true
+  _boolify = (p, d) -> return if p in [false, 'false', 0, '0'] then false else !!p || d
   _domStr = (o) ->
     attrs = ''; children = '';
     ((attrs += ' ' + k + '="' + v + '"') for k, v of o.attrs) if o.attrs
@@ -177,22 +213,32 @@
   _fadeCss = (el, t) -> el.style.transition = el.style.mozTransition = el.style.webkitTransition = "opacity #{t}ms ease"
   _fadeIn = (el, t) -> _fadeCss(el, t); el.style.display = 'block'; setTimeout((-> el.style.opacity = 1), 20)
   _fadeOut = (el, t) -> _fadeCss(el, t); el.style.opacity = 0; setTimeout((-> el.style.display = 'none'), t)
-  _initYT = ->
+  _initYTAPI = ->
     return if dom.getElementById('ytScript')
     scriptA = dom.getElementsByTagName('script')[0]
-    ytrScript = document.createElement('script')
-    ytrScript.innerHTML = 'function onYouTubeIframeAPIReady() {vlData.ready()};'
-    scriptA.parentNode.insertBefore(ytrScript, scriptA)
-    ytScript = document.createElement('script')
-    ytScript.id = 'ytScript'
-    ytScript.async = true
-    ytScript.src = "https://www.youtube.com/iframe_api"
-    ytrScript.parentNode.insertBefore(ytScript, ytrScript.nextSibling)
+    vFuncs = document.createElement('script')
+    vFuncs.innerHTML = 'function onYouTubeIframeAPIReady() {vlData.ytReady()};'
+    scriptA.parentNode.insertBefore(vFuncs, scriptA)
+    vScript = document.createElement('script')
+    vScript.id = 'ytScript'
+    vScript.async = true
+    vScript.src = '//www.youtube.com/iframe_api'
+    vFuncs.parentNode.insertBefore(vScript, vFuncs.nextSibling)
     return
+  _ytReset = (p, s = 0) -> if (p.getDuration() - 3) < p.getCurrentTime() then p.pauseVideo(); p.seekTo(s, false); return
+  _postToVM = (player, id, k, v = null) ->
+    data = if v then {method: k, value: v} else {method: k}
+    player.contentWindow.postMessage(JSON.stringify(data), "http://player.vimeo.com/video/#{id}")
+  _coverEl = (target, src) ->
+    cover = dom.createElement('img')
+    cover.className = 'video-link'
+    cover.src = src
+    target.appendChild(cover)
+    return cover
 
   # INIT
   @videoLightning = videoLightning
   @vlData = {}
-  @vlData.ready = () => i.initPlayer() for i in @vlData.instances
+  @vlData.ytReady = () => i.initPlayerYT() for i in @vlData.instances.filter (i) -> i.vendor == 'youtube'
   @vlData.youtube = @vlData.vimeo = false
 ) document

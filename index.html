@@ -150,10 +150,10 @@
 <script>
     videoLightning({elements: [
         {".video-link": {autoclose: true, autoplay: true, fadeOut: 600}},
-        ".video-link2",
-        ".video-link3",
+        {".video-link2": {autoclose: true, autoplay: true, fadeOut: 600}},
+        {".video-link3": {autoplay: false}},
         ".video-link4",
-        ".video-link5",
+        {".video-link5": {cover: true}},
         ".video-link6"
     ]});
 //    videoLightning({element: {".video-link4": {fadeOut: 3000}}});
