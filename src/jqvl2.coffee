@@ -47,18 +47,19 @@
       (@target = dom.createElement('span')).className = 'video-target'
       @el.parentNode.insertBefore(@target, @el)
       @target.appendChild(@el)
-      bdc = _cc(@opts.bdColor || '#ddd')
-      bdo = @opts.bdOpacity || 0.6
+      bdc = _cc(_val(@opts.bdColor, '#ddd'))
+      bdo = _val(@opts.bdOpacity, 0.6)
       bdbg = "background: rgba(#{bdc.r}, #{bdc.g}, #{bdc.b}, #{bdo})};"
       fdim = "width: #{@opts.width}px; height: #{@opts.height}px;"
       fmar = "margin-top: -#{@opts.height/2}px; margin-left: -#{@opts.width/2}px;"
-      fglo = "box-shadow: 0px 0px #{@opts.glow||20}px #{(@opts.glow||20) / 5}px #{_fullHex(@opts.glowColor||'#000')};"
+      fglo = "box-shadow: 0px 0px #{g = _val(@opts.glow, 20)}px #{g / 5}px #{_fullHex(_val(@opts.glowColor, '#000'))};"
+      wrapCss = if @opts.popover then _wrapCssP(@opts.width, @opts.height) else _wrapCss
       @target.insertAdjacentHTML 'beforeend', _domStr(
         tag: 'div'
         attrs:
           id: "wrap_#{@inst}"
           class: 'video-wrapper'
-          style: "#{_wrapCss} #{bdbg} z-index: #{@opts.zIndex||2100}; opacity: 0;"
+          style: "#{wrapCss} #{bdbg} z-index: #{_val(@opts.zIndex, 2100)}; opacity: 0;"
         children: [
           tag: 'div'
           attrs:
@@ -77,18 +78,40 @@
       @wrapper = dom.getElementById("wrap_#{@inst}")
       @iframe = dom.getElementById("iframe_#{@inst}")
 
+    popoverPos: =>
+      pos = _gravity(@target, @opts.width, @opts.height, @opts.fluidity)
+      @wrapper.style.left = "#{pos.x}px"
+      @wrapper.style.top = "#{pos.y}px"
+
+    resize: =>
+      unless @opts.throttle
+        @popoverPos()
+        if vlData.throttle
+          @opts.throttle = true
+          throttleOff = -> @opts.throttle = false
+          setTimeout(throttleOff, vlData.throttle)
+
     regEvents: =>
       @target.style.cursor = 'pointer'
       @target.addEventListener('mouseup', @clicked)
-      @target.addEventListener('mouseover', @hovered) if @opts.peek
+      if @opts.popover
+        window.addEventListener('resize', @resize)
+        window.addEventListener('scroll', @resize)
+        window.addEventListener('orientationchange', @resize)
+        if @opts.peek
+          @target.addEventListener('mouseenter', @hovered)
+          @target.addEventListener('mouseleave', @hovered)
 
     clicked: (e) =>
       return if (e.buttons && e.buttons != 1) || (e.which && e.which != 1) || (e.button && e.button != 1)
       return if @playing then @stop() else @play()
 
-    hovered: (e) => return true
+    hovered: (e) =>
+      @play() if e.type == 'mouseenter' && !@playing
+      @stop() if e.type == 'mouseleave' && @playing
 
     play: =>
+      @popoverPos() if @opts.popover
       @show()
       if _boolify(@opts.autoplay, true)
         @ytPlay() if @yt
@@ -103,9 +126,9 @@
       @playing = false
       return
 
-    show: => _fadeIn(@wrapper, @opts.fadeIn || 300); return
+    show: => _fadeIn(@wrapper, _val(@opts.fadeIn, 300)); return
 
-    hide: (fade = 0) => _fadeOut(@wrapper, @opts.fadeOut || fade); return
+    hide: (fade = 0) => _fadeOut(@wrapper, _val(@opts.fadeOut, fade)); return
 
     cover: => if @yt then @coverYT(); return
 
@@ -137,7 +160,7 @@
           'rel': _val(@opts.rel, 0),
           'showinfo': _val(@opts.showinfo, 1),
           'start': _val(@opts.startTime, 0),
-          'theme': @opts.theme || null
+          'theme': _val(@opts.theme, null)
         events:
           'onReady': @regEvents,
           'onStateChange': @ytState
@@ -158,10 +181,10 @@
       src =
         "http://player.vimeo.com/video/#{@id}?" +
           "autoplay=0&" +
-          "loop=#{@opts.loop || 0}&title=#{@opts.showinfo || 1}&" +
-          "byline=#{@opts.byline || 1}&" +
-          "portrait=#{@opts.portrait || 1}&" +
-          "color=#{_prepHex(@opts.color || '#00adef')}" +
+          "loop=#{_val(@opts.loop, 0)}&title=#{_val(@opts.showinfo, 1)}&" +
+          "byline=#{_val(@opts.byline, 1)}&" +
+          "portrait=#{_val(@opts.portrait, 1)}&" +
+          "color=#{_prepHex(_val(@opts.color, '#00adef'))}" +
           "api=1&player_id=#{@inst}"
       @iframe.setAttribute('allowFullScreen', '1')
       @iframe.width = @opts.width
@@ -210,6 +233,7 @@
     g: parseInt((_prepHex(hex)).substring(2, 4), 16)
     b: parseInt((_prepHex(hex)).substring(4, 6), 16)
   _wrapCss = 'display: none; position: fixed; min-width: 100%; min-height: 100%; top: 0; right: 0; bottom: 0; left: 0;'
+  _wrapCssP = (w, h) -> "display: none; position: fixed; width: #{w}px; height: #{h}px;"
   _frameCss = 'position: absolute; top: 50%; left: 50%; background: #000000;'
   _fadeCss = (el, t) -> el.style.transition = el.style.mozTransition = el.style.webkitTransition = "opacity #{t}ms ease"
   _fadeIn = (el, t) -> _fadeCss(el, t); el.style.display = 'block'; setTimeout((-> el.style.opacity = 1), 20)
@@ -242,25 +266,17 @@
       test.id = 'vl-size-test'
       test.style.cssText = "position:fixed;top:0;left:0;bottom:0;right:0;visibility:hidden;"
       document.body.appendChild(test)
-    height: test.offsetHeight
     width: test.offsetWidth
-  _coords = (el) ->
-    rect = el.getBoundingClientRect()
-    hl_border = 0
-    top: rect.top - hl_border
-    right: rect.right + hl_border
-    bottom: rect.bottom + hl_border
-    left: rect.left - hl_border
-    width: rect.width || rect.right - rect.left
-    height: rect.height || rect.bottom - rect.top
-  _gravity = (coords, height, width) ->
+    height: test.offsetHeight
+  _gravity = (el, width, height, fluidity = 30) ->
+    coords = el.getBoundingClientRect()
     center = x: (page_width = _testEl().width) / 2, y: (page_height = _testEl().height) / 2
     box_center = x: width / 2, y: height / 2
     points = []
-    for x in [coords.left..(coords.right + width)] by 30
+    for x in [coords.left..(coords.right + width)] by fluidity
       points.push([x - width, coords.top - height])
       points.push([x - width, coords.bottom])
-    for y in [coords.top..(coords.bottom + height)] by 30
+    for y in [coords.top..(coords.bottom + height)] by fluidity
       points.push([coords.left - width, y - height])
       points.push([coords.right, y - height])
     sort = (a, b) ->
@@ -270,12 +286,12 @@
         ary[1].diffx = if (dax = (x + box_center.x)) > center.x then dax - center.x else center.x - dax
         ary[1].diffy = if (day = (y + box_center.y)) > center.y then day - center.y else center.y - day
         ary[1].diff = ary[1].diffx + ary[1].diffy
-        if x < 0 || x + width > page_width then ary[1].diff =+ 10000
-        if y < 0 || y + height > page_height then ary[1].diff =+ 10000
+        if x < 0 || x + width > page_width then ary[1].diff += 10000
+        if y < 0 || y + height > page_height then ary[1].diff += 10000
       obja.diff - objb.diff
     points.sort(sort)
-    x: if (x = points[0][0]) < 0 || x + width > page_width then null else x
-    y: if (y = points[0][1]) < 0 || y + height > page_height then null else y
+    x: parseInt((if (x = points[0][0]) < 0 || x + width > page_width then center.x - box_center.x else x), 10)
+    y: parseInt((if (y = points[0][1]) < 0 || y + height > page_height then center.y - box_center.y else y), 10)
 
   # INIT
   @videoLightning = videoLightning
