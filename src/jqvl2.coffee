@@ -3,7 +3,6 @@
 
   # SETUP
   videoLightning = (obj) =>
-    @vlData.instances = []
     noElErr = -> console.error('VideoLightning was initialized without elements.'); return
     optEls = obj.elements || obj.element
     return noElErr() unless optEls
@@ -54,6 +53,9 @@
       fmar = "margin-top: -#{@opts.height/2}px; margin-left: -#{@opts.width/2}px;"
       fglo = "box-shadow: 0px 0px #{g = _val(@opts.glow, 20)}px #{g / 5}px #{_fullHex(_val(@opts.glowColor, '#000'))};"
       wrapCss = if @opts.popover then _wrapCssP(@opts.width, @opts.height) else _wrapCss
+      if @opts.popover
+        xCss = "background: #{_fullHex(_val(@opts.xBgColor, '#000'))}; color: #{_fullHex(_val(@opts.xColor, '#fff'))};"
+      else xCss = 'display: none;'
       @target.insertAdjacentHTML 'beforeend', _domStr(
         tag: 'div'
         attrs:
@@ -72,11 +74,19 @@
               tag: "#{if @yt then 'div' else 'iframe'}"
               attrs: {id: "iframe_#{@inst}", class: 'video-iframe'}
             ]
-          ]
+          ],
+        ,
+          tag: 'div'
+          inner: '&times;'
+          attrs:
+            id: "close_#{@inst}"
+            class: 'video-close'
+            style: "float: right; margin-right: -34px; #{fglo} #{xCss} padding: 0 10px 0 12px; font-size: 25px;"
         ]
       )
       @wrapper = dom.getElementById("wrap_#{@inst}")
       @iframe = dom.getElementById("iframe_#{@inst}")
+      @close = dom.getElementById("close_#{@inst}")
 
     popoverPos: =>
       pos = _gravity(@target, @opts.width, @opts.height, @opts.fluidity)
@@ -84,12 +94,12 @@
       @wrapper.style.top = "#{pos.y}px"
 
     resize: =>
-      unless @opts.throttle
+      unless window.vlData.throttle
         @popoverPos()
-        if vlData.throttle
-          @opts.throttle = true
-          throttleOff = -> @opts.throttle = false
-          setTimeout(throttleOff, vlData.throttle)
+        if @opts.throttle
+          window.vlData.throttle = true
+          throttleOff = -> window.vlData.throttle = false
+          setTimeout(throttleOff, @opts.throttle)
 
     regEvents: =>
       @target.style.cursor = 'pointer'
@@ -103,12 +113,19 @@
           @target.addEventListener('mouseleave', @hovered)
 
     clicked: (e) =>
+      return @peek(false, true) if @peeking
       return if (e.buttons && e.buttons != 1) || (e.which && e.which != 1) || (e.button && e.button != 1)
       return if @playing then @stop() else @play()
 
     hovered: (e) =>
-      @play() if e.type == 'mouseenter' && !@playing
-      @stop() if e.type == 'mouseleave' && @playing
+      @peek() if e.type == 'mouseenter' && !@playing
+      @peek(@peeking) if e.type == 'mouseleave' && @playing
+
+    peek: (close = false, pin = false) =>
+      return if !@peeking && @playing
+      @close.innerHTML = if close || pin then '&times;' else '&#94;'
+      @peeking = !!!(close || pin)
+      return if close then @stop() else if pin then null else @play()
 
     play: =>
       @popoverPos() if @opts.popover
@@ -173,7 +190,7 @@
       @ytPlayer.stopVideo()
       @ytPlayer.clearVideo()
 
-    ytState: (e) => @stop(1000) if e.data == 0 && _boolify(@opts.autoclose, true)
+    ytState: (e) => @stop(_val(@opts.fadeOut, 1000)) if e.data == 0 && _boolify(@opts.autoclose, true)
 
     coverYT: => @ytCover = _coverEl(@target, "//img.youtube.com/vi/#{@id}/hqdefault.jpg"); return
 
@@ -215,7 +232,7 @@
     attrs = ''; children = '';
     ((attrs += ' ' + k + '="' + v + '"') for k, v of o.attrs) if o.attrs
     ((children += if _isObj(c) then _domStr(c) else c) for c in o.children) if o.children
-    return '<' + o.tag + attrs + '>' + children + '</' + o.tag + '>'
+    return '<' + o.tag + attrs + '>' + (o.inner || children) + '</' + o.tag + '>'
   _extObj = (baseObj, extObj) -> (baseObj[k] = v) for k, v of extObj; return baseObj
   _isStr = (obj) -> return typeof obj == 'string'
   _isAry = (obj) -> return obj instanceof Array
@@ -296,6 +313,18 @@
   # INIT
   @videoLightning = videoLightning
   @vlData = {}
+  @vlData.instances = []
   @vlData.ytReady = () => i.initPlayerYT() for i in @vlData.instances.filter (i) -> i.vendor == 'youtube'
   @vlData.youtube = @vlData.vimeo = false
+
+  if typeof $ != 'undefined'
+    $.fn['jqueryVideoLightning'] = (options) ->
+      @each ->
+        unless $.data(this, 'plugin_jqueryVideoLightning')
+          inst = new VideoLightning({el: this, opts: options})
+          vlData.instances.push(inst)
+          $.data(this, 'plugin_jqueryVideoLightning', inst)
+        return
+      _initYTAPI()
+
 ) document

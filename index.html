@@ -152,55 +152,112 @@
 <script src="src/jqvl2.js"></script>
 <script src="javascripts/jqvl-page.js"></script>
 <script>
-  videoLightning({
-    elements: [
-      ".video-link",
-      {".video-link2": {
-          bdColor: "#7FFF00",
-          bdOpacity: 0.6,
-          glow: 150,
-          glowColor: '#fff',
-          color: '#fff'
-        }
-      },
-      {".video-link3": {
-          controls: 0,
-          bdColor: "#000",
-          bdOpacity: 0.9,
-          glow: 40,
-          glowColor: '#ff9900',
-          color: 'white'
-        }
-      },
-      {".video-link4": {
-          controls: 0,
-          bdColor: "#F5F5F5",
-          bdOpacity: 1,
-          glow: 20,
-          glowColor: '#000',
-          color: 'white'
-        }
-      },
-      {".video-link5": {
-          playlist: "AxvjkPAiUdU,WkgWvaFrJv8",
-          bdColor: "#000",
-          bdOpacity: 0.9,
-          glow: 50,
-          glowColor: '#F1D6F5',
-          color: 'white',
-          cover: true
-        }
-      },
-      {".video-link6": {
-          controls: 0,
-          width: "480px",
-          height: "320px",
+//  videoLightning({
+//    elements: [
+//      ".video-link",
+//      {".video-link2": {
+//          bdColor: "#7FFF00",
+//          bdOpacity: 0.6,
+//          glow: 150,
+//          glowColor: '#fff',
+//          color: '#fff'
+//        }
+//      },
+//      {".video-link3": {
+//          controls: 0,
+//          bdColor: "#000",
+//          bdOpacity: 0.9,
+//          glow: 40,
+//          glowColor: '#ff9900',
+//          color: 'white'
+//        }
+//      },
+//      {".video-link4": {
+//          controls: 0,
+//          bdColor: "#F5F5F5",
+//          bdOpacity: 1,
+//          glow: 20,
+//          glowColor: '#000',
+//          color: 'white'
+//        }
+//      },
+//      {".video-link5": {
+//          playlist: "AxvjkPAiUdU,WkgWvaFrJv8",
+//          bdColor: "#000",
+//          bdOpacity: 0.9,
+//          glow: 50,
+//          glowColor: '#F1D6F5',
+//          color: 'white',
+//          cover: true
+//        }
+//      },
+//      {".video-link6": {
+//          controls: 0,
+//          width: "480px",
+//          height: "320px",
 //          peek: true,
-//          peekPlay: true,
-          popover: true
-        }
-      }
-    ]
+//          popover: true
+//        }
+//      }
+//    ]
+//  });
+  $(function () {
+    $(".video-link").jqueryVideoLightning({
+      ease_out: 1000,
+      //backdrop_color: "#ddd",
+      bdColor: "#ddd",
+      //backdrop_opacity: 0.6,
+      bdOpacity: 0.6,
+      glow: 20,
+      //glow_color: "#000"
+      glowColor: "#000"
+    });
+  });
+  $(function () {
+    $(".video-link2").jqueryVideoLightning({
+      bdColor: "#7FFF00",
+      bdOpacity: 0.7,
+      glow: 150,
+      glowColor: "#fff",
+      color: "#fff"
+    });
+  });
+  $(function () {
+    $(".video-link3").jqueryVideoLightning({
+      controls: 0,
+      bdColor: "#000",
+      bdOpacity: 0.9,
+      glow: 40,
+      glowColor: "#ff9900",
+      color: "white"
+    });
+  });
+  $(function () {
+    $(".video-link4").jqueryVideoLightning({
+      fadeIn: 0,
+      controls: 0,
+      color: "white"
+    });
+  });
+  $(function () {
+    $(".video-link5").jqueryVideoLightning({
+      playlist: "PL0941E3B0A7410341",
+      bdColor: "#3A0372",
+      bdOpacity: 0.8,
+      glow: 50,
+      glowColor: "#F1D6F5",
+      color: "#fff",
+      cover: true
+    });
+  });
+  $(function () {
+    $(".video-link6").jqueryVideoLightning({
+      controls: 0,
+      width: "480px",
+      height: "320px",
+      popover: true,
+      peek: true
+    });
   });
 </script>
 </body>
