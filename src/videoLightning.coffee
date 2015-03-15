@@ -14,7 +14,7 @@
     for el in rawEls
       if (domEls = _getEl(el.el))
         (if _isElAry(domEls) then (els.push(el: de, opts: el.opts) for de in domEls) else els.push(el: domEls, el.opts))
-    return noElErr() unless els.length > 0
+    return noElErr() if els.length == 0
     settings = obj.settings || {}
     (@vlData.instances.push(new VideoLightning(el, settings))) for el in els
     _initYTAPI()
@@ -34,9 +34,10 @@
     buildOpts: =>
       _extObj(@opts, @elObj.opts)
       elDataSet = @el.dataset
-      (@opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v) for k, v of elDataSet
-      @opts.width = if @opts.width then parseInt(@opts.width) else 640
-      @opts.height = if @opts.height then parseInt(@opts.height) else 390
+      normalize = (k, v) -> @opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v
+      normalize(k, v) for k, v of elDataSet
+      @opts.width = if @opts.width then parseInt(@opts.width, 10) else 640
+      @opts.height = if @opts.height then parseInt(@opts.height, 10) else 390
       @opts.id ?= 'y-dQw4w9WgXcQ'
       if @opts.id.match(/^v/) then (@vendor = 'vimeo'; @vm = true) else (@vendor = 'youtube'; @yt = true)
       window.vlData[@vendor] = true
@@ -103,14 +104,14 @@
 
     regEvents: =>
       @target.style.cursor = 'pointer'
-      @target.addEventListener('mouseup', @clicked)
+      @target.addEventListener('mouseup', @clicked, false)
       if @opts.popover
-        window.addEventListener('resize', @resize)
-        window.addEventListener('scroll', @resize)
-        window.addEventListener('orientationchange', @resize)
+        window.addEventListener('resize', @resize, false)
+        window.addEventListener('scroll', @resize, false)
+        window.addEventListener('orientationchange', @resize, false)
         if @opts.peek
-          @target.addEventListener('mouseenter', @hovered)
-          @target.addEventListener('mouseleave', @hovered)
+          @target.addEventListener('mouseenter', @hovered, false)
+          @target.addEventListener('mouseleave', @hovered, false)
 
     clicked: (e) =>
       return @peek(false, true) if @peeking
@@ -253,8 +254,16 @@
   _wrapCssP = (w, h) -> "display: none; position: fixed; width: #{w}px; height: #{h}px;"
   _frameCss = 'position: absolute; top: 50%; left: 50%; background: #000000;'
   _fadeCss = (el, t) -> el.style.transition = el.style.mozTransition = el.style.webkitTransition = "opacity #{t}ms ease"
-  _fadeIn = (el, t) -> _fadeCss(el, t); el.style.display = 'block'; setTimeout((-> el.style.opacity = 1), 20)
-  _fadeOut = (el, t) -> _fadeCss(el, t); el.style.opacity = 0; setTimeout((-> el.style.display = 'none'), t)
+  _fadeIn = (el, t) ->
+    _fadeCss(el, t)
+    el.style.display = 'block'
+    applyFade = -> el.style.opacity = 1
+    setTimeout(applyFade, 20)
+  _fadeOut = (el, t) ->
+    _fadeCss(el, t)
+    el.style.opacity = 0
+    applyFade = -> el.style.display = 'none'
+    setTimeout(applyFade, t)
   _initYTAPI = ->
     return if dom.getElementById('ytScript')
     scriptA = dom.getElementsByTagName('script')[0]
@@ -318,7 +327,7 @@
   @vlData.youtube = @vlData.vimeo = false
 
   if typeof $ != 'undefined'
-    $.fn['jqueryVideoLightning'] = (options) ->
+    $.fn.jqueryVideoLightning = (options) ->
       @each ->
         unless $.data(this, 'plugin_jqueryVideoLightning')
           inst = new VideoLightning({el: this, opts: options})
