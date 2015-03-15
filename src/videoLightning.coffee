@@ -34,7 +34,7 @@
     buildOpts: =>
       _extObj(@opts, @elObj.opts)
       elDataSet = @el.dataset
-      normalize = (k, v) -> @opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v
+      normalize = (k, v) => @opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v
       normalize(k, v) for k, v of elDataSet
       @opts.width = if @opts.width then parseInt(@opts.width, 10) else 640
       @opts.height = if @opts.height then parseInt(@opts.height, 10) else 390
@@ -138,6 +138,7 @@
       return
 
     stop: (fade = 0) =>
+      return if @opts.rickRoll
       @hide(fade)
       @ytStop() if @yt
       @vmStop() if @vm

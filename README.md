@@ -79,18 +79,54 @@ Or they can be passed as data attributes: *(Note that data attributes are all pr
 ### Available Options
 jQuery Video Lightning exposes all available basic API options for both Youtube and Vimeo. There are also a number of effect and behavior options that are available. The following is the current list of available options.
 
+#### GENERAL OPTIONS
+
+- **id** *(default="y-dQw4w9WgXcQ")*
+	Vendor prefixed video id [if Youtube then prefix with y-, if Vimeo then v-]
 - **width** *(default="640px")*
-	Y&V: video width in px
+	video width in px
 - **height** *(default="390px")*
-	Y&V: video height in px
-- **autoplay** *(default=0)*
-	Y&V: start playback immediately (0,1)
+	video height in px
+- **autoplay** *(default=true)*
+	start playback immediately (true,false)
+- **autoclose** *(default=true)*
+	autoclose lightbox / popover once video is complete (true,false)
+- **popover** *(default=false)*
+	Open in popover instead of lightbox (true,false)
+- **peek** *(default=false)*
+	Preview video on hover, user can click `^` to pin (true,false)
+- **bdColor** *(default="#ddd")*
+	Color of page overlay
+- **bdOpacity** *(default=0.6)*
+	Opacity of page overlay
+- **glow** *(default=20)*
+	Glow around video frame
+- **glowColor** *(default="#000")*
+	Glow color around video frame
+- **fadeIn** *(default=300)*
+	Time in ms of lightbox fade in
+- **fadeOut** *(default=0, 1000)*
+	Time in ms of lightbox fade out [default is 0 if closed manually, 1000 if autoclosed]
+- **zIndex** *(default=2100)*
+	Z-index of page overlay
+- **rickRoll** *(default=false)*
+	Make video un-closable (true,false)
+- **cover** *(default=false)*
+	Display cover image (true,false)
+
+#### VENDOR OPTIONS
+
+Some of Youtube's options are not listed below, but everything on their params page (as of 3/15/15) is available.
+[Youtube Params Reference](https://developers.google.com/youtube/player_parameters)
+
 - **autohide** *(default=2)*
 	Y: auto hide controls after video load (0,1,2)
 - **controls** *(default=1)*
 	Y: display controls (0,1,2)
-- **iv_load_policy** *(default=1)*
+- **ivLoadPolicy** *(default=1)*
 	Y: display annotations (1,3)
+- **ccLoadPolicy** *(default=null)*
+	Y: display closed captions by default (null,1)
 - **loop** *(default=0)*
 	Y&V: loop video playback (0,1)
 - **modestbranding** *(default=0)*
@@ -101,8 +137,10 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 	Y: show related videos when playback is finished (0,1)
 - **showinfo** *(default=1)*
 	Y: display title, uploader (0,1)  V: display title (0,1)
-- **start_time** *(default=0)*
+- **startTime** *(default=0)*
 	Y: playback start position in seconds (ex. "132" starts at 2mins, 12secs)
+- **endTime** *(default=0)*
+	Y: playback end position in seconds (ex. "132" ends at 2mins, 12secs)
 - **theme** *(default="dark")*
 	Y: player theme ("dark","light")
 - **color** *(default="")*
@@ -111,38 +149,45 @@ jQuery Video Lightning exposes all available basic API options for both Youtube 
 	V: display byline (0,1)
 - **portrait** *(default=1)*
 	V: display user's portrait (0,1)
-- **ease_in** *(default=300)*
-	Time in ms of lightbox fade in
-- **ease_out** *(default=1)*
-	Time in ms of lightbox fade out
-- **z_index** *(default=21000)*
-	Z-index of page overlay
-- **backdrop_color** *(default="#000")*
-	Color of page overlay
-- **backdrop_opacity** *(default=1)*
-	Opacity of page overlay
-- **glow** *(default=0)*
-	Glow around video frame
-- **glow_color** *(default="#fff")*
-	Glow color around video frame
-- **rick_roll** *(default=0)*
-	Make video un-closable (0,1)
-- **cover** *(default=0)*
-	Display cover image (0,1)
-- **popover** *(default=0)*
-	Open in popover instead of lightbox (0,1)
-- **popover_x** *(default="auto")*
-	X position of popover ("auto","left","center","right")
-- **popover_y** *(default="auto")*
-	Y position of popover ("auto","top","center","bottom")
 
-ToDo
+Changed Defaults [3.0]
 ----
-1. Add auto close option
+- **bdColor**: '#000' => '#ddd'
+- **bdOpacity**: 1.0 => 0.6
+- **glow**: 0 => 20
+- **glowColor**: '#fff' => '#000'
+
+Changed Parameters [3.0]
+----
+- **autoplay**: (1,0) => (true,false)
+- **popover**: (1,0) => (true,false)
+- **rickRoll**: (1,0) => (true,false)
+- **cover**: (1,0) => (true,false)
+
+Renamed Options [3.0]
+----
+- **backdrop_color** => **bdColor**
+- **backdrop_opacity** => **bdOpacity**
+- **ease_in** => **fadeIn**
+- **ease_out** => **fadeOut**
+- **glow_color** => **glowColor**
+- **start_time** => **startTime**
+- **z_index** => **zIndex**
+- **rick_roll** => **rickRoll**
+- **iv_load_policy** => **ivLoadPolicy**
+
+Deprecated Options [3.0]
+----
+- **popover_x**
+- **popover_y**
 
 Alternate Builds
 ----
+[2.0.1 minified](https://github.com/musocrat/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/dist/jquery-video-lightning.min.js) (latest jQuery only build) (8.514 kb)
+[2.0.1 Docs](https://github.com/musocrat/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/README.md)
+
 [1.1.0 minified](https://github.com/musocrat/jquery-video-lightning/blob/87c0b9370dd3ea3ad09a82541ad295a543139e32/dist/jquery-video-lightning.min.js) (pre-popover, lightbox only) (4.646 kb)
+[1.1.0 Docs](https://github.com/musocrat/jquery-video-lightning/blob/736846ef61a9e7f8d0c85f362ab791b19986ce1f/README.md)
 
 Contributing
 ----

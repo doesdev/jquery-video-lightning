@@ -106,11 +106,12 @@
       }
 
       VideoLightning.prototype.buildOpts = function() {
-        var elDataSet, k, normalize, v, _base;
+        var elDataSet, k, normalize, v, _base,
+          _this = this;
         _extObj(this.opts, this.elObj.opts);
         elDataSet = this.el.dataset;
         normalize = function(k, v) {
-          return this.opts[k.replace(/^video(.)(.*)/, function(a, b, c) {
+          return _this.opts[k.replace(/^video(.)(.*)/, function(a, b, c) {
             return b.toLowerCase() + c;
           })] = v;
         };
@@ -296,6 +297,9 @@
       VideoLightning.prototype.stop = function(fade) {
         if (fade == null) {
           fade = 0;
+        }
+        if (this.opts.rickRoll) {
+          return;
         }
         this.hide(fade);
         if (this.yt) {
