@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>jQuery Video Lightning by musocrat</title>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="stylesheets/jqvl-page.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+<img class="video-link main-logo demo-link" data-video-rick-roll="1" src="images/JqueryVideoLightningIconPurple144.png" alt="jQuery Video Lightning Icon"/>
+<div class="wrapper">
+    <header>
+        <h1 class="header-title">jQuery Video Lightning</h1>
+    </header>
+
+    <ul class="github-links">
+        <li>
+            <a href="https://github.com/musocrat/jquery-video-lightning">
+                View On GitHub
+            </a>
+        </li>
+        <li>
+            <a href="https://github.com/musocrat/jquery-video-lightning/zipball/master">
+                Download ZIP File
+            </a>
+        </li>
+        <li>
+            <a href="https://github.com/musocrat/jquery-video-lightning/tarball/master">
+                Download TAR Ball
+            </a>
+        </li>
+    </ul>
+
+    <div class="box intro">
+        <p>Turn any element into a lightbox or popover link for
+            <span class="video-link demo-link" data-video-id="y-PKffm2uI4dk">Youtube</span>
+            and
+            <span class="video-link2 demo-link" data-video-id="v-29749357">Vimeo</span>
+            videos.
+        </p>
+    </div>
+
+    <section class="box main-content">
+        <h2>
+            <a name="jquery-video-lightning" class="anchor" href="#jquery-video-lightning">
+                <span class="octicon octicon-link"></span></a>
+            jQuery Video Lightning
+        </h2>
+
+        <p>Turn any element into a
+            <span class="video-link4 demo-link" data-video-id="y-z1bAh193Iwc">
+                lightbox
+            </span>
+            or
+            <span class="video-link6 demo-link" data-video-id="y-UU2KMm9HTZg">
+                popover
+            </span>
+            link for Youtube and Vimeo videos. Includes access to all embed API options for both providers as well as a healthy set of style options.
+        </p>
+        <hr>
+
+        <h2>
+            <a name="why" class="anchor" href="#why"><span class="octicon octicon-link"></span></a>
+            Why?
+        </h2>
+
+        <p>Lots of reasons.
+            <span class="video-link3 demo-link" data-video-id="y-XbTtgr8J8uU">
+                The main one, and the reason we built it, is for quick video explainers
+            </span>
+            in the appropriate places. This little plugin bootstraps getting those helpful little videos in place.
+        </p>
+        <hr>
+
+        <h2>
+            <a name="how" class="anchor" href="#how"><span class="octicon octicon-link"></span></a>
+            How?
+        </h2>
+
+        <p>Simple. Add the js your project (along with jQuery), add the appropriate data atrributes like so
+            <code>`data-video-id="y-XbTtgr8J8uU"`</code>
+            , then initialize on the target and enjoy your video lightbox enhanced element!
+        </p>
+        <hr>
+
+        <h2>
+            <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>
+            Features
+        </h2>
+
+        <ul>
+            <li>Simple access to all embed API options for both providers</li>
+            <li>Lots of options to customize and beautify your lightboxes</li>
+            <li>Intelligent popover auto positioning gravitates to page center</li>
+            <li>Lazy loading of videos prevents slow page load due to video embeds</li>
+            <li>Rick Roll with ease (don't pass video id, add rick_roll option to prevent closing)</li>
+        </ul>
+        <hr>
+
+        <h2>
+            <a name="demos" class="anchor" href="#demos"><span class="octicon octicon-link"></span></a>
+            Demos
+        </h2>
+
+        <p>Those little purple links scattered throughout the page are the
+            <span class="video-link5 demo-link" data-video-id="y-N9QlZghCERo">
+                demos.
+            </span>
+        </p>
+        <hr>
+
+        <h2>
+            <a name="docs" class="anchor" href="#docs">
+                <span class="octicon octicon-link"></span></a>
+            Docs
+        </h2>
+
+        <p>
+            Docs can be found at <a href="https://github.com/musocrat/jquery-video-lightning#readme">the repo</a>.
+        </p>
+        <hr>
+
+        <h2>
+            <a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>
+            Contributing
+        </h2>
+
+        <ol>
+            <li><strong class="uppercase">Fork it</strong></li>
+            <li><strong class="uppercase">Create your feature branch</strong> (git checkout -b my-new-feature)</li>
+            <li><strong class="uppercase">Commit your changes</strong> (git commit -am 'Added some feature')</li>
+            <li><strong class="uppercase">Push to the branch</strong> (git push origin my-new-feature)</li>
+            <li><strong class="uppercase">Create new Pull Request</strong></li>
+        </ol>
+        <hr>
+            <p>author: <a href="https://github.com/musocrat">Andrew Carpenter</a>, on behalf of the <a href="http://www.musocrat.com">musocrat</a> team</p>
+    </section>
+</div>
+<script src="javascripts/scale.fix.js"></script>
+<script src="javascripts/jquery.min.js"></script>
+<script src="javascripts/videoLightning.js"></script>
+<script src="javascripts/jqvl-page.js"></script>
+<script>
+    $(function () {
+        $(".video-link").jqueryVideoLightning({
+            autoplay: 1,
+            ease_out: 1000,
+            backdrop_color: "#ddd",
+            backdrop_opacity: 0.6,
+            glow: 20,
+            glow_color: "#000"
+        });
+    });
+    $(function () {
+        $(".video-link2").jqueryVideoLightning({
+            autoplay: 1,
+            backdrop_color: "#7FFF00",
+            backdrop_opacity: 0.7,
+            glow: 150,
+            glow_color: "#fff",
+            color: "#fff"
+        });
+    });
+    $(function () {
+        $(".video-link3").jqueryVideoLightning({
+            autoplay: 1,
+            controls: 0,
+            backdrop_color: "#000",
+            backdrop_opacity: 0.9,
+            glow: 40,
+            glow_color: "#ff9900",
+            color: "white"
+        });
+    });
+    $(function () {
+        $(".video-link4").jqueryVideoLightning({
+            autoplay: 1,
+            ease_in: 0,
+            controls: 0,
+            color: "white"
+        });
+    });
+    $(function () {
+        $(".video-link5").jqueryVideoLightning({
+            autoplay: 1,
+            playlist: "PL0941E3B0A7410341",
+            backdrop_color: "#3A0372",
+            backdrop_opacity: 0.8,
+            glow: 50,
+            glow_color: "#F1D6F5",
+            color: "#fff",
+            cover: 1,
+            purelist: true
+        });
+    });
+    $(function () {
+        $(".video-link6").jqueryVideoLightning({
+            autoplay: 1,
+            controls: 0,
+            width: "480px",
+            height: "320px",
+            popover: 1,
+			hover_plays: 1,
+            peek: 1
+        });
+    });
+</script>
+</body>
+</html>
