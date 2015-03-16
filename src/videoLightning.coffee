@@ -29,9 +29,12 @@
       @buildOpts()
       @buildEls()
       @cover() if _boolify(@opts.cover, false)
-      @initPlayerVM() if @vm
+      @regEvents()
 
     buildOpts: =>
+      remap = [['backdrop_color','bdColor'],['backdrop_opacity','bdOpacity'],['ease_in','fadeIn'],
+               ['ease_out','fadeOut'],['glow_color','glowColor'],['start_time','startTime'],['z_index','zIndex'],
+               ['rick_roll','rickRoll'],['iv_load_policy','ivLoadPolicy']]
       _extObj(@opts, @elObj.opts)
       elDataSet = @el.dataset
       normalize = (k, v) => @opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v
@@ -42,6 +45,7 @@
       if @opts.id.match(/^v/) then (@vendor = 'vimeo'; @vm = true) else (@vendor = 'youtube'; @yt = true)
       window.vlData[@vendor] = true
       @id = @opts.id.replace(/([vy]-)/i, '')
+      (@opts[key[1]] ?= @opts[key[0]]) for key in remap
 
     buildEls: =>
       (@target = dom.createElement('span')).className = 'video-target'
@@ -53,8 +57,8 @@
       fdim = "width: #{@opts.width}px; height: #{@opts.height}px;"
       fmar = "margin-top: -#{@opts.height/2}px; margin-left: -#{@opts.width/2}px;"
       fglo = "box-shadow: 0px 0px #{g = _val(@opts.glow, 20)}px #{g / 5}px #{_fullHex(_val(@opts.glowColor, '#000'))};"
-      wrapCss = if @opts.popover then _wrapCssP(@opts.width, @opts.height) else _wrapCss
-      if @opts.popover
+      wrapCss = if _boolify(@opts.popover, false) then _wrapCssP(@opts.width, @opts.height) else _wrapCss
+      if _boolify(@opts.popover, false)
         xCss = "background: #{_fullHex(_val(@opts.xBgColor, '#000'))}; color: #{_fullHex(_val(@opts.xColor, '#fff'))};"
       else xCss = 'display: none;'
       @target.insertAdjacentHTML 'beforeend', _domStr(
@@ -72,8 +76,11 @@
             tag: 'div'
             attrs: {class: 'video'}
             children: [
-              tag: "#{if @yt then 'div' else 'iframe'}"
-              attrs: {id: "iframe_#{@inst}", class: 'video-iframe'}
+              tag: 'iframe' #"#{if @yt then 'div' else 'iframe'}"
+              attrs:
+                type: 'text/html'
+                id: "iframe_#{@inst}"
+                class: 'video-iframe'
             ]
           ],
         ,
@@ -105,7 +112,7 @@
     regEvents: =>
       @target.style.cursor = 'pointer'
       @target.addEventListener('mouseup', @clicked, false)
-      if @opts.popover
+      if _boolify(@opts.popover, false)
         window.addEventListener('resize', @resize, false)
         window.addEventListener('scroll', @resize, false)
         window.addEventListener('orientationchange', @resize, false)
@@ -114,6 +121,8 @@
           @target.addEventListener('mouseleave', @hovered, false)
 
     clicked: (e) =>
+      @initPlayerVM() if @vm && !@vmPlayer
+      @initPlayerYT() if @yt && !@ytPlayer
       return @peek(false, true) if @peeking
       return if (e.buttons && e.buttons != 1) || (e.which && e.which != 1) || (e.button && e.button != 1)
       return if @playing then @stop() else @play()
@@ -129,19 +138,36 @@
       return if close then @stop() else if pin then null else @play()
 
     play: =>
-      @popoverPos() if @opts.popover
+      @popoverPos() if _boolify(@opts.popover, false)
       @show()
-      if _boolify(@opts.autoplay, true)
+      console.log('START:')
+      console.log('@ready', @ready)
+      console.log('!@playing', !@playing)
+      console.log("@iframe.src != ''", @iframe.src != '')
+      console.log("@iframe.src", @iframe.src)
+      if @ready && !@playing && @iframe.src != ''
         @ytPlay() if @yt
         @vmPlay() if @vm
+      else if !@playing
+        @initPlayerVM() if @vm
+        @initPlayerYT() if @yt
       @playing = true
       return
 
     stop: (fade = 0) =>
-      return if @opts.rickRoll
+      return if _boolify(@opts.rickRoll, false)
       @hide(fade)
-      @ytStop() if @yt
-      @vmStop() if @vm
+      console.log('STOP:')
+      console.log('@ready', @ready)
+      console.log('!@playing', !@playing)
+      console.log("@iframe.src != ''", @iframe.src != '')
+      console.log("@iframe.src", @iframe.src)
+      console.log('@ytPlayer', @ytPlayer)
+      if @ready
+        @ytStop() if @yt
+        @vmStop() if @vm
+      else
+        @iframe.src = ''
       @playing = false
       return
 
@@ -152,38 +178,47 @@
     cover: => if @yt then @coverYT(); return
 
     initPlayerYT: =>
-      @ytPlayer = new YT.Player "iframe_#{@inst}", {
-        width: @opts.width
-        height: @opts.height
-        videoId: @id
-        playerVars:
-          'enablejsapi': 1,
-          'autoplay': 0,
-          'autohide': _val(@opts.autohide, 2),
-          'cc_load_policy': _val(@opts.ccLoadPolicy, 0),
-          'color': _val(@opts.color, null),
-          'controls': _val(@opts.controls, 2),
-          'disablekb': _val(@opts.disablekb, 0),
-          'end': _val(@opts.endTime, null),
-          'fs': _val(@opts.fs, 1),
-          'hl': _val(@opts.hl, 'en'),
-          'iv_load_policy': _val(@opts.ivLoadPolicy, 1),
-          'list': _val(@opts.list, null),
-          'listType': _val(@opts.listType, null),
-          'loop': _val(@opts.loop, 0),
-          'modestbranding': _val(@opts.modestbranding, 0),
-          'origin': _val(@opts.origin, "#{location.protocol}//#{location.host}"),
-          'playerapiid': @inst,
-          'playlist': _val(@opts.playlist, null),
-          'playsinline': _val(@opts.playsinline, 0),
-          'rel': _val(@opts.rel, 0),
-          'showinfo': _val(@opts.showinfo, 1),
-          'start': _val(@opts.startTime, 0),
-          'theme': _val(@opts.theme, null)
+      _setSrc(@iframe,
+        url: "#{location.protocol}//www.youtube.com/embed/#{@id}"
+        params:
+          enablejsapi: 1
+          autoplay: _val(@opts.autoplay, 1)
+          autohide: _val(@opts.autohide, 2)
+          cc_load_policy: _val(@opts.ccLoadPolicy, 0)
+          color: _val(@opts.color, null)
+          controls: _val(@opts.controls, 2)
+          disablekb: _val(@opts.disablekb, 0)
+          end: _val(@opts.endTime, null)
+          fs: _val(@opts.fs, 1)
+          hl: _val(@opts.hl, 'en')
+          iv_load_policy: _val(@opts.ivLoadPolicy, 1)
+          list: _val(@opts.list, null)
+          listType: _val(@opts.listType, null)
+          loop: _val(@opts.loop, 0)
+          modestbranding: _val(@opts.modestbranding, 0)
+          origin: _val(@opts.origin, "#{location.protocol}//#{location.host}")
+          playerapiid: @inst
+          playlist: _val(@opts.playlist, null)
+          playsinline: _val(@opts.playsinline, 0)
+          rel: _val(@opts.rel, 0)
+          showinfo: _val(@opts.showinfo, 1)
+          start: _val(@opts.startTime, 0)
+          theme: _val(@opts.theme, null)
+        attrs:
+          width: @opts.width
+          height: @opts.height
+          frameBorder: 0
+      )
+      @setYTPlayer() if window.vlData.ytAPIReady
+
+    setYTPlayer: =>
+      ready = => console.log('ready fired'); @ready = true
+      @ytPlayer = new YT.Player("iframe_#{@inst}", {
+        origin: _val(@opts.origin, "#{location.protocol}//#{location.host}")
         events:
-          'onReady': @regEvents,
-          'onStateChange': @ytState
-      }
+          onReady: ready
+          onStateChange: @ytState
+      })
 
     ytPlay: => @ytPlayer.playVideo()
 
@@ -192,33 +227,37 @@
       @ytPlayer.stopVideo()
       @ytPlayer.clearVideo()
 
-    ytState: (e) => @stop(_val(@opts.fadeOut, 1000)) if e.data == 0 && _boolify(@opts.autoclose, true)
+    ytState: (e) => console.log(e.target); @stop(_val(@opts.fadeOut, 1000)) if e.data == 0 && _boolify(@opts.autoclose, true)
 
     coverYT: => @ytCover = _coverEl(@target, "//img.youtube.com/vi/#{@id}/hqdefault.jpg"); return
 
     initPlayerVM: =>
-      src =
-        "http://player.vimeo.com/video/#{@id}?" +
-          "autoplay=0&" +
-          "loop=#{_val(@opts.loop, 0)}&title=#{_val(@opts.showinfo, 1)}&" +
-          "byline=#{_val(@opts.byline, 1)}&" +
-          "portrait=#{_val(@opts.portrait, 1)}&" +
-          "color=#{_prepHex(_val(@opts.color, '#00adef'))}" +
-          "api=1&player_id=#{@inst}"
-      @iframe.setAttribute('allowFullScreen', '1')
-      @iframe.width = @opts.width
-      @iframe.height = @opts.height
-      @iframe.frameBorder = 0
-      @iframe.src = src
+      _setSrc(@iframe,
+        url: "#{location.protocol}//player.vimeo.com/video/#{@id}"
+        params:
+          autoplay: _val(@opts.autoplay, 1)
+          loop: _val(@opts.loop, 0)
+          title: _val(@opts.showinfo, 1)
+          byline: _val(@opts.byline, 1)
+          portrait: _val(@opts.portrait, 1)
+          color: _prepHex(_val(@opts.color, '#00adef'))
+          api: 1
+          player_id: @inst
+        attrs:
+          width: @opts.width
+          height: @opts.height
+          frameBorder: 0
+      )
       window.addEventListener('message', @vmListen, false)
       @vmPlayer = @iframe
 
     vmListen: (msg) =>
+      console.log(msg)
       data = JSON.parse(msg.data)
       return unless data.player_id == @inst
       switch data.event
         when 'ready'
-          @regEvents()
+          @ready = true
           _postToVM(@vmPlayer, @id, 'addEventListener', 'finish')
         when 'finish' then @stop(1000)
       return
@@ -235,6 +274,11 @@
     ((attrs += ' ' + k + '="' + v + '"') for k, v of o.attrs) if o.attrs
     ((children += if _isObj(c) then _domStr(c) else c) for c in o.children) if o.children
     return '<' + o.tag + attrs + '>' + (o.inner || children) + '</' + o.tag + '>'
+  _setSrc = (el, o) ->
+    src = "#{o.url}?"
+    ((src += "&#{k}=#{v}") for k, v of o.params)
+    el.src = src.replace(/&/, '')
+    (el[k] = v) for k, v of o.attrs
   _extObj = (baseObj, extObj) -> (baseObj[k] = v) for k, v of extObj; return baseObj
   _isStr = (obj) -> return typeof obj == 'string'
   _isAry = (obj) -> return obj instanceof Array
@@ -274,13 +318,13 @@
     vScript = document.createElement('script')
     vScript.id = 'ytScript'
     vScript.async = true
-    vScript.src = '//www.youtube.com/iframe_api'
+    vScript.src = "#{location.protocol}//www.youtube.com/iframe_api"
     vFuncs.parentNode.insertBefore(vScript, vFuncs.nextSibling)
     return
   _ytReset = (p, s = 0) -> if (p.getDuration() - 3) < p.getCurrentTime() then p.pauseVideo(); p.seekTo(s, false); return
   _postToVM = (player, id, k, v = null) ->
     data = if v then {method: k, value: v} else {method: k}
-    player.contentWindow.postMessage(JSON.stringify(data), "http://player.vimeo.com/video/#{id}")
+    player.contentWindow.postMessage(JSON.stringify(data), "#{location.protocol}//player.vimeo.com/video/#{id}")
   _coverEl = (target, src) ->
     cover = dom.createElement('img')
     cover.className = 'video-link'
@@ -324,7 +368,7 @@
   @videoLightning = videoLightning
   @vlData = {}
   @vlData.instances = []
-  @vlData.ytReady = () => i.initPlayerYT() for i in @vlData.instances.filter (i) -> i.vendor == 'youtube'
+  @vlData.ytReady = () => @vlData.ytAPIReady = true; console.log('YT API READY')
   @vlData.youtube = @vlData.vimeo = false
 
   if typeof $ != 'undefined'

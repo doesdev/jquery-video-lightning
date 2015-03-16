@@ -1,97 +1,99 @@
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   (function(document) {
-    var VideoLightning, dom, videoLightning, _boolify, _cc, _coverEl, _domStr, _extObj, _fadeCss, _fadeIn, _fadeOut, _frameCss, _fullHex, _getEl, _gravity, _initYTAPI, _isAry, _isElAry, _isObj, _isStr, _postToVM, _prepHex, _randar, _testEl, _topKeyOfObj, _val, _wrapCss, _wrapCssP, _ytReset,
-      _this = this;
+    var VideoLightning, _boolify, _cc, _coverEl, _domStr, _extObj, _fadeCss, _fadeIn, _fadeOut, _frameCss, _fullHex, _getEl, _gravity, _initYTAPI, _isAry, _isElAry, _isObj, _isStr, _postToVM, _prepHex, _randar, _setSrc, _testEl, _topKeyOfObj, _val, _wrapCss, _wrapCssP, _ytReset, dom, videoLightning;
     dom = document;
-    videoLightning = function(obj) {
-      var de, domEls, e, el, els, noElErr, optEls, pushRawEls, rawEls, settings, _i, _j, _k, _l, _len, _len1, _len2, _len3;
-      noElErr = function() {
-        console.error('VideoLightning was initialized without elements.');
-      };
-      optEls = obj.elements || obj.element;
-      if (!optEls) {
-        return noElErr();
-      }
-      rawEls = [];
-      els = [];
-      pushRawEls = function(e) {
-        var el;
-        if (_isStr(e)) {
-          return rawEls.push({
-            el: e,
-            opts: null
-          });
-        } else {
-          el = _topKeyOfObj(e);
-          return rawEls.push({
-            el: el,
-            opts: e[el] || null
-          });
+    videoLightning = (function(_this) {
+      return function(obj) {
+        var de, domEls, e, el, els, i, j, l, len, len1, len2, len3, m, noElErr, optEls, pushRawEls, rawEls, settings;
+        noElErr = function() {
+          console.error('VideoLightning was initialized without elements.');
+        };
+        optEls = obj.elements || obj.element;
+        if (!optEls) {
+          return noElErr();
         }
-      };
-      if (_isAry(optEls)) {
-        for (_i = 0, _len = optEls.length; _i < _len; _i++) {
-          e = optEls[_i];
-          pushRawEls(e);
-        }
-      } else {
-        pushRawEls(optEls);
-      }
-      for (_j = 0, _len1 = rawEls.length; _j < _len1; _j++) {
-        el = rawEls[_j];
-        if ((domEls = _getEl(el.el))) {
-          if (_isElAry(domEls)) {
-            for (_k = 0, _len2 = domEls.length; _k < _len2; _k++) {
-              de = domEls[_k];
-              els.push({
-                el: de,
-                opts: el.opts
-              });
-            }
+        rawEls = [];
+        els = [];
+        pushRawEls = function(e) {
+          var el;
+          if (_isStr(e)) {
+            return rawEls.push({
+              el: e,
+              opts: null
+            });
           } else {
-            els.push({
-              el: domEls
-            }, el.opts);
+            el = _topKeyOfObj(e);
+            return rawEls.push({
+              el: el,
+              opts: e[el] || null
+            });
+          }
+        };
+        if (_isAry(optEls)) {
+          for (i = 0, len = optEls.length; i < len; i++) {
+            e = optEls[i];
+            pushRawEls(e);
+          }
+        } else {
+          pushRawEls(optEls);
+        }
+        for (j = 0, len1 = rawEls.length; j < len1; j++) {
+          el = rawEls[j];
+          if ((domEls = _getEl(el.el))) {
+            if (_isElAry(domEls)) {
+              for (l = 0, len2 = domEls.length; l < len2; l++) {
+                de = domEls[l];
+                els.push({
+                  el: de,
+                  opts: el.opts
+                });
+              }
+            } else {
+              els.push({
+                el: domEls
+              }, el.opts);
+            }
           }
         }
-      }
-      if (els.length === 0) {
-        return noElErr();
-      }
-      settings = obj.settings || {};
-      for (_l = 0, _len3 = els.length; _l < _len3; _l++) {
-        el = els[_l];
-        _this.vlData.instances.push(new VideoLightning(el, settings));
-      }
-      _initYTAPI();
-    };
+        if (els.length === 0) {
+          return noElErr();
+        }
+        settings = obj.settings || {};
+        for (m = 0, len3 = els.length; m < len3; m++) {
+          el = els[m];
+          _this.vlData.instances.push(new VideoLightning(el, settings));
+        }
+        _initYTAPI();
+      };
+    })(this);
     VideoLightning = (function() {
       function VideoLightning(elObj, opts) {
         this.elObj = elObj;
-        this.vmStop = __bind(this.vmStop, this);
-        this.vmPlay = __bind(this.vmPlay, this);
-        this.vmListen = __bind(this.vmListen, this);
-        this.initPlayerVM = __bind(this.initPlayerVM, this);
-        this.coverYT = __bind(this.coverYT, this);
-        this.ytState = __bind(this.ytState, this);
-        this.ytStop = __bind(this.ytStop, this);
-        this.ytPlay = __bind(this.ytPlay, this);
-        this.initPlayerYT = __bind(this.initPlayerYT, this);
-        this.cover = __bind(this.cover, this);
-        this.hide = __bind(this.hide, this);
-        this.show = __bind(this.show, this);
-        this.stop = __bind(this.stop, this);
-        this.play = __bind(this.play, this);
-        this.peek = __bind(this.peek, this);
-        this.hovered = __bind(this.hovered, this);
-        this.clicked = __bind(this.clicked, this);
-        this.regEvents = __bind(this.regEvents, this);
-        this.resize = __bind(this.resize, this);
-        this.popoverPos = __bind(this.popoverPos, this);
-        this.buildEls = __bind(this.buildEls, this);
-        this.buildOpts = __bind(this.buildOpts, this);
+        this.vmStop = bind(this.vmStop, this);
+        this.vmPlay = bind(this.vmPlay, this);
+        this.vmListen = bind(this.vmListen, this);
+        this.initPlayerVM = bind(this.initPlayerVM, this);
+        this.coverYT = bind(this.coverYT, this);
+        this.ytState = bind(this.ytState, this);
+        this.ytStop = bind(this.ytStop, this);
+        this.ytPlay = bind(this.ytPlay, this);
+        this.setYTPlayer = bind(this.setYTPlayer, this);
+        this.initPlayerYT = bind(this.initPlayerYT, this);
+        this.cover = bind(this.cover, this);
+        this.hide = bind(this.hide, this);
+        this.show = bind(this.show, this);
+        this.stop = bind(this.stop, this);
+        this.play = bind(this.play, this);
+        this.peek = bind(this.peek, this);
+        this.hovered = bind(this.hovered, this);
+        this.clicked = bind(this.clicked, this);
+        this.regEvents = bind(this.regEvents, this);
+        this.resize = bind(this.resize, this);
+        this.popoverPos = bind(this.popoverPos, this);
+        this.buildEls = bind(this.buildEls, this);
+        this.buildOpts = bind(this.buildOpts, this);
         this.opts = _extObj({}, opts);
         this.inst = _randar();
         this.el = this.elObj.el;
@@ -100,29 +102,29 @@
         if (_boolify(this.opts.cover, false)) {
           this.cover();
         }
-        if (this.vm) {
-          this.initPlayerVM();
-        }
+        this.regEvents();
       }
 
       VideoLightning.prototype.buildOpts = function() {
-        var elDataSet, k, normalize, v, _base,
-          _this = this;
+        var base, base1, elDataSet, i, k, key, len, name, normalize, remap, results, v;
+        remap = [['backdrop_color', 'bdColor'], ['backdrop_opacity', 'bdOpacity'], ['ease_in', 'fadeIn'], ['ease_out', 'fadeOut'], ['glow_color', 'glowColor'], ['start_time', 'startTime'], ['z_index', 'zIndex'], ['rick_roll', 'rickRoll'], ['iv_load_policy', 'ivLoadPolicy']];
         _extObj(this.opts, this.elObj.opts);
         elDataSet = this.el.dataset;
-        normalize = function(k, v) {
-          return _this.opts[k.replace(/^video(.)(.*)/, function(a, b, c) {
-            return b.toLowerCase() + c;
-          })] = v;
-        };
+        normalize = (function(_this) {
+          return function(k, v) {
+            return _this.opts[k.replace(/^video(.)(.*)/, function(a, b, c) {
+              return b.toLowerCase() + c;
+            })] = v;
+          };
+        })(this);
         for (k in elDataSet) {
           v = elDataSet[k];
           normalize(k, v);
         }
         this.opts.width = this.opts.width ? parseInt(this.opts.width, 10) : 640;
         this.opts.height = this.opts.height ? parseInt(this.opts.height, 10) : 390;
-        if ((_base = this.opts).id == null) {
-          _base.id = 'y-dQw4w9WgXcQ';
+        if ((base = this.opts).id == null) {
+          base.id = 'y-dQw4w9WgXcQ';
         }
         if (this.opts.id.match(/^v/)) {
           this.vendor = 'vimeo';
@@ -132,7 +134,13 @@
           this.yt = true;
         }
         window.vlData[this.vendor] = true;
-        return this.id = this.opts.id.replace(/([vy]-)/i, '');
+        this.id = this.opts.id.replace(/([vy]-)/i, '');
+        results = [];
+        for (i = 0, len = remap.length; i < len; i++) {
+          key = remap[i];
+          results.push((base1 = this.opts)[name = key[1]] != null ? base1[name] : base1[name] = this.opts[key[0]]);
+        }
+        return results;
       };
 
       VideoLightning.prototype.buildEls = function() {
@@ -146,8 +154,8 @@
         fdim = "width: " + this.opts.width + "px; height: " + this.opts.height + "px;";
         fmar = "margin-top: -" + (this.opts.height / 2) + "px; margin-left: -" + (this.opts.width / 2) + "px;";
         fglo = "box-shadow: 0px 0px " + (g = _val(this.opts.glow, 20)) + "px " + (g / 5) + "px " + (_fullHex(_val(this.opts.glowColor, '#000'))) + ";";
-        wrapCss = this.opts.popover ? _wrapCssP(this.opts.width, this.opts.height) : _wrapCss;
-        if (this.opts.popover) {
+        wrapCss = _boolify(this.opts.popover, false) ? _wrapCssP(this.opts.width, this.opts.height) : _wrapCss;
+        if (_boolify(this.opts.popover, false)) {
           xCss = "background: " + (_fullHex(_val(this.opts.xBgColor, '#000'))) + "; color: " + (_fullHex(_val(this.opts.xColor, '#fff'))) + ";";
         } else {
           xCss = 'display: none;';
@@ -157,14 +165,14 @@
           attrs: {
             id: "wrap_" + this.inst,
             "class": 'video-wrapper',
-            style: "" + wrapCss + " " + bdbg + " z-index: " + (_val(this.opts.zIndex, 2100)) + "; opacity: 0;"
+            style: wrapCss + " " + bdbg + " z-index: " + (_val(this.opts.zIndex, 2100)) + "; opacity: 0;"
           },
           children: [
             {
               tag: 'div',
               attrs: {
                 "class": 'video-frame',
-                style: "" + _frameCss + " " + fdim + " " + fmar + " " + fglo
+                style: _frameCss + " " + fdim + " " + fmar + " " + fglo
               },
               children: [
                 {
@@ -174,8 +182,9 @@
                   },
                   children: [
                     {
-                      tag: "" + (this.yt ? 'div' : 'iframe'),
+                      tag: 'iframe',
                       attrs: {
+                        type: 'text/html',
                         id: "iframe_" + this.inst,
                         "class": 'video-iframe'
                       }
@@ -202,8 +211,8 @@
       VideoLightning.prototype.popoverPos = function() {
         var pos;
         pos = _gravity(this.target, this.opts.width, this.opts.height, this.opts.fluidity);
-        this.wrapper.style.left = "" + pos.x + "px";
-        return this.wrapper.style.top = "" + pos.y + "px";
+        this.wrapper.style.left = pos.x + "px";
+        return this.wrapper.style.top = pos.y + "px";
       };
 
       VideoLightning.prototype.resize = function() {
@@ -223,7 +232,7 @@
       VideoLightning.prototype.regEvents = function() {
         this.target.style.cursor = 'pointer';
         this.target.addEventListener('mouseup', this.clicked, false);
-        if (this.opts.popover) {
+        if (_boolify(this.opts.popover, false)) {
           window.addEventListener('resize', this.resize, false);
           window.addEventListener('scroll', this.resize, false);
           window.addEventListener('orientationchange', this.resize, false);
@@ -235,6 +244,12 @@
       };
 
       VideoLightning.prototype.clicked = function(e) {
+        if (this.vm && !this.vmPlayer) {
+          this.initPlayerVM();
+        }
+        if (this.yt && !this.ytPlayer) {
+          this.initPlayerYT();
+        }
         if (this.peeking) {
           return this.peek(false, true);
         }
@@ -279,16 +294,28 @@
       };
 
       VideoLightning.prototype.play = function() {
-        if (this.opts.popover) {
+        if (_boolify(this.opts.popover, false)) {
           this.popoverPos();
         }
         this.show();
-        if (_boolify(this.opts.autoplay, true)) {
+        console.log('START:');
+        console.log('@ready', this.ready);
+        console.log('!@playing', !this.playing);
+        console.log("@iframe.src != ''", this.iframe.src !== '');
+        console.log("@iframe.src", this.iframe.src);
+        if (this.ready && !this.playing && this.iframe.src !== '') {
           if (this.yt) {
             this.ytPlay();
           }
           if (this.vm) {
             this.vmPlay();
+          }
+        } else if (!this.playing) {
+          if (this.vm) {
+            this.initPlayerVM();
+          }
+          if (this.yt) {
+            this.initPlayerYT();
           }
         }
         this.playing = true;
@@ -298,15 +325,25 @@
         if (fade == null) {
           fade = 0;
         }
-        if (this.opts.rickRoll) {
+        if (_boolify(this.opts.rickRoll, false)) {
           return;
         }
         this.hide(fade);
-        if (this.yt) {
-          this.ytStop();
-        }
-        if (this.vm) {
-          this.vmStop();
+        console.log('STOP:');
+        console.log('@ready', this.ready);
+        console.log('!@playing', !this.playing);
+        console.log("@iframe.src != ''", this.iframe.src !== '');
+        console.log("@iframe.src", this.iframe.src);
+        console.log('@ytPlayer', this.ytPlayer);
+        if (this.ready) {
+          if (this.yt) {
+            this.ytStop();
+          }
+          if (this.vm) {
+            this.vmStop();
+          }
+        } else {
+          this.iframe.src = '';
         }
         this.playing = false;
       };
@@ -329,38 +366,57 @@
       };
 
       VideoLightning.prototype.initPlayerYT = function() {
-        return this.ytPlayer = new YT.Player("iframe_" + this.inst, {
-          width: this.opts.width,
-          height: this.opts.height,
-          videoId: this.id,
-          playerVars: {
-            'enablejsapi': 1,
-            'autoplay': 0,
-            'autohide': _val(this.opts.autohide, 2),
-            'cc_load_policy': _val(this.opts.ccLoadPolicy, 0),
-            'color': _val(this.opts.color, null),
-            'controls': _val(this.opts.controls, 2),
-            'disablekb': _val(this.opts.disablekb, 0),
-            'end': _val(this.opts.endTime, null),
-            'fs': _val(this.opts.fs, 1),
-            'hl': _val(this.opts.hl, 'en'),
-            'iv_load_policy': _val(this.opts.ivLoadPolicy, 1),
-            'list': _val(this.opts.list, null),
-            'listType': _val(this.opts.listType, null),
-            'loop': _val(this.opts.loop, 0),
-            'modestbranding': _val(this.opts.modestbranding, 0),
-            'origin': _val(this.opts.origin, "" + location.protocol + "//" + location.host),
-            'playerapiid': this.inst,
-            'playlist': _val(this.opts.playlist, null),
-            'playsinline': _val(this.opts.playsinline, 0),
-            'rel': _val(this.opts.rel, 0),
-            'showinfo': _val(this.opts.showinfo, 1),
-            'start': _val(this.opts.startTime, 0),
-            'theme': _val(this.opts.theme, null)
+        _setSrc(this.iframe, {
+          url: location.protocol + "//www.youtube.com/embed/" + this.id,
+          params: {
+            enablejsapi: 1,
+            autoplay: _val(this.opts.autoplay, 1),
+            autohide: _val(this.opts.autohide, 2),
+            cc_load_policy: _val(this.opts.ccLoadPolicy, 0),
+            color: _val(this.opts.color, null),
+            controls: _val(this.opts.controls, 2),
+            disablekb: _val(this.opts.disablekb, 0),
+            end: _val(this.opts.endTime, null),
+            fs: _val(this.opts.fs, 1),
+            hl: _val(this.opts.hl, 'en'),
+            iv_load_policy: _val(this.opts.ivLoadPolicy, 1),
+            list: _val(this.opts.list, null),
+            listType: _val(this.opts.listType, null),
+            loop: _val(this.opts.loop, 0),
+            modestbranding: _val(this.opts.modestbranding, 0),
+            origin: _val(this.opts.origin, location.protocol + "//" + location.host),
+            playerapiid: this.inst,
+            playlist: _val(this.opts.playlist, null),
+            playsinline: _val(this.opts.playsinline, 0),
+            rel: _val(this.opts.rel, 0),
+            showinfo: _val(this.opts.showinfo, 1),
+            start: _val(this.opts.startTime, 0),
+            theme: _val(this.opts.theme, null)
           },
+          attrs: {
+            width: this.opts.width,
+            height: this.opts.height,
+            frameBorder: 0
+          }
+        });
+        if (window.vlData.ytAPIReady) {
+          return this.setYTPlayer();
+        }
+      };
+
+      VideoLightning.prototype.setYTPlayer = function() {
+        var ready;
+        ready = (function(_this) {
+          return function() {
+            console.log('ready fired');
+            return _this.ready = true;
+          };
+        })(this);
+        return this.ytPlayer = new YT.Player("iframe_" + this.inst, {
+          origin: _val(this.opts.origin, location.protocol + "//" + location.host),
           events: {
-            'onReady': this.regEvents,
-            'onStateChange': this.ytState
+            onReady: ready,
+            onStateChange: this.ytState
           }
         });
       };
@@ -376,6 +432,7 @@
       };
 
       VideoLightning.prototype.ytState = function(e) {
+        console.log(e.target);
         if (e.data === 0 && _boolify(this.opts.autoclose, true)) {
           return this.stop(_val(this.opts.fadeOut, 1000));
         }
@@ -386,26 +443,38 @@
       };
 
       VideoLightning.prototype.initPlayerVM = function() {
-        var src;
-        src = ("http://player.vimeo.com/video/" + this.id + "?") + "autoplay=0&" + ("loop=" + (_val(this.opts.loop, 0)) + "&title=" + (_val(this.opts.showinfo, 1)) + "&") + ("byline=" + (_val(this.opts.byline, 1)) + "&") + ("portrait=" + (_val(this.opts.portrait, 1)) + "&") + ("color=" + (_prepHex(_val(this.opts.color, '#00adef')))) + ("api=1&player_id=" + this.inst);
-        this.iframe.setAttribute('allowFullScreen', '1');
-        this.iframe.width = this.opts.width;
-        this.iframe.height = this.opts.height;
-        this.iframe.frameBorder = 0;
-        this.iframe.src = src;
+        _setSrc(this.iframe, {
+          url: location.protocol + "//player.vimeo.com/video/" + this.id,
+          params: {
+            autoplay: _val(this.opts.autoplay, 1),
+            loop: _val(this.opts.loop, 0),
+            title: _val(this.opts.showinfo, 1),
+            byline: _val(this.opts.byline, 1),
+            portrait: _val(this.opts.portrait, 1),
+            color: _prepHex(_val(this.opts.color, '#00adef')),
+            api: 1,
+            player_id: this.inst
+          },
+          attrs: {
+            width: this.opts.width,
+            height: this.opts.height,
+            frameBorder: 0
+          }
+        });
         window.addEventListener('message', this.vmListen, false);
         return this.vmPlayer = this.iframe;
       };
 
       VideoLightning.prototype.vmListen = function(msg) {
         var data;
+        console.log(msg);
         data = JSON.parse(msg.data);
         if (data.player_id !== this.inst) {
           return;
         }
         switch (data.event) {
           case 'ready':
-            this.regEvents();
+            this.ready = true;
             _postToVM(this.vmPlayer, this.id, 'addEventListener', 'finish');
             break;
           case 'finish':
@@ -439,24 +508,41 @@
       }
     };
     _domStr = function(o) {
-      var attrs, c, children, k, v, _i, _len, _ref, _ref1;
+      var attrs, c, children, i, k, len, ref, ref1, v;
       attrs = '';
       children = '';
       if (o.attrs) {
-        _ref = o.attrs;
-        for (k in _ref) {
-          v = _ref[k];
+        ref = o.attrs;
+        for (k in ref) {
+          v = ref[k];
           attrs += ' ' + k + '="' + v + '"';
         }
       }
       if (o.children) {
-        _ref1 = o.children;
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          c = _ref1[_i];
+        ref1 = o.children;
+        for (i = 0, len = ref1.length; i < len; i++) {
+          c = ref1[i];
           children += _isObj(c) ? _domStr(c) : c;
         }
       }
       return '<' + o.tag + attrs + '>' + (o.inner || children) + '</' + o.tag + '>';
+    };
+    _setSrc = function(el, o) {
+      var k, ref, ref1, results, src, v;
+      src = o.url + "?";
+      ref = o.params;
+      for (k in ref) {
+        v = ref[k];
+        src += "&" + k + "=" + v;
+      }
+      el.src = src.replace(/&/, '');
+      ref1 = o.attrs;
+      results = [];
+      for (k in ref1) {
+        v = ref1[k];
+        results.push(el[k] = v);
+      }
+      return results;
     };
     _extObj = function(baseObj, extObj) {
       var k, v;
@@ -553,7 +639,7 @@
       vScript = document.createElement('script');
       vScript.id = 'ytScript';
       vScript.async = true;
-      vScript.src = '//www.youtube.com/iframe_api';
+      vScript.src = location.protocol + "//www.youtube.com/iframe_api";
       vFuncs.parentNode.insertBefore(vScript, vFuncs.nextSibling);
     };
     _ytReset = function(p, s) {
@@ -576,7 +662,7 @@
       } : {
         method: k
       };
-      return player.contentWindow.postMessage(JSON.stringify(data), "http://player.vimeo.com/video/" + id);
+      return player.contentWindow.postMessage(JSON.stringify(data), location.protocol + "//player.vimeo.com/video/" + id);
     };
     _coverEl = function(target, src) {
       var cover;
@@ -600,7 +686,7 @@
       };
     };
     _gravity = function(el, width, height, fluidity) {
-      var box_center, center, coords, page_height, page_width, points, sort, x, y, _i, _j, _ref, _ref1, _ref2, _ref3;
+      var box_center, center, coords, i, j, page_height, page_width, points, ref, ref1, ref2, ref3, ref4, ref5, sort, x, y;
       if (fluidity == null) {
         fluidity = 30;
       }
@@ -614,19 +700,19 @@
         y: height / 2
       };
       points = [];
-      for (x = _i = _ref = coords.left, _ref1 = coords.right + width; fluidity > 0 ? _i <= _ref1 : _i >= _ref1; x = _i += fluidity) {
+      for (x = i = ref = coords.left, ref1 = coords.right + width, ref2 = fluidity; ref2 > 0 ? i <= ref1 : i >= ref1; x = i += ref2) {
         points.push([x - width, coords.top - height]);
         points.push([x - width, coords.bottom]);
       }
-      for (y = _j = _ref2 = coords.top, _ref3 = coords.bottom + height; fluidity > 0 ? _j <= _ref3 : _j >= _ref3; y = _j += fluidity) {
+      for (y = j = ref3 = coords.top, ref4 = coords.bottom + height, ref5 = fluidity; ref5 > 0 ? j <= ref4 : j >= ref4; y = j += ref5) {
         points.push([coords.left - width, y - height]);
         points.push([coords.right, y - height]);
       }
       sort = function(a, b) {
-        var ary, dax, day, obja, objb, _k, _len, _ref4;
-        _ref4 = [[a, obja = {}], [b, objb = {}]];
-        for (_k = 0, _len = _ref4.length; _k < _len; _k++) {
-          ary = _ref4[_k];
+        var ary, dax, day, l, len, obja, objb, ref6;
+        ref6 = [[a, obja = {}], [b, objb = {}]];
+        for (l = 0, len = ref6.length; l < len; l++) {
+          ary = ref6[l];
           x = ary[0][0];
           y = ary[0][1];
           ary[1].diffx = (dax = x + box_center.x) > center.x ? dax - center.x : center.x - dax;
@@ -650,18 +736,12 @@
     this.videoLightning = videoLightning;
     this.vlData = {};
     this.vlData.instances = [];
-    this.vlData.ytReady = function() {
-      var i, _i, _len, _ref, _results;
-      _ref = _this.vlData.instances.filter(function(i) {
-        return i.vendor === 'youtube';
-      });
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        i = _ref[_i];
-        _results.push(i.initPlayerYT());
-      }
-      return _results;
-    };
+    this.vlData.ytReady = (function(_this) {
+      return function() {
+        _this.vlData.ytAPIReady = true;
+        return console.log('YT API READY');
+      };
+    })(this);
     this.vlData.youtube = this.vlData.vimeo = false;
     if (typeof $ !== 'undefined') {
       return $.fn.jqueryVideoLightning = function(options) {
