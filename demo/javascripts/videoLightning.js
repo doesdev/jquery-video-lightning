@@ -1,5 +1,5 @@
 /*
- *  jQuery Video Lightning - v2.0.1
+ *  Video Lightning - v3.0.0
  *  Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
  *  https://github.com/musocrat/jquery-video-lightning
  *
@@ -669,7 +669,7 @@
     _coverEl = function(target, src) {
       var cover;
       cover = dom.createElement('img');
-      cover.className = 'video-link';
+      cover.className = 'video-cover';
       cover.src = src;
       target.appendChild(cover);
       return cover;

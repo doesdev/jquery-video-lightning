@@ -661,7 +661,7 @@
     _coverEl = function(target, src) {
       var cover;
       cover = dom.createElement('img');
-      cover.className = 'video-link';
+      cover.className = 'video-cover';
       cover.src = src;
       target.appendChild(cover);
       return cover;

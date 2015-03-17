@@ -318,7 +318,7 @@
     player.contentWindow.postMessage(JSON.stringify(data), "#{location.protocol}//player.vimeo.com/video/#{id}")
   _coverEl = (target, src) ->
     cover = dom.createElement('img')
-    cover.className = 'video-link'
+    cover.className = 'video-cover'
     cover.src = src
     target.appendChild(cover)
     return cover
