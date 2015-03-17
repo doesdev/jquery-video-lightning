@@ -3,6 +3,16 @@
 
 Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
 
+### 3.0 is a significant update (complete re-write).
+Some things have changed, though the only real non-backward compatible change is a couple updated defaults.
+Everything else (such as renamed options and updated params) has shims in place to maintain compatibility.
+
+You can see a comprehensive list of all the changes below in the [changes](#changes) section.
+
+#### Going native
+Also of pretty significant note Video Lightning is no longer jQuery dependent though it still retains it's jQuery friendly API.
+See below for more info on the new non-jQuery API usage.
+
 ### Table of Contents
 - [Why](#why)    
 - [How](#how)    
