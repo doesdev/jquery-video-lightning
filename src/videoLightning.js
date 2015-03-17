@@ -393,6 +393,7 @@
             frameBorder: 0
           }
         });
+        this.iframe.setAttribute('allowFullScreen', '');
         if (window.vlData.ytAPIReady) {
           return this.setYTPlayer();
         }
@@ -452,6 +453,7 @@
             frameBorder: 0
           }
         });
+        this.iframe.setAttribute('allowFullScreen', '');
         window.addEventListener('message', this.vmListen, false);
         return this.vmPlayer != null ? this.vmPlayer : this.vmPlayer = this.iframe;
       };

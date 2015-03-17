@@ -200,6 +200,7 @@
           height: @opts.height
           frameBorder: 0
       )
+      @iframe.setAttribute('allowFullScreen', '')
       @setYTPlayer() if window.vlData.ytAPIReady
 
     setYTPlayer: =>
@@ -238,6 +239,7 @@
           height: @opts.height
           frameBorder: 0
       )
+      @iframe.setAttribute('allowFullScreen', '')
       window.addEventListener('message', @vmListen, false)
       @vmPlayer ?= @iframe
 
