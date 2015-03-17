@@ -1,0 +1,183 @@
+@import url(http://fonts.googleapis.com/css?family=Oswald:700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,800);
+
+/* RESETS */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+
+html, body, .wrapper {
+    min-width: 100%;
+    min-height: 100%;
+}
+
+body, .wrapper {
+    position: relative;
+}
+
+/* TYPOGRAPHY, LISTS, & LINKS */
+h1, h2, h3 {
+    font-family: 'Oswald', sans-serif;
+}
+
+p, li, a {
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #0C0A0D;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+}
+
+a {
+    text-decoration: underline;
+    font-size: 0.9em;
+    color: #010127;
+    font-weight: 800;
+}
+
+a:hover {
+    color: #6804A5;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+ul li {
+    list-style: none;
+}
+
+.demo-link {
+    color: #6804A5;
+    font-weight: 800;
+}
+
+/* LAYOUT */
+.wrapper {
+    margin-top: 45px;
+    width: 100%;
+    height: 100%;
+    background: #3A0372;
+    overflow: hidden
+}
+
+.main-logo {
+    position: absolute;
+    top: -45px;
+    left: 5px;
+    z-index: 100;
+}
+
+header {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 100px;
+    background: #F1D6F5;
+}
+
+/* THEME */
+body {
+    background: #ffffff;
+}
+
+.header-title {
+    margin-left: 160px;
+    font-size: 4em;
+    color: #010127;
+    line-height: 1;
+}
+
+.github-links {
+    padding-top: 15px;
+}
+
+.github-links li {
+    display: inline-block;
+    width: 32%;
+    text-align: center;
+}
+
+.github-links a {
+    color: #F1D6F5;
+    text-shadow: 0px 0px 1px rgba(1, 1, 39, 1);
+    font-size: 1.2em;
+}
+
+.box {
+    border-radius: 4px;
+    background: #dddddd;
+    padding: 15px 0;
+    margin: 20px 20%;
+    width: 60%;
+}
+
+.box h2, .box h3 {
+    margin: 25px;
+}
+
+.box p {
+    margin: 30px;
+}
+
+.intro {
+    background: #010127;
+    text-align: center;
+}
+
+.intro p {
+    margin: 20px;
+    color: #ffffff;
+    font-size: 1.8em;
+    font-weight: 400;
+}
+
+.main-content {
+    font-size: 1.5em;
+}
+
+.main-content ul li {
+    list-style: circle;
+    margin: 15px 55px;
+    font-weight: 600;
+}
+
+.main-content ol li {
+    margin: 15px 55px;
+    font-weight: 600;
+}
+
+.video-cover {
+    margin: 15px 10%;
+    width: 80%;
+}
+
+hr {
+    display: block;
+    -webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
+    -webkit-margin-start: auto;
+    -webkit-margin-end: auto;
+    border-style: inset;
+    border-width: 1px;
+}
