@@ -159,7 +159,7 @@
         this.target.appendChild(this.el);
         bdc = _cc(_val(this.opts.bdColor, '#ddd'));
         bdo = _val(this.opts.bdOpacity, 0.6);
-        bdbg = "background: rgba(" + bdc.r + ", " + bdc.g + ", " + bdc.b + ", " + bdo + ")};";
+        bdbg = "background: rgba(" + bdc.r + ", " + bdc.g + ", " + bdc.b + ", " + bdo + ");";
         fdim = "width: " + this.opts.width + "px; height: " + this.opts.height + "px;";
         fmar = "margin-top: -" + (this.opts.height / 2) + "px; margin-left: -" + (this.opts.width / 2) + "px;";
         fglo = "box-shadow: 0px 0px " + (g = _val(this.opts.glow, 20)) + "px " + (g / 5) + "px " + (_fullHex(_val(this.opts.glowColor, '#000'))) + ";";

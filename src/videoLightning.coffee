@@ -53,7 +53,7 @@
       @target.appendChild(@el)
       bdc = _cc(_val(@opts.bdColor, '#ddd'))
       bdo = _val(@opts.bdOpacity, 0.6)
-      bdbg = "background: rgba(#{bdc.r}, #{bdc.g}, #{bdc.b}, #{bdo})};"
+      bdbg = "background: rgba(#{bdc.r}, #{bdc.g}, #{bdc.b}, #{bdo});"
       fdim = "width: #{@opts.width}px; height: #{@opts.height}px;"
       fmar = "margin-top: -#{@opts.height/2}px; margin-left: -#{@opts.width/2}px;"
       fglo = "box-shadow: 0px 0px #{g = _val(@opts.glow, 20)}px #{g / 5}px #{_fullHex(_val(@opts.glowColor, '#000'))};"
