@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>jQuery Video Lightning by musocrat</title>
+    <title>Video Lightning by musocrat</title>
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
@@ -12,10 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-<img class="video-link main-logo demo-link" data-video-rick-roll="1" src="images/JqueryVideoLightningIconPurple144.png" alt="jQuery Video Lightning Icon"/>
+<img class="video-link main-logo demo-link" data-video-rick-roll="1" src="images/JqueryVideoLightningIconPurple144.png" alt="Video Lightning Icon"/>
 <div class="wrapper">
     <header>
-        <h1 class="header-title">jQuery Video Lightning</h1>
+        <h1 class="header-title">Video Lightning</h1>
     </header>
 
     <ul class="github-links">
@@ -49,7 +49,7 @@
         <h2>
             <a name="jquery-video-lightning" class="anchor" href="#jquery-video-lightning">
                 <span class="octicon octicon-link"></span></a>
-            jQuery Video Lightning
+            Video Lightning
         </h2>
 
         <p>Turn any element into a
@@ -57,10 +57,11 @@
                 lightbox
             </span>
             or
-            <span class="video-link6 demo-link" data-video-id="y-UU2KMm9HTZg">
+            <!--<span class="video-link6 demo-link" data-video-id="y-UU2KMm9HTZg">-->
+            <span class="video-link6 demo-link" data-video-id="v-58795239">
                 popover
             </span>
-            link for Youtube and Vimeo videos. Includes access to all embed API options for both providers as well as a healthy set of style options.
+            link for Youtube and Vimeo videos. Includes access to all embed API options for both providers as well as a healthy set of style options. Popovers are intelligently positioned and allow users to preview videos on hover.
         </p>
         <hr>
 
@@ -70,7 +71,7 @@
         </h2>
 
         <p>Lots of reasons.
-            <span class="video-link3 demo-link" data-video-id="y-XbTtgr8J8uU">
+            <span class="video-link3 demo-link">
                 The main one, and the reason we built it, is for quick video explainers
             </span>
             in the appropriate places. This little plugin bootstraps getting those helpful little videos in place.
@@ -82,9 +83,7 @@
             How?
         </h2>
 
-        <p>Simple. Add the js your project (along with jQuery), add the appropriate data atrributes like so
-            <code>`data-video-id="y-XbTtgr8J8uU"`</code>
-            , then initialize on the target and enjoy your video lightbox enhanced element!
+        <p>Simple. Add the js your project, initialize with target and options and enjoy your video lightbox enhanced element!
         </p>
         <hr>
 
@@ -97,8 +96,9 @@
             <li>Simple access to all embed API options for both providers</li>
             <li>Lots of options to customize and beautify your lightboxes</li>
             <li>Intelligent popover auto positioning gravitates to page center</li>
+            <li>Preview videos on hover, pin if you want them to stick around</li>
             <li>Lazy loading of videos prevents slow page load due to video embeds</li>
-            <li>Rick Roll with ease (don't pass video id, add rick_roll option to prevent closing)</li>
+            <li>Rick Roll with ease (don't pass video id, add rickRoll option to prevent closing)</li>
         </ul>
         <hr>
 
@@ -143,73 +143,77 @@
 </div>
 <script src="javascripts/scale.fix.js"></script>
 <script src="javascripts/jquery.min.js"></script>
-<!--<script src="javascripts/jquery-video-lightning.js"></script>-->
-<script src="src/jqvl.js"></script>
+<script src="javascripts/videoLightning.js"></script>
 <script src="javascripts/jqvl-page.js"></script>
 <script>
-    $(function () {
-        $(".video-link").jqueryVideoLightning({
-            autoplay: 1,
-            ease_out: 1000,
-            backdrop_color: "#ddd",
-            backdrop_opacity: 0.6,
-            glow: 20,
-            glow_color: "#000"
-        });
-    });
-    $(function () {
-        $(".video-link2").jqueryVideoLightning({
-            autoplay: 1,
-            backdrop_color: "#7FFF00",
-            backdrop_opacity: 0.7,
-            glow: 150,
-            glow_color: "#fff",
-            color: "#fff"
-        });
-    });
-    $(function () {
-        $(".video-link3").jqueryVideoLightning({
-            autoplay: 1,
-            controls: 0,
-            backdrop_color: "#000",
-            backdrop_opacity: 0.9,
-            glow: 40,
-            glow_color: "#ff9900",
-            color: "white"
-        });
-    });
-    $(function () {
-        $(".video-link4").jqueryVideoLightning({
-            autoplay: 1,
-            ease_in: 0,
-            controls: 0,
-            color: "white"
-        });
-    });
-    $(function () {
-        $(".video-link5").jqueryVideoLightning({
-            autoplay: 1,
-            playlist: "PL0941E3B0A7410341",
-            backdrop_color: "#3A0372",
-            backdrop_opacity: 0.8,
-            glow: 50,
-            glow_color: "#F1D6F5",
-            color: "#fff",
-            cover: 1,
-            purelist: true
-        });
-    });
-    $(function () {
-        $(".video-link6").jqueryVideoLightning({
-            autoplay: 1,
-            controls: 0,
-            width: "480px",
-            height: "320px",
-            popover: 1,
-			hover_plays: 1,
-            peek: 1
-        });
-    });
+  videoLightning({
+    elements: [
+      {
+        ".video-link": {
+          autoplay: 1,
+          ease_out: 1000,
+          backdrop_color: "#ddd",
+          backdrop_opacity: 0.6,
+          glow: 20,
+          glow_color: "#000"
+        }
+      },
+      {
+        ".video-link2": {
+          autoplay: 1,
+          backdrop_color: "#7FFF00",
+          backdrop_opacity: 0.7,
+          glow: 150,
+          glow_color: "#fff",
+          color: "#fff"
+        }
+      }
+    ]
+  });
+  $(function () {
+      $(".video-link3").jqueryVideoLightning({
+          id: "y-z-D1PJ1cMXs",
+          autoplay: 1,
+          controls: 0,
+          backdrop_color: "#fff",
+          backdrop_opacity: 1,
+          glow: 0,
+          width: 640,
+          height: 360,
+          showinfo: 0,
+          fadeIn: 3000
+      });
+  });
+  $(function () {
+      $(".video-link4").jqueryVideoLightning({
+          autoplay: 1,
+          ease_in: 0,
+          controls: 0,
+          color: "white"
+      });
+  });
+  $(function () {
+      $(".video-link5").jqueryVideoLightning({
+          autoplay: 1,
+          playlist: "WkgWvaFrJv8,NCsihs3A_hM",
+          backdrop_color: "#3A0372",
+          backdrop_opacity: 0.8,
+          glow: 50,
+          glow_color: "#F1D6F5",
+          color: "#fff",
+          cover: 1
+      });
+  });
+  $(function () {
+      $(".video-link6").jqueryVideoLightning({
+          autoplay: 1,
+          controls: 0,
+          width: "480px",
+          height: "320px",
+          popover: 1,
+          peek: 1
+      });
+  });
 </script>
 </body>
 </html>

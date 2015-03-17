@@ -50,6 +50,7 @@ p, li, a {
 
 a {
     text-decoration: underline;
+    font-size: 0.9em;
     color: #010127;
     font-weight: 800;
 }
