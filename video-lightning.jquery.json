@@ -1,6 +1,6 @@
 {
 	"name": "video-lightning",
-	"title": "jQuery Video Lightning",
+	"title": "Video Lightning",
 	"description": "Turn any element into a lightbox or popover link for Youtube and Vimeo videos.",
 	"keywords": [
 		"jquery",
@@ -8,13 +8,18 @@
 		"lightning",
 		"lightbox",
 		"popover",
+		"popup",
 		"youtube",
 		"vimeo",
 		"api",
         "rick",
-        "roll"
+        "roll",
+        "rickroll",
+        "hover",
+        "preview",
+        "iframe"
 	],
-	"version": "2.0.1",
+	"version": "3.0.0",
 	"author": {
 		"name": "Andrew Carpenter",
 		"email": "andrew@musocrat.com",
