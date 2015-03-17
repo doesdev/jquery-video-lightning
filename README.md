@@ -1,4 +1,4 @@
-![alt text](http://musocrat.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "jQuery Video Lightning Logo") jQuery Video Lightning [![Build Status](https://travis-ci.org/musocrat/jquery-video-lightning.png)](https://travis-ci.org/musocrat/jquery-video-lightning)
+![alt text](http://musocrat.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "Video Lightning Logo") Video Lightning [![Build Status](https://travis-ci.org/musocrat/jquery-video-lightning.png)](https://travis-ci.org/musocrat/jquery-video-lightning)
 ======================
 
 Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
@@ -12,7 +12,7 @@ Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
   - [Getting Started](#getting-started)    
   - [Passing in Options](#passing-in-options)    
   - [Available Options](#available-options)
-- [ToDo](#todo) 
+- [Changes](#changes)
 - [Alternate Builds](#alternate-builds)
 - [Contributing](#contributing)        
 
@@ -22,13 +22,14 @@ Lots of reasons. The main one, and the reason we built it, is for quick video ex
 
 How?
 ----
-Simple. Add the js to your project (along with jQuery), add the appropriate data atrributes like so `data-video-id="y-XbTtgr8J8uU"`, then initialize on the target and enjoy your video lightbox / popover enhanced element!
+Simple. Add the js your project, initialize with target and options and enjoy your video lightbox enhanced element!
 
 Features
 ----
 - Simple access to all embed API options for both providers
 - Lots of options to customize and beautify your lightboxes
 - Intelligent popover auto positioning gravitates to page center
+- Preview videos on hover, pin if you want them to stick around
 - Lazy loading of videos prevents slow page load due to video embeds
 - Rick Roll with ease (don't pass video id, add rick_roll option to prevent closing)
 
@@ -44,74 +45,109 @@ Docs
 ```html
 <script src="javascripts/jquery-video-lightning.js"></script>
 ```
-**ii.** Add vendor prefixed video id to target element *(i.e. Youtube:* `data-video-id="y-PKffm2uI4dk"`, *Vimeo:* `data-video-id="v-29749357"`)
-```html
-<span class="video-link" data-video-id="y-PKffm2uI4dk">Youtube</span>
-```
-**iii.**  Initialize it on the desired elements with any options you please *(options can also be passed as data attributes)*
+**ii.**  Initialize it on the desired elements with any options you please *(options can also be passed as data attributes)*
+Native initialization:
 ```html
 <script>
-    $(function() {
-        $(".video-link").jqueryVideoLightning({
-            autoplay: 1,
-            color: "white"
-        });
+  videoLightning({
+    elements: [
+      {
+        ".video-link": {
+          id: "y-PKffm2uI4dk",
+          autoplay: 1,
+          color: "white"
+        }
+      }
+    ]
+  });
+</script>
+```
+jQuery flavored initialization:
+```html
+<script>
+  $(function() {
+    $(".video-link").jqueryVideoLightning({
+        id: "y-PKffm2uI4dk",
+        autoplay: 1,
+        color: "white"
     });
+  });
 </script>
 ```
 
 ### Passing in Options
-Options can be passed in either of two ways. They can be passed in the initialization like so:
+Options can be passed in any of three ways. They can be passed as attributes off the element object:
 ```javascript
-$(function() {
-    $(".video-link").jqueryVideoLightning({
-        width: "1280px",
-        height: "720px",
-        autoplay: 1
-    });
+videoLightning({
+  elements: [
+    {
+      ".video-link": {
+        id: "y-PKffm2uI4dk",
+        width: 1280,
+        height: 720
+      }
+    }
+  ]
 });
 ```
-Or they can be passed as data attributes: *(Note that data attributes are all prefixed with `data-video` and underscored options should be dashed instead in data attributes. So `start_time` becomes `data-video-start-time`)*
+They can be passed as attributes of the `setting` object:
+```javascript
+videoLightning({
+  settings: {
+    autoplay: true,
+    width: 1280,
+    height: 720
+  },
+  elements: [
+    {
+      ".video-link": {
+        id: "y-PKffm2uI4dk"
+      }
+    }
+  ]
+});
+```
+Or they can be passed as data attributes: *(Note that data attributes are all prefixed with `data-video` and camel cased options should be dashed instead in data attributes. So `startTime` becomes `data-video-start-time`)*
 ```html
-<div class="video-link" data-video-id="y-PKffm2uI4dk" data-video-width="1280px" data-video-height="720px" data-video-autoplay="1" ></div>
+<div class="video-link" data-video-id="y-PKffm2uI4dk" data-video-width="1280" data-video-height="720" data-video-autoplay="true"></div>
 ```
 
 ### Available Options
-jQuery Video Lightning exposes all available basic API options for both Youtube and Vimeo. There are also a number of effect and behavior options that are available. The following is the current list of available options.
+Video Lightning exposes all available basic API options for both Youtube and Vimeo. There are also a number of effect, style, and behavior options that are available. The following is the current list of available options.
 
 #### GENERAL OPTIONS
 
-- **id** *(default="y-dQw4w9WgXcQ")*
-	Vendor prefixed video id [if Youtube then prefix with y-, if Vimeo then v-]
-- **width** *(default="640px")*
+- **id** *(String - default="y-dQw4w9WgXcQ")*
+	Vendor prefixed video id [if Youtube then prefix with y-xxxxx, if Vimeo then v-xxxxx]
+- **width** *(Integer - default=640)*
 	video width in px
-- **height** *(default="390px")*
+- **height** *(Integer - default=390)*
 	video height in px
-- **autoplay** *(default=true)*
+- **autoplay** *(Boolean - default=true)*
 	start playback immediately (true,false)
-- **autoclose** *(default=true)*
+- **autoclose** *(Boolean - default=true)*
 	autoclose lightbox / popover once video is complete (true,false)
-- **popover** *(default=false)*
+- **popover** *(Boolean - default=false)*
 	Open in popover instead of lightbox (true,false)
-- **peek** *(default=false)*
+- **peek** *(Boolean - default=false)*
 	Preview video on hover, user can click `^` to pin (true,false)
-- **bdColor** *(default="#ddd")*
+- **bdColor** *(String [hex] - default="#ddd")*
 	Color of page overlay
-- **bdOpacity** *(default=0.6)*
+- **bdOpacity** *(Decimal [0 to 1] - default=0.6)*
 	Opacity of page overlay
-- **glow** *(default=20)*
+- **glow** *(Integer - default=20)*
 	Glow around video frame
-- **glowColor** *(default="#000")*
+- **glowColor** *(String [hex] - default="#000")*
 	Glow color around video frame
-- **fadeIn** *(default=300)*
+- **fadeIn** *(Integer [ms] - default=300)*
 	Time in ms of lightbox fade in
-- **fadeOut** *(default=0, 1000)*
+- **fadeOut** *(Integer [ms] - default=0, 1000)*
 	Time in ms of lightbox fade out [default is 0 if closed manually, 1000 if autoclosed]
-- **zIndex** *(default=2100)*
+- **zIndex** *(Integer - default=2100)*
 	Z-index of page overlay
-- **rickRoll** *(default=false)*
+- **rickRoll** *(Boolean - default=false)*
 	Make video un-closable (true,false)
-- **cover** *(default=false)*
+- **cover** *(Boolean - default=false)*
 	Display cover image (true,false)
 
 #### VENDOR OPTIONS
@@ -150,22 +186,24 @@ Some of Youtube's options are not listed below, but everything on their params p
 - **portrait** *(default=1)*
 	V: display user's portrait (0,1)
 
-Changed Defaults [3.0]
+Changes
 ----
+
+### Changed Defaults [3.0]
 - **bdColor**: '#000' => '#ddd'
 - **bdOpacity**: 1.0 => 0.6
 - **glow**: 0 => 20
 - **glowColor**: '#fff' => '#000'
 
-Changed Parameters [3.0]
-----
+### Changed Parameters [3.0]
+- **width**: (pixel string w/ px suffix) => (pixel integer)
+- **height**: (pixel string w/ px suffix) => (pixel integer)
 - **autoplay**: (1,0) => (true,false)
 - **popover**: (1,0) => (true,false)
 - **rickRoll**: (1,0) => (true,false)
 - **cover**: (1,0) => (true,false)
 
-Renamed Options [3.0]
-----
+### Renamed Options [3.0]
 - **backdrop_color** => **bdColor**
 - **backdrop_opacity** => **bdOpacity**
 - **ease_in** => **fadeIn**
@@ -176,8 +214,7 @@ Renamed Options [3.0]
 - **rick_roll** => **rickRoll**
 - **iv_load_policy** => **ivLoadPolicy**
 
-Deprecated Options [3.0]
-----
+### Deprecated Options [3.0]
 - **popover_x**
 - **popover_y**
 
