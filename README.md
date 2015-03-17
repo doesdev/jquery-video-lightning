@@ -147,84 +147,64 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 
 #### GENERAL OPTIONS
 
-- **id** *(String - default="y-dQw4w9WgXcQ")*
-
+- **id** *(String - default="y-dQw4w9WgXcQ")*  
 	Vendor prefixed video id [if Youtube then prefix with y-xxxxx, if Vimeo then v-xxxxx]
 
-- **width** *(Integer - default=640)*
-
+- **width** *(Integer - default=640)*  
 	Video width in px
 
-- **height** *(Integer - default=390)*
-
+- **height** *(Integer - default=390)*  
 	Video height in px
 
-- **autoplay** *(Boolean - default=true)*
-
+- **autoplay** *(Boolean - default=true)*  
 	Start playback immediately (true,false)
 
-- **autoclose** *(Boolean - default=true)*
-
+- **autoclose** *(Boolean - default=true)*  
 	Autoclose lightbox / popover once video is complete (true,false)
 
-- **popover** *(Boolean - default=false)*
-
+- **popover** *(Boolean - default=false)*  
 	Open in popover instead of lightbox (true,false)
 
-- **peek** *(Boolean - default=false)*
-
+- **peek** *(Boolean - default=false)*  
 	Preview video on hover, user can click `^` to pin (true,false)
 
-- **bdColor** *(String [hex] - default="#ddd")*
-
+- **bdColor** *(String [hex] - default="#ddd")*  
 	Color of page overlay
 
-- **bdOpacity** *(Decimal [0 to 1] - default=0.6)*
-
+- **bdOpacity** *(Decimal [0 to 1] - default=0.6)*  
 	Opacity of page overlay
 
-- **glow** *(Integer - default=20)*
-
+- **glow** *(Integer - default=20)*  
 	Glow around video frame
 
-- **glowColor** *(String [hex] - default="#000")*
-
+- **glowColor** *(String [hex] - default="#000")*  
 	Glow color around video frame
 
-- **fadeIn** *(Integer [ms] - default=300)*
-
+- **fadeIn** *(Integer [ms] - default=300)*  
 	Time in ms of lightbox fade in
 
-- **fadeOut** *(Integer [ms] - default=0, 1000)*
-
+- **fadeOut** *(Integer [ms] - default=0, 1000)*  
 	Time in ms of lightbox fade out [default is 0 if closed manually, 1000 if autoclosed]
 
-- **zIndex** *(Integer - default=2100)*
-
+- **zIndex** *(Integer - default=2100)*  
 	Z-index of page overlay
 
-- **rickRoll** *(Boolean - default=false)*
-
+- **rickRoll** *(Boolean - default=false)*  
 	Make video un-closable (true,false)
 
-- **cover** *(Boolean - default=false)*
-
+- **cover** *(Boolean - default=false)*  
 	Display cover image (true,false)
 
-- **unload** *(Boolean - default=true)*
-
+- **unload** *(Boolean - default=true)*  
 	Unload video iframe X seconds after it is closed
 
-- **unloadAfter** *(Integer [s] - default=45)*
-
+- **unloadAfter** *(Integer [s] - default=45)*  
 	Time in seconds to wait after closing before unloading
 
-- **fluidity** *(Integer - default=30)*
-
+- **fluidity** *(Integer - default=30)*  
 	Number of steps popover should move in on resize events. Lower is smoother, higher is faster
 
-- **throttle** *(Integer [ms] - default=null)*
-
+- **throttle** *(Integer [ms] - default=null)*  
 	Rate limit resize events. Reduces redraws on resizing, lowers accuracy / smoothness of repositioning
 
 #### VENDOR OPTIONS
@@ -232,64 +212,49 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 Some of Youtube's options are not listed below, but everything on their params page (as of 3/15/15) is available.
 [Youtube Params Reference](https://developers.google.com/youtube/player_parameters)
 
-- **autohide** *(default=2)*
-
+- **autohide** *(default=2)*  
 	Y: auto hide controls after video load (0,1,2)
 
-- **controls** *(default=1)*
-
+- **controls** *(default=1)*  
 	Y: display controls (0,1,2)
 
-- **ivLoadPolicy** *(default=1)*
-
+- **ivLoadPolicy** *(default=1)*  
 	Y: display annotations (1,3)
 
-- **ccLoadPolicy** *(default=null)*
-
+- **ccLoadPolicy** *(default=null)*  
 	Y: display closed captions by default (null,1)
 
-- **loop** *(default=0)*
-
+- **loop** *(default=0)*  
 	Y&V: loop video playback (0,1)
 
-- **modestbranding** *(default=0)*
-
+- **modestbranding** *(default=0)*  
 	Y: hide large Youtube logo (0,1)
 
-- **playlist** *(default="")*
-
+- **playlist** *(default="")*  
 	Y: comma-separated list of video IDs to play (ex. "WkgWvaFrJv8,VZPxHUpdAGw")
 
-- **related** *(default=0)*
-
+- **related** *(default=0)*  
 	Y: show related videos when playback is finished (0,1)
 
-- **showinfo** *(default=1)*
-
+- **showinfo** *(default=1)*  
 	Y: display title, uploader (0,1)  V: display title (0,1)
 
-- **startTime** *(default=0)*
-
+- **startTime** *(default=0)*  
 	Y: playback start position in seconds (ex. "132" starts at 2mins, 12secs)
 
-- **endTime** *(default=0)*
-
+- **endTime** *(default=0)*  
 	Y: playback end position in seconds (ex. "132" ends at 2mins, 12secs)
 
-- **theme** *(default="dark")*
-
+- **theme** *(default="dark")*  
 	Y: player theme ("dark","light")
 
-- **color** *(default="")*
-
+- **color** *(default="")*  
 	Y: player controls color ("red","white") V: player controls color (hex code default is "#00adef")
 
-- **byline** *(default=1)*
-
+- **byline** *(default=1)*  
 	V: display byline (0,1)
 
-- **portrait** *(default=1)*
-
+- **portrait** *(default=1)*  
 	V: display user's portrait (0,1)
 
 Changes
@@ -310,12 +275,6 @@ Changes
 - **unloadAfter**
 - **fluidity**
 - **throttle**
-
-### Changed Defaults [3.0]
-- **bdColor**: '#000' => '#ddd'
-- **bdOpacity**: 1.0 => 0.6
-- **glow**: 0 => 20
-- **glowColor**: '#fff' => '#000'
 
 ### Changed Defaults [3.0]
 - **bdColor**: '#000' => '#ddd'
@@ -348,10 +307,10 @@ Changes
 
 Alternate Builds
 ----
-[2.0.1 minified](https://github.com/musocrat/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/dist/jquery-video-lightning.min.js) (latest jQuery only build) (8.514 kb)
+[2.0.1 minified](https://github.com/musocrat/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/dist/jquery-video-lightning.min.js) (latest jQuery only build) (8.514 kb)  
 [2.0.1 Docs](https://github.com/musocrat/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/README.md)
 
-[1.1.0 minified](https://github.com/musocrat/jquery-video-lightning/blob/87c0b9370dd3ea3ad09a82541ad295a543139e32/dist/jquery-video-lightning.min.js) (pre-popover, lightbox only) (4.646 kb)
+[1.1.0 minified](https://github.com/musocrat/jquery-video-lightning/blob/87c0b9370dd3ea3ad09a82541ad295a543139e32/dist/jquery-video-lightning.min.js) (pre-popover, lightbox only) (4.646 kb)  
 [1.1.0 Docs](https://github.com/musocrat/jquery-video-lightning/blob/736846ef61a9e7f8d0c85f362ab791b19986ce1f/README.md)
 
 Contributing
