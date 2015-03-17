@@ -84,6 +84,7 @@
         this.cover = bind(this.cover, this);
         this.hide = bind(this.hide, this);
         this.show = bind(this.show, this);
+        this.clear = bind(this.clear, this);
         this.stop = bind(this.stop, this);
         this.play = bind(this.play, this);
         this.peek = bind(this.peek, this);
@@ -244,12 +245,6 @@
       };
 
       VideoLightning.prototype.clicked = function(e) {
-        if (this.vm && !this.vmPlayer) {
-          this.initPlayerVM();
-        }
-        if (this.yt && !this.ytPlayer) {
-          this.initPlayerYT();
-        }
         if (this.peeking) {
           return this.peek(false, true);
         }
@@ -298,12 +293,7 @@
           this.popoverPos();
         }
         this.show();
-        console.log('START:');
-        console.log('@ready', this.ready);
-        console.log('!@playing', !this.playing);
-        console.log("@iframe.src != ''", this.iframe.src !== '');
-        console.log("@iframe.src", this.iframe.src);
-        if (this.ready && !this.playing && this.iframe.src !== '') {
+        if (this.ready && !this.playing && this.iframe.src !== 'about:blank') {
           if (this.yt) {
             this.ytPlay();
           }
@@ -319,6 +309,9 @@
           }
         }
         this.playing = true;
+        if (this.clearAfter) {
+          window.clearTimeout(this.clearAfter);
+        }
       };
 
       VideoLightning.prototype.stop = function(fade) {
@@ -329,12 +322,6 @@
           return;
         }
         this.hide(fade);
-        console.log('STOP:');
-        console.log('@ready', this.ready);
-        console.log('!@playing', !this.playing);
-        console.log("@iframe.src != ''", this.iframe.src !== '');
-        console.log("@iframe.src", this.iframe.src);
-        console.log('@ytPlayer', this.ytPlayer);
         if (this.ready) {
           if (this.yt) {
             this.ytStop();
@@ -343,9 +330,16 @@
             this.vmStop();
           }
         } else {
-          this.iframe.src = '';
+          this.clear();
         }
         this.playing = false;
+        if (_boolify(this.opts.unload, true)) {
+          this.clearAfter = window.setTimeout(this.clear, (_val(this.opts.unloadAfter) || 45) * 1000);
+        }
+      };
+
+      VideoLightning.prototype.clear = function() {
+        this.iframe.src = 'about:blank';
       };
 
       VideoLightning.prototype.show = function() {
@@ -384,7 +378,7 @@
             listType: _val(this.opts.listType, null),
             loop: _val(this.opts.loop, 0),
             modestbranding: _val(this.opts.modestbranding, 0),
-            origin: _val(this.opts.origin, location.protocol + "//" + location.host),
+            origin: encodeURIComponent(_val(this.opts.origin, location.protocol + "//" + location.host)),
             playerapiid: this.inst,
             playlist: _val(this.opts.playlist, null),
             playsinline: _val(this.opts.playsinline, 0),
@@ -408,12 +402,10 @@
         var ready;
         ready = (function(_this) {
           return function() {
-            console.log('ready fired');
             return _this.ready = true;
           };
         })(this);
-        return this.ytPlayer = new YT.Player("iframe_" + this.inst, {
-          origin: _val(this.opts.origin, location.protocol + "//" + location.host),
+        return this.ytPlayer != null ? this.ytPlayer : this.ytPlayer = new YT.Player("iframe_" + this.inst, {
           events: {
             onReady: ready,
             onStateChange: this.ytState
@@ -432,7 +424,6 @@
       };
 
       VideoLightning.prototype.ytState = function(e) {
-        console.log(e.target);
         if (e.data === 0 && _boolify(this.opts.autoclose, true)) {
           return this.stop(_val(this.opts.fadeOut, 1000));
         }
@@ -462,12 +453,11 @@
           }
         });
         window.addEventListener('message', this.vmListen, false);
-        return this.vmPlayer = this.iframe;
+        return this.vmPlayer != null ? this.vmPlayer : this.vmPlayer = this.iframe;
       };
 
       VideoLightning.prototype.vmListen = function(msg) {
         var data;
-        console.log(msg);
         data = JSON.parse(msg.data);
         if (data.player_id !== this.inst) {
           return;
@@ -533,7 +523,9 @@
       ref = o.params;
       for (k in ref) {
         v = ref[k];
-        src += "&" + k + "=" + v;
+        if (v !== null) {
+          src += "&" + k + "=" + v;
+        }
       }
       el.src = src.replace(/&/, '');
       ref1 = o.attrs;
@@ -738,8 +730,7 @@
     this.vlData.instances = [];
     this.vlData.ytReady = (function(_this) {
       return function() {
-        _this.vlData.ytAPIReady = true;
-        return console.log('YT API READY');
+        return _this.vlData.ytAPIReady = true;
       };
     })(this);
     this.vlData.youtube = this.vlData.vimeo = false;

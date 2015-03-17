@@ -121,8 +121,6 @@
           @target.addEventListener('mouseleave', @hovered, false)
 
     clicked: (e) =>
-      @initPlayerVM() if @vm && !@vmPlayer
-      @initPlayerYT() if @yt && !@ytPlayer
       return @peek(false, true) if @peeking
       return if (e.buttons && e.buttons != 1) || (e.which && e.which != 1) || (e.button && e.button != 1)
       return if @playing then @stop() else @play()
@@ -140,36 +138,29 @@
     play: =>
       @popoverPos() if _boolify(@opts.popover, false)
       @show()
-      console.log('START:')
-      console.log('@ready', @ready)
-      console.log('!@playing', !@playing)
-      console.log("@iframe.src != ''", @iframe.src != '')
-      console.log("@iframe.src", @iframe.src)
-      if @ready && !@playing && @iframe.src != ''
+      if @ready && !@playing && @iframe.src != 'about:blank'
         @ytPlay() if @yt
         @vmPlay() if @vm
       else if !@playing
         @initPlayerVM() if @vm
         @initPlayerYT() if @yt
       @playing = true
+      window.clearTimeout(@clearAfter) if @clearAfter
       return
 
     stop: (fade = 0) =>
       return if _boolify(@opts.rickRoll, false)
       @hide(fade)
-      console.log('STOP:')
-      console.log('@ready', @ready)
-      console.log('!@playing', !@playing)
-      console.log("@iframe.src != ''", @iframe.src != '')
-      console.log("@iframe.src", @iframe.src)
-      console.log('@ytPlayer', @ytPlayer)
       if @ready
         @ytStop() if @yt
         @vmStop() if @vm
       else
-        @iframe.src = ''
+        @clear()
       @playing = false
+      @clearAfter = window.setTimeout(@clear, (_val(@opts.unloadAfter) || 45) * 1000) if _boolify(@opts.unload, true)
       return
+
+    clear: => @iframe.src = 'about:blank'; return
 
     show: => _fadeIn(@wrapper, _val(@opts.fadeIn, 300)); return
 
@@ -196,7 +187,7 @@
           listType: _val(@opts.listType, null)
           loop: _val(@opts.loop, 0)
           modestbranding: _val(@opts.modestbranding, 0)
-          origin: _val(@opts.origin, "#{location.protocol}//#{location.host}")
+          origin: encodeURIComponent(_val(@opts.origin, "#{location.protocol}//#{location.host}"))
           playerapiid: @inst
           playlist: _val(@opts.playlist, null)
           playsinline: _val(@opts.playsinline, 0)
@@ -212,9 +203,8 @@
       @setYTPlayer() if window.vlData.ytAPIReady
 
     setYTPlayer: =>
-      ready = => console.log('ready fired'); @ready = true
-      @ytPlayer = new YT.Player("iframe_#{@inst}", {
-        origin: _val(@opts.origin, "#{location.protocol}//#{location.host}")
+      ready = => @ready = true
+      @ytPlayer ?= new YT.Player("iframe_#{@inst}", {
         events:
           onReady: ready
           onStateChange: @ytState
@@ -227,7 +217,7 @@
       @ytPlayer.stopVideo()
       @ytPlayer.clearVideo()
 
-    ytState: (e) => console.log(e.target); @stop(_val(@opts.fadeOut, 1000)) if e.data == 0 && _boolify(@opts.autoclose, true)
+    ytState: (e) => @stop(_val(@opts.fadeOut, 1000)) if e.data == 0 && _boolify(@opts.autoclose, true)
 
     coverYT: => @ytCover = _coverEl(@target, "//img.youtube.com/vi/#{@id}/hqdefault.jpg"); return
 
@@ -249,10 +239,9 @@
           frameBorder: 0
       )
       window.addEventListener('message', @vmListen, false)
-      @vmPlayer = @iframe
+      @vmPlayer ?= @iframe
 
     vmListen: (msg) =>
-      console.log(msg)
       data = JSON.parse(msg.data)
       return unless data.player_id == @inst
       switch data.event
@@ -276,7 +265,7 @@
     return '<' + o.tag + attrs + '>' + (o.inner || children) + '</' + o.tag + '>'
   _setSrc = (el, o) ->
     src = "#{o.url}?"
-    ((src += "&#{k}=#{v}") for k, v of o.params)
+    ((src += "&#{k}=#{v}") for k, v of o.params when v != null)
     el.src = src.replace(/&/, '')
     (el[k] = v) for k, v of o.attrs
   _extObj = (baseObj, extObj) -> (baseObj[k] = v) for k, v of extObj; return baseObj
@@ -368,7 +357,7 @@
   @videoLightning = videoLightning
   @vlData = {}
   @vlData.instances = []
-  @vlData.ytReady = () => @vlData.ytAPIReady = true; console.log('YT API READY')
+  @vlData.ytReady = () => @vlData.ytAPIReady = true
   @vlData.youtube = @vlData.vimeo = false
 
   if typeof $ != 'undefined'
