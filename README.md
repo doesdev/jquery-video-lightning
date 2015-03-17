@@ -42,11 +42,15 @@ Docs
 
 ### Getting Started
 **i.**  Add script where you desire *(bottom of body is recommended)*
+
 ```html
 <script src="javascripts/jquery-video-lightning.js"></script>
 ```
+
 **ii.**  Initialize it on the desired elements with any options you please *(options can also be passed as data attributes)*
-Native initialization:
+
+#### Native initialization:
+
 ```html
 <script>
   videoLightning({
@@ -62,7 +66,9 @@ Native initialization:
   });
 </script>
 ```
-jQuery flavored initialization:
+
+#### jQuery flavored initialization:
+
 ```html
 <script>
   $(function() {
@@ -75,8 +81,19 @@ jQuery flavored initialization:
 </script>
 ```
 
+Alternatively, for a simple setup you could initialize on a class, set your options globally, and add video id to each el.
+
+ ```html
+<div class="video-link" data-video-id="y-PKffm2uI4dk"></div>
+<div class="video-link" data-video-id="y-z-D1PJ1cMXs></div>
+<script>
+  videoLightning({settings: {autoplay: 1, color: "white"}, element: ".video-link"});
+</script>
+```
+
 ### Passing in Options
 Options can be passed in any of three ways. They can be passed as attributes off the element object:
+
 ```javascript
 videoLightning({
   elements: [
@@ -90,7 +107,9 @@ videoLightning({
   ]
 });
 ```
-They can be passed as attributes of the `setting` object:
+
+They can be passed as attributes of the `setting` object (doesn't apply to jQuery style init):
+
 ```javascript
 videoLightning({
   settings: {
@@ -107,6 +126,7 @@ videoLightning({
   ]
 });
 ```
+
 Or they can be passed as data attributes: *(Note that data attributes are all prefixed with `data-video` and camel cased options should be dashed instead in data attributes. So `startTime` becomes `data-video-start-time`)*
 ```html
 <div class="video-link" data-video-id="y-PKffm2uI4dk" data-video-width="1280" data-video-height="720" data-video-autoplay="true"></div>
@@ -118,37 +138,84 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 #### GENERAL OPTIONS
 
 - **id** *(String - default="y-dQw4w9WgXcQ")*
+
 	Vendor prefixed video id [if Youtube then prefix with y-xxxxx, if Vimeo then v-xxxxx]
+
 - **width** *(Integer - default=640)*
-	video width in px
+
+	Video width in px
+
 - **height** *(Integer - default=390)*
-	video height in px
+
+	Video height in px
+
 - **autoplay** *(Boolean - default=true)*
-	start playback immediately (true,false)
+
+	Start playback immediately (true,false)
+
 - **autoclose** *(Boolean - default=true)*
-	autoclose lightbox / popover once video is complete (true,false)
+
+	Autoclose lightbox / popover once video is complete (true,false)
+
 - **popover** *(Boolean - default=false)*
+
 	Open in popover instead of lightbox (true,false)
+
 - **peek** *(Boolean - default=false)*
+
 	Preview video on hover, user can click `^` to pin (true,false)
+
 - **bdColor** *(String [hex] - default="#ddd")*
+
 	Color of page overlay
+
 - **bdOpacity** *(Decimal [0 to 1] - default=0.6)*
+
 	Opacity of page overlay
+
 - **glow** *(Integer - default=20)*
+
 	Glow around video frame
+
 - **glowColor** *(String [hex] - default="#000")*
+
 	Glow color around video frame
+
 - **fadeIn** *(Integer [ms] - default=300)*
+
 	Time in ms of lightbox fade in
+
 - **fadeOut** *(Integer [ms] - default=0, 1000)*
+
 	Time in ms of lightbox fade out [default is 0 if closed manually, 1000 if autoclosed]
+
 - **zIndex** *(Integer - default=2100)*
+
 	Z-index of page overlay
+
 - **rickRoll** *(Boolean - default=false)*
+
 	Make video un-closable (true,false)
+
 - **cover** *(Boolean - default=false)*
+
 	Display cover image (true,false)
+
+- **unload** *(Boolean - default=true)*
+
+	Unload video iframe X seconds after it is closed
+
+- **unloadAfter** *(Integer [s] - default=45)*
+
+	Time in seconds to wait after closing before unloading
+
+- **fluidity** *(Integer - default=30)*
+
+	Number of steps popover should move in on resize events. Lower is smoother, higher is faster
+
+- **throttle** *(Integer [ms] - default=null)*
+
+	Rate limit resize events. Reduces redraws on resizing, lowers accuracy / smoothness of repositioning
 
 #### VENDOR OPTIONS
 
@@ -156,38 +223,89 @@ Some of Youtube's options are not listed below, but everything on their params p
 [Youtube Params Reference](https://developers.google.com/youtube/player_parameters)
 
 - **autohide** *(default=2)*
+
 	Y: auto hide controls after video load (0,1,2)
+
 - **controls** *(default=1)*
+
 	Y: display controls (0,1,2)
+
 - **ivLoadPolicy** *(default=1)*
+
 	Y: display annotations (1,3)
+
 - **ccLoadPolicy** *(default=null)*
+
 	Y: display closed captions by default (null,1)
+
 - **loop** *(default=0)*
+
 	Y&V: loop video playback (0,1)
+
 - **modestbranding** *(default=0)*
+
 	Y: hide large Youtube logo (0,1)
+
 - **playlist** *(default="")*
+
 	Y: comma-separated list of video IDs to play (ex. "WkgWvaFrJv8,VZPxHUpdAGw")
+
 - **related** *(default=0)*
+
 	Y: show related videos when playback is finished (0,1)
+
 - **showinfo** *(default=1)*
+
 	Y: display title, uploader (0,1)  V: display title (0,1)
+
 - **startTime** *(default=0)*
+
 	Y: playback start position in seconds (ex. "132" starts at 2mins, 12secs)
+
 - **endTime** *(default=0)*
+
 	Y: playback end position in seconds (ex. "132" ends at 2mins, 12secs)
+
 - **theme** *(default="dark")*
+
 	Y: player theme ("dark","light")
+
 - **color** *(default="")*
+
 	Y: player controls color ("red","white") V: player controls color (hex code default is "#00adef")
+
 - **byline** *(default=1)*
+
 	V: display byline (0,1)
+
 - **portrait** *(default=1)*
+
 	V: display user's portrait (0,1)
 
 Changes
 ----
+
+### General Updates
+3.0:
+- complete re-write removing the dependency on jQuery while still supporting jQuery initialization
+- using full iframe API's for Youtube and Vimeo for event handling and interaction
+- adds option to `autoclose` on video end
+- adds `peek` option to preview video on hover with ability to pin popover
+- enhanced gravity function improves popover positioning performance and smoothness
+
+### New Options [3.0]
+- **peek**
+- **autoclose**
+- **unload**
+- **unloadAfter**
+- **fluidity**
+- **throttle**
+
+### Changed Defaults [3.0]
+- **bdColor**: '#000' => '#ddd'
+- **bdOpacity**: 1.0 => 0.6
+- **glow**: 0 => 20
+- **glowColor**: '#fff' => '#000'
 
 ### Changed Defaults [3.0]
 - **bdColor**: '#000' => '#ddd'
