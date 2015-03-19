@@ -68,7 +68,7 @@ Docs
       {
         ".video-link": {
           id: "y-PKffm2uI4dk",
-          autoplay: 1,
+          autoplay: true,
           color: "white"
         }
       }
@@ -84,7 +84,7 @@ Docs
   $(function() {
     $(".video-link").jqueryVideoLightning({
         id: "y-PKffm2uI4dk",
-        autoplay: 1,
+        autoplay: true,
         color: "white"
     });
   });
@@ -97,7 +97,7 @@ Alternatively, for a simple setup you could initialize on a class, set your opti
 <div class="video-link" data-video-id="y-PKffm2uI4dk"></div>
 <div class="video-link" data-video-id="y-z-D1PJ1cMXs></div>
 <script>
-  videoLightning({settings: {autoplay: 1, color: "white"}, element: ".video-link"});
+  videoLightning({settings: {autoplay: true, color: "white"}, element: ".video-link"});
 </script>
 ```
 
@@ -179,6 +179,12 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 
 - **glowColor** *(String [hex] - default="#000")*  
 	Glow color around video frame
+
+- **xBgColor** *(String [hex] - default="#000")*
+	Close icon background color
+
+- **xColor** *(String [hex] - default="#fff")*
+	Close icon `×` color
 
 - **fadeIn** *(Integer [ms] - default=300)*  
 	Time in ms of lightbox fade in
@@ -275,6 +281,8 @@ Changes
 - **unloadAfter**
 - **fluidity**
 - **throttle**
+- **xBgColor**
+- **xColor**
 
 ### Changed Defaults [3.0]
 - **bdColor**: '#000' => '#ddd'
