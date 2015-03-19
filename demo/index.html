@@ -53,7 +53,7 @@
         </h2>
 
         <p>Turn any element into a
-            <span class="video-link4 demo-link" data-video-id="y-z1bAh193Iwc">
+            <span class="video-link4 demo-link">
                 lightbox
             </span>
             or
@@ -165,6 +165,7 @@
           backdrop_opacity: 0.7,
           glow: 150,
           glow_color: "#fff",
+          xColor: "#7FFF00",
           color: "#fff"
         }
       }
@@ -177,6 +178,8 @@
           controls: 0,
           backdrop_color: "#fff",
           backdrop_opacity: 1,
+          xBgColor: 'transparent',
+          xColor: 'transparent',
           glow: 0,
           width: 640,
           height: 360,
@@ -186,9 +189,15 @@
   });
   $(function () {
       $(".video-link4").jqueryVideoLightning({
+          id: 'y-26mMPKS83c4',
           autoplay: 1,
-          ease_in: 0,
+          fadeIn: 0,
+          bdColor: '#f5f5f5',
+          bdOpacity: 1,
+          glow: 20,
+          glowColor: '#000',
           controls: 0,
+          showinfo: 0,
           color: "white"
       });
   });
