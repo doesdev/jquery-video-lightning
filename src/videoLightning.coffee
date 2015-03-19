@@ -58,9 +58,9 @@
       fmar = "margin-top: -#{@opts.height/2}px; margin-left: -#{@opts.width/2}px;"
       fglo = "box-shadow: 0px 0px #{g = _val(@opts.glow, 20)}px #{g / 5}px #{_fullHex(_val(@opts.glowColor, '#000'))};"
       wrapCss = if _boolify(@opts.popover, false) then _wrapCssP(@opts.width, @opts.height) else _wrapCss
-      if _boolify(@opts.popover, false)
-        xCss = "background: #{_fullHex(_val(@opts.xBgColor, '#000'))}; color: #{_fullHex(_val(@opts.xColor, '#fff'))};"
-      else xCss = 'display: none;'
+      #if _boolify(@opts.popover, false)
+      xCss = "background: #{_fullHex(_val(@opts.xBgColor, '#000'))}; color: #{_fullHex(_val(@opts.xColor, '#fff'))};"
+      #else xCss = 'display: none;'
       @target.insertAdjacentHTML 'beforeend', _domStr(
         tag: 'div'
         attrs:
@@ -76,20 +76,21 @@
             tag: 'div'
             attrs: {class: 'video'}
             children: [
+              tag: 'div'
+              inner: '&times;'
+              attrs:
+                id: "close_#{@inst}"
+                class: 'video-close'
+                style: "float: right; margin-right: -34px; #{fglo} #{xCss} padding: 0 10px 0 12px; font-size: 25px;"
+            ,
               tag: 'iframe' #"#{if @yt then 'div' else 'iframe'}"
               attrs:
                 type: 'text/html'
                 id: "iframe_#{@inst}"
                 class: 'video-iframe'
+                style: 'position: absolute; top: 0; left: 0;'
             ]
-          ],
-        ,
-          tag: 'div'
-          inner: '&times;'
-          attrs:
-            id: "close_#{@inst}"
-            class: 'video-close'
-            style: "float: right; margin-right: -34px; #{fglo} #{xCss} padding: 0 10px 0 12px; font-size: 25px;"
+          ]
         ]
       )
       @wrapper = dom.getElementById("wrap_#{@inst}")
@@ -173,7 +174,7 @@
         url: "#{location.protocol}//www.youtube.com/embed/#{@id}"
         params:
           enablejsapi: 1
-          autoplay: _val(@opts.autoplay, 1)
+          autoplay: _bitify(@opts.autoplay, 1)
           autohide: _val(@opts.autohide, 2)
           cc_load_policy: _val(@opts.ccLoadPolicy, 0)
           color: _val(@opts.color, null)
@@ -226,7 +227,7 @@
       _setSrc(@iframe,
         url: "#{location.protocol}//player.vimeo.com/video/#{@id}"
         params:
-          autoplay: _val(@opts.autoplay, 1)
+          autoplay: _bitify(@opts.autoplay, 1)
           loop: _val(@opts.loop, 0)
           title: _val(@opts.showinfo, 1)
           byline: _val(@opts.byline, 1)
@@ -259,6 +260,7 @@
 
   # HELPERS
   _val = (p, d) -> return if p in [false, 'false', 0, '0'] then p else p || d
+  _bitify = (p, d) -> return if p in [false, 'false', 0, '0'] then 0 else if p in [true, 'true', '1', 1] then 1 else d
   _boolify = (p, d) -> return if p in [false, 'false', 0, '0'] then false else !!p || d
   _domStr = (o) ->
     attrs = ''; children = '';
@@ -281,7 +283,7 @@
     return if _isAry(els) && els.length == 0 then null else els
   _randar = -> (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).substring(0, 16)
   _prepHex = (hex) -> hex = hex.replace(/^#/, ''); return if hex.length == 3 then "#{hex}#{hex}" else hex
-  _fullHex = (hex) -> return "#" + _prepHex(hex)
+  _fullHex = (hex) -> return if hex == 'transparent' then hex else "#" + _prepHex(hex)
   _cc = (hex) ->
     r: parseInt((_prepHex(hex)).substring(0, 2), 16)
     g: parseInt((_prepHex(hex)).substring(2, 4), 16)

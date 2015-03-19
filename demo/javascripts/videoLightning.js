@@ -1,16 +1,16 @@
 /*
  *  Video Lightning - v3.0.0
  *  Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
- *  https://github.com/musocrat/jquery-video-lightning
+ *  https://github.com/musocrat/jquery-video-lightning/
  *
- *  Made by Andrew Carpenter
- *  Under MIT License
+ *  Made by Andrew Carpenter @ Musocrat
+ *  Published under MIT License
  */
 (function() {
   var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   (function(document) {
-    var VideoLightning, _boolify, _cc, _coverEl, _domStr, _extObj, _fadeCss, _fadeIn, _fadeOut, _frameCss, _fullHex, _getEl, _gravity, _initYTAPI, _isAry, _isElAry, _isObj, _isStr, _postToVM, _prepHex, _randar, _setSrc, _testEl, _topKeyOfObj, _val, _wrapCss, _wrapCssP, _ytReset, dom, videoLightning;
+    var VideoLightning, _bitify, _boolify, _cc, _coverEl, _domStr, _extObj, _fadeCss, _fadeIn, _fadeOut, _frameCss, _fullHex, _getEl, _gravity, _initYTAPI, _isAry, _isElAry, _isObj, _isStr, _postToVM, _prepHex, _randar, _setSrc, _testEl, _topKeyOfObj, _val, _wrapCss, _wrapCssP, _ytReset, dom, videoLightning;
     dom = document;
     videoLightning = (function(_this) {
       return function(obj) {
@@ -164,11 +164,7 @@
         fmar = "margin-top: -" + (this.opts.height / 2) + "px; margin-left: -" + (this.opts.width / 2) + "px;";
         fglo = "box-shadow: 0px 0px " + (g = _val(this.opts.glow, 20)) + "px " + (g / 5) + "px " + (_fullHex(_val(this.opts.glowColor, '#000'))) + ";";
         wrapCss = _boolify(this.opts.popover, false) ? _wrapCssP(this.opts.width, this.opts.height) : _wrapCss;
-        if (_boolify(this.opts.popover, false)) {
-          xCss = "background: " + (_fullHex(_val(this.opts.xBgColor, '#000'))) + "; color: " + (_fullHex(_val(this.opts.xColor, '#fff'))) + ";";
-        } else {
-          xCss = 'display: none;';
-        }
+        xCss = "background: " + (_fullHex(_val(this.opts.xBgColor, '#000'))) + "; color: " + (_fullHex(_val(this.opts.xColor, '#fff'))) + ";";
         this.target.insertAdjacentHTML('beforeend', _domStr({
           tag: 'div',
           attrs: {
@@ -191,24 +187,25 @@
                   },
                   children: [
                     {
+                      tag: 'div',
+                      inner: '&times;',
+                      attrs: {
+                        id: "close_" + this.inst,
+                        "class": 'video-close',
+                        style: "float: right; margin-right: -34px; " + fglo + " " + xCss + " padding: 0 10px 0 12px; font-size: 25px;"
+                      }
+                    }, {
                       tag: 'iframe',
                       attrs: {
                         type: 'text/html',
                         id: "iframe_" + this.inst,
-                        "class": 'video-iframe'
+                        "class": 'video-iframe',
+                        style: 'position: absolute; top: 0; left: 0;'
                       }
                     }
                   ]
                 }
               ]
-            }, {
-              tag: 'div',
-              inner: '&times;',
-              attrs: {
-                id: "close_" + this.inst,
-                "class": 'video-close',
-                style: "float: right; margin-right: -34px; " + fglo + " " + xCss + " padding: 0 10px 0 12px; font-size: 25px;"
-              }
             }
           ]
         }));
@@ -372,7 +369,7 @@
           url: location.protocol + "//www.youtube.com/embed/" + this.id,
           params: {
             enablejsapi: 1,
-            autoplay: _val(this.opts.autoplay, 1),
+            autoplay: _bitify(this.opts.autoplay, 1),
             autohide: _val(this.opts.autohide, 2),
             cc_load_policy: _val(this.opts.ccLoadPolicy, 0),
             color: _val(this.opts.color, null),
@@ -446,7 +443,7 @@
         _setSrc(this.iframe, {
           url: location.protocol + "//player.vimeo.com/video/" + this.id,
           params: {
-            autoplay: _val(this.opts.autoplay, 1),
+            autoplay: _bitify(this.opts.autoplay, 1),
             loop: _val(this.opts.loop, 0),
             title: _val(this.opts.showinfo, 1),
             byline: _val(this.opts.byline, 1),
@@ -498,6 +495,15 @@
         return p;
       } else {
         return p || d;
+      }
+    };
+    _bitify = function(p, d) {
+      if (p === false || p === 'false' || p === 0 || p === '0') {
+        return 0;
+      } else if (p === true || p === 'true' || p === '1' || p === 1) {
+        return 1;
+      } else {
+        return d;
       }
     };
     _boolify = function(p, d) {
@@ -594,7 +600,11 @@
       }
     };
     _fullHex = function(hex) {
-      return "#" + _prepHex(hex);
+      if (hex === 'transparent') {
+        return hex;
+      } else {
+        return "#" + _prepHex(hex);
+      }
     };
     _cc = function(hex) {
       return {
