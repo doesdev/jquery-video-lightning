@@ -22,7 +22,7 @@
     "preview",
     "iframe"
   ],
-  "author": "Andrew Carpenter",
+  "author": "Andrew Carpenter @ Musocrat",
   "repository": {
     "type" : "git",
     "url" : "https://github.com/musocrat/jquery-video-lightning.git"
@@ -43,5 +43,11 @@
   },
   "scripts": {
     "test": "grunt travis --verbose"
-  }
+  },
+  "licenses": [
+    {
+      "name": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ]
 }
