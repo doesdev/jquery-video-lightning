@@ -16,7 +16,7 @@
         (if _isElAry(domEls) then (els.push(el: de, opts: el.opts) for de in domEls) else els.push(el: domEls, el.opts))
     return noElErr() if els.length == 0
     settings = obj.settings || {}
-    (@vlData.instances.push(new VideoLightning(el, settings))) for el in els
+    (@vlData.instances.push(new VideoLightning(el, settings))) for el in els when el
     _initYTAPI()
     return
 

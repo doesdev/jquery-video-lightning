@@ -63,7 +63,9 @@
         settings = obj.settings || {};
         for (m = 0, len3 = els.length; m < len3; m++) {
           el = els[m];
-          _this.vlData.instances.push(new VideoLightning(el, settings));
+          if (el) {
+            _this.vlData.instances.push(new VideoLightning(el, settings));
+          }
         }
         _initYTAPI();
       };
@@ -765,3 +767,5 @@
   })(document);
 
 }).call(this);
+
+//# sourceMappingURL=videoLightning.js.map
