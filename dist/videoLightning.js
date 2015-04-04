@@ -1,5 +1,5 @@
 /*
- *  Video Lightning - v3.0.1
+ *  Video Lightning - v3.0.2
  *  Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
  *  https://github.com/musocrat/jquery-video-lightning/
  *
