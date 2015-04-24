@@ -182,7 +182,7 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 - **frameColor** *(String [hex] - default="#000")*  
 	Color of iframe video will fill
 
-- **frameBorder** *(String [border/outline css shorthand] - default="none")*
+- **frameBorder** *(String [border/outline css shorthand] - default="none")*  
 	Video iframe border `ex: '3px solid #555'`
 
 - **glow** *(Integer - default=20)*  
@@ -191,13 +191,13 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 - **glowColor** *(String [hex] - default="#000")*  
 	Glow color around video frame
 
-- **xBgColor** *(String [hex] - default="#000")*
+- **xBgColor** *(String [hex] - default="#000")*  
 	Close icon background color
 
-- **xColor** *(String [hex] - default="#fff")*
+- **xColor** *(String [hex] - default="#fff")*  
 	Close icon `×` color
 
-- **xBorder** *(String [border/outline css shorthand] - default="none")*
+- **xBorder** *(String [border/outline css shorthand] - default="none")*  
 	Close icon box border `ex: '3px solid #555'`
 
 - **fadeIn** *(Integer [ms] - default=300)*  
