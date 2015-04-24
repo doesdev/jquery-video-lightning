@@ -52,8 +52,9 @@
               }
             } else {
               els.push({
-                el: domEls
-              }, el.opts);
+                el: domEls,
+                opts: el.opts
+              });
             }
           }
         }
@@ -132,12 +133,15 @@
         if (this.opts.id.match(/^v/)) {
           this.vendor = 'vimeo';
           this.vm = true;
+        } else if (this.opts.id.match(/^f/)) {
+          this.vendor = 'iframe';
+          this.ifr = true;
         } else {
           this.vendor = 'youtube';
           this.yt = true;
         }
         window.vlData[this.vendor] = true;
-        this.id = this.opts.id.replace(/([vy]-)/i, '');
+        this.id = this.opts.id.replace(/([vyf]-)/i, '');
         results = [];
         for (i = 0, len = remap.length; i < len; i++) {
           key = remap[i];
@@ -292,7 +296,16 @@
           this.popoverPos();
         }
         this.show();
-        if (this.ready && !this.playing && this.iframe.src !== 'about:blank') {
+        if (this.ifr) {
+          _setSrc(this.iframe, {
+            url: encodeURI(this.id),
+            attrs: {
+              width: this.opts.width,
+              height: this.opts.height,
+              frameBorder: 0
+            }
+          });
+        } else if (this.ready && !this.playing && this.iframe.src !== 'about:blank') {
           if (this.yt) {
             this.ytPlay();
           }

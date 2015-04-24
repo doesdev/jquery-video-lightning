@@ -3,6 +3,11 @@
 
 Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
 
+### MAJOR BUG IN (3.0 - 3.0.2)
+If you are using these versions you will be unable to initialize on elements specified by id rather than a class.
+
+**Corrected in version 3.0.3**, so upgrading is highly recommended. 
+
 ### 3.0 is a significant update (complete re-write).
 Some things have changed, though the only real non-backward compatible change is a couple updated defaults.
 Everything else (such as renamed options and updated params) has shims in place to maintain compatibility.
@@ -265,6 +270,12 @@ Some of Youtube's options are not listed below, but everything on their params p
 
 Changes
 ----
+
+### Patch [3.0.3]
+3.0.3:
+- [BUG FIX] corrects bug preventing initializing on element by id rather than class 
+- [FEATURE] by request bare iframe option was added for embedding a webpage in a VL driven iframe
+  - usage: set vendor + video id to `'f-{url}'`, for example `'f-http://musocrat.github.io/jquery-video-lightning/'`
 
 ### General Updates
 3.0:

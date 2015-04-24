@@ -13,7 +13,8 @@
     if _isAry(optEls) then (pushRawEls(e) for e in optEls) else pushRawEls(optEls)
     for el in rawEls
       if (domEls = _getEl(el.el))
-        (if _isElAry(domEls) then (els.push(el: de, opts: el.opts) for de in domEls) else els.push(el: domEls, el.opts))
+        if _isElAry(domEls) then (els.push(el: de, opts: el.opts) for de in domEls)
+        else els.push(el: domEls, opts: el.opts)
     return noElErr() if els.length == 0
     settings = obj.settings || {}
     (@vlData.instances.push(new VideoLightning(el, settings))) for el in els when el
@@ -42,9 +43,11 @@
       @opts.width = if @opts.width then parseInt(@opts.width, 10) else 640
       @opts.height = if @opts.height then parseInt(@opts.height, 10) else 390
       @opts.id ?= 'y-dQw4w9WgXcQ'
-      if @opts.id.match(/^v/) then (@vendor = 'vimeo'; @vm = true) else (@vendor = 'youtube'; @yt = true)
+      if @opts.id.match(/^v/) then (@vendor = 'vimeo'; @vm = true)
+      else if @opts.id.match(/^f/) then (@vendor = 'iframe'; @ifr = true)
+      else (@vendor = 'youtube'; @yt = true)
       window.vlData[@vendor] = true
-      @id = @opts.id.replace(/([vy]-)/i, '')
+      @id = @opts.id.replace(/([vyf]-)/i, '')
       (@opts[key[1]] ?= @opts[key[0]]) for key in remap
 
     buildEls: =>
@@ -139,7 +142,15 @@
     play: =>
       @popoverPos() if _boolify(@opts.popover, false)
       @show()
-      if @ready && !@playing && @iframe.src != 'about:blank'
+      if @ifr
+        _setSrc(@iframe,
+          url: encodeURI(@id)
+          attrs:
+            width: @opts.width
+            height: @opts.height
+            frameBorder: 0
+        )
+      else if @ready && !@playing && @iframe.src != 'about:blank'
         @ytPlay() if @yt
         @vmPlay() if @vm
       else if !@playing
