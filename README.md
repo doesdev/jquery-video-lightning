@@ -179,6 +179,12 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 - **bdOpacity** *(Decimal [0 to 1] - default=0.6)*  
 	Opacity of page overlay
 
+- **frameColor** *(String [hex] - default="#000")*  
+	Color of iframe video will fill
+
+- **frameBorder** *(String [border/outline css shorthand] - default="none")*
+	Video iframe border `ex: '3px solid #555'`
+
 - **glow** *(Integer - default=20)*  
 	Glow around video frame
 
@@ -190,6 +196,9 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 
 - **xColor** *(String [hex] - default="#fff")*
 	Close icon `×` color
+
+- **xBorder** *(String [border/outline css shorthand] - default="none")*
+	Close icon box border `ex: '3px solid #555'`
 
 - **fadeIn** *(Integer [ms] - default=300)*  
 	Time in ms of lightbox fade in
@@ -271,14 +280,15 @@ Some of Youtube's options are not listed below, but everything on their params p
 Changes
 ----
 
+### Patch [3.0.4]
+- [FEATURE] added options for iframe background color `frameColor`, iframe border `frameBorder`, close button border `xBorder`
+
 ### Patch [3.0.3]
-3.0.3:
 - [BUG FIX] corrects bug preventing initializing on element by id rather than class 
 - [FEATURE] by request bare iframe option was added for embedding a webpage in a VL driven iframe
   - usage: set vendor + video id to `'f-{url}'`, for example `'f-http://musocrat.github.io/jquery-video-lightning/'`
 
-### General Updates
-3.0:
+### General Updates [3.0]
 - complete re-write removing the dependency on jQuery while still supporting jQuery initialization
 - using full iframe API's for Youtube and Vimeo for event handling and interaction
 - adds option to `autoclose` on video end

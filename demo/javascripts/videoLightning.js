@@ -1,5 +1,5 @@
 /*
- *  Video Lightning - v3.0.3
+ *  Video Lightning - v3.0.4
  *  Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
  *  https://github.com/musocrat/jquery-video-lightning/
  *
@@ -159,7 +159,7 @@
       };
 
       VideoLightning.prototype.buildEls = function() {
-        var bdbg, bdc, bdo, fdim, fglo, fmar, g, wrapCss, xCss;
+        var bdbg, bdc, bdo, fdim, fglo, fmar, frameCss, g, wrapCss, xCss;
         (this.target = dom.createElement('span')).className = 'video-target';
         this.el.parentNode.insertBefore(this.target, this.el);
         this.target.appendChild(this.el);
@@ -170,7 +170,8 @@
         fmar = "margin-top: -" + (this.opts.height / 2) + "px; margin-left: -" + (this.opts.width / 2) + "px;";
         fglo = "box-shadow: 0px 0px " + (g = _val(this.opts.glow, 20)) + "px " + (g / 5) + "px " + (_fullHex(_val(this.opts.glowColor, '#000'))) + ";";
         wrapCss = _boolify(this.opts.popover, false) ? _wrapCssP(this.opts.width, this.opts.height) : _wrapCss;
-        xCss = "background: " + (_fullHex(_val(this.opts.xBgColor, '#000'))) + "; color: " + (_fullHex(_val(this.opts.xColor, '#fff'))) + ";";
+        xCss = "background: " + (_fullHex(_val(this.opts.xBgColor, '#000'))) + "; color: " + (_fullHex(_val(this.opts.xColor, '#fff'))) + "; outline: " + (_val(this.opts.xBorder, 'none')) + ";";
+        frameCss = "background: " + (_fullHex(_val(this.opts.frameColor, '#000'))) + "; outline: " + (_val(this.opts.frameBorder, 'none')) + ";";
         this.target.insertAdjacentHTML('beforeend', _domStr({
           tag: 'div',
           attrs: {
@@ -206,7 +207,7 @@
                         type: 'text/html',
                         id: "iframe_" + this.inst,
                         "class": 'video-iframe',
-                        style: 'position: absolute; top: 0; left: 0;'
+                        style: "position: absolute; top: 0; left: 0; " + frameCss
                       }
                     }
                   ]

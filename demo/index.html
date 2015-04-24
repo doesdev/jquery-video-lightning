@@ -151,27 +151,34 @@
       {
         ".video-link": {
           autoplay: 1,
-          ease_out: 1000,
-          backdrop_color: "#ddd",
-          backdrop_opacity: 0.6,
+          easeOut: 1000,
+          bdColor: "#ddd",
+          bdOpacity: 0.6,
           glow: 20,
-          glow_color: "#000"
+          glowColor: "#000"
         }
       },
       {
         ".video-link2": {
           autoplay: 1,
-          backdrop_color: "#7FFF00",
-          backdrop_opacity: 0.7,
+          bdColor: "#7FFF00",
+          bdOpacity: 0.7,
           glow: 150,
-          glow_color: "#fff",
+          glowColor: "#fff",
           xColor: "#7FFF00",
           color: "#fff"
         }
       },
       {
         "#bare-iframe-link": {
-          id: 'f-iframe.html'
+          id: 'f-images/JqueryVideoLightningIconPurple144.png',
+          frameColor: '#555',
+          frameBorder: '3px solid #3A0372',
+          bdOpacity: 0.9,
+          glow: 0,
+          xBgColor: '#3A0372',
+          xColor: '#f5f5f5',
+          xBorder: '3px solid #555'
         }
       }
     ]
@@ -181,15 +188,16 @@
           id: "y-z-D1PJ1cMXs",
           autoplay: 1,
           controls: 0,
-          backdrop_color: "#fff",
-          backdrop_opacity: 1,
+          bdColor: "#fff",
+          bdOpacity: 1,
           xBgColor: 'transparent',
           xColor: 'transparent',
           glow: 0,
           width: 640,
           height: 360,
           showinfo: 0,
-          fadeIn: 3000
+          fadeIn: 3000,
+          frameColor: '#fff'
       });
   });
   $(function () {
@@ -210,10 +218,10 @@
       $(".video-link5").jqueryVideoLightning({
           autoplay: 1,
           playlist: "WkgWvaFrJv8,NCsihs3A_hM",
-          backdrop_color: "#3A0372",
-          backdrop_opacity: 0.8,
+          bdColor: "#3A0372",
+          bdOpacity: 0.8,
           glow: 50,
-          glow_color: "#F1D6F5",
+          glowColor: "#F1D6F5",
           color: "#fff",
           cover: 1
       });

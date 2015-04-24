@@ -61,9 +61,9 @@
       fmar = "margin-top: -#{@opts.height/2}px; margin-left: -#{@opts.width/2}px;"
       fglo = "box-shadow: 0px 0px #{g = _val(@opts.glow, 20)}px #{g / 5}px #{_fullHex(_val(@opts.glowColor, '#000'))};"
       wrapCss = if _boolify(@opts.popover, false) then _wrapCssP(@opts.width, @opts.height) else _wrapCss
-      #if _boolify(@opts.popover, false)
-      xCss = "background: #{_fullHex(_val(@opts.xBgColor, '#000'))}; color: #{_fullHex(_val(@opts.xColor, '#fff'))};"
-      #else xCss = 'display: none;'
+      xCss = "background: #{_fullHex(_val(@opts.xBgColor, '#000'))}; color: #{_fullHex(_val(@opts.xColor, '#fff'))};
+         outline: #{_val(@opts.xBorder, 'none')};"
+      frameCss = "background: #{_fullHex(_val(@opts.frameColor, '#000'))}; outline: #{_val(@opts.frameBorder, 'none')};"
       @target.insertAdjacentHTML 'beforeend', _domStr(
         tag: 'div'
         attrs:
@@ -91,7 +91,7 @@
                 type: 'text/html'
                 id: "iframe_#{@inst}"
                 class: 'video-iframe'
-                style: 'position: absolute; top: 0; left: 0;'
+                style: "position: absolute; top: 0; left: 0; #{frameCss}"
             ]
           ]
         ]
