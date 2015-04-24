@@ -3,7 +3,7 @@
 
 Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
 
-### MAJOR BUG IN (3.0 - 3.0.2)
+### MAJOR BUG IN (3.0.0 - 3.0.2)
 If you are using these versions you will be unable to initialize on elements specified by id rather than a class.
 
 **Corrected in version 3.0.3**, so upgrading is highly recommended. 
