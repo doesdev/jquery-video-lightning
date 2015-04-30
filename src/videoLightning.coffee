@@ -62,8 +62,9 @@
       fglo = "box-shadow: 0px 0px #{g = _val(@opts.glow, 20)}px #{g / 5}px #{_fullHex(_val(@opts.glowColor, '#000'))};"
       wrapCss = if _boolify(@opts.popover, false) then _wrapCssP(@opts.width, @opts.height) else _wrapCss
       xCss = "background: #{_fullHex(_val(@opts.xBgColor, '#000'))}; color: #{_fullHex(_val(@opts.xColor, '#fff'))};
-         outline: #{_val(@opts.xBorder, 'none')};"
-      frameCss = "background: #{_fullHex(_val(@opts.frameColor, '#000'))}; outline: #{_val(@opts.frameBorder, 'none')};"
+         border: #{_val(@opts.xBorder, 'none')}; box-sizing: border-box;"
+      frameCss = "background: #{_fullHex(_val(@opts.frameColor, '#000'))}; border: #{_val(@opts.frameBorder, 'none')};
+         box-sizing: border-box;"
       @target.insertAdjacentHTML 'beforeend', _domStr(
         tag: 'div'
         attrs:

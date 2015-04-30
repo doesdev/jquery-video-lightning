@@ -162,8 +162,8 @@
         fmar = "margin-top: -" + (this.opts.height / 2) + "px; margin-left: -" + (this.opts.width / 2) + "px;";
         fglo = "box-shadow: 0px 0px " + (g = _val(this.opts.glow, 20)) + "px " + (g / 5) + "px " + (_fullHex(_val(this.opts.glowColor, '#000'))) + ";";
         wrapCss = _boolify(this.opts.popover, false) ? _wrapCssP(this.opts.width, this.opts.height) : _wrapCss;
-        xCss = "background: " + (_fullHex(_val(this.opts.xBgColor, '#000'))) + "; color: " + (_fullHex(_val(this.opts.xColor, '#fff'))) + "; outline: " + (_val(this.opts.xBorder, 'none')) + ";";
-        frameCss = "background: " + (_fullHex(_val(this.opts.frameColor, '#000'))) + "; outline: " + (_val(this.opts.frameBorder, 'none')) + ";";
+        xCss = "background: " + (_fullHex(_val(this.opts.xBgColor, '#000'))) + "; color: " + (_fullHex(_val(this.opts.xColor, '#fff'))) + "; border: " + (_val(this.opts.xBorder, 'none')) + "; box-sizing: border-box;";
+        frameCss = "background: " + (_fullHex(_val(this.opts.frameColor, '#000'))) + "; border: " + (_val(this.opts.frameBorder, 'none')) + "; box-sizing: border-box;";
         this.target.insertAdjacentHTML('beforeend', _domStr({
           tag: 'div',
           attrs: {
