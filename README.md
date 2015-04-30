@@ -6,7 +6,7 @@ Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
 ### MAJOR BUG IN (3.0.0 - 3.0.2)
 If you are using these versions you will be unable to initialize on elements specified by id rather than a class.
 
-**Corrected in version 3.0.3**, so upgrading is highly recommended. 
+**Corrected in version 3.0.3+ **, so upgrading is highly recommended. 
 
 ### 3.0 is a significant update (complete re-write).
 Some things have changed, though the only real non-backward compatible change is a couple updated defaults.
@@ -107,7 +107,9 @@ Alternatively, for a simple setup you could initialize on a class, set your opti
 ```
 
 ### Passing in Options
-Options can be passed in any of three ways. They can be passed as attributes off the element object:
+Options can be passed in any of the following three ways. 
+
+#### Options as attributes off the element object (local to element):
 
 ```javascript
 videoLightning({
@@ -123,7 +125,7 @@ videoLightning({
 });
 ```
 
-They can be passed as attributes of the `setting` object (doesn't apply to jQuery style init):
+#### Options as attributes of the `setting` object (global, overwritten by local, doesn't apply to jQuery style init):
 
 ```javascript
 videoLightning({
@@ -142,9 +144,14 @@ videoLightning({
 });
 ```
 
-Or they can be passed as data attributes: *(Note that data attributes are all prefixed with `data-video` and camel cased options should be dashed instead in data attributes. So `startTime` becomes `data-video-start-time`)*
+#### Options as data attributes: 
+
+*(Note that data attributes are all prefixed with `data-video` and camel cased options should be dashed instead in data attributes. So `startTime` becomes `data-video-start-time`)*   
+
+*IE<10 does not support `dataset` and as such the only backported settings that work with older IE versions are `id`, `width`, and `height`*   
+
 ```html
-<div class="video-link" data-video-id="y-PKffm2uI4dk" data-video-width="1280" data-video-height="720" data-video-autoplay="true"></div>
+<div class="video-link" data-video-id="y-PKffm2uI4dk" data-video-width="1280" data-video-height="720"></div>
 ```
 
 ### Available Options
@@ -183,7 +190,7 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 	Color of iframe video will fill
 
 - **frameBorder** *(String [border/outline css shorthand] - default="none")*  
-	Video iframe border `ex: '3px solid #555'`
+	Video iframe border `ex: '3px solid #555'`, *note: will change aspect ratio of video*
 
 - **glow** *(Integer - default=20)*  
 	Glow around video frame
@@ -279,6 +286,10 @@ Some of Youtube's options are not listed below, but everything on their params p
 
 Changes
 ----
+
+### Patch [3.0.5]
+- [BUGFIX] backport `id`, `width`, and `height` data-attribute specification to work with IE<10
+- [BUGFIX] use CSS `border` property for borders instead of `outline` (note, will change aspect ratio if `frameBorder` enabled)
 
 ### Patch [3.0.4]
 - [FEATURE] added options for iframe background color `frameColor`, iframe border `frameBorder`, close button border `xBorder`

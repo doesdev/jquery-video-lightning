@@ -37,7 +37,9 @@
                ['ease_out','fadeOut'],['glow_color','glowColor'],['start_time','startTime'],['z_index','zIndex'],
                ['rick_roll','rickRoll'],['iv_load_policy','ivLoadPolicy']]
       _extObj(@opts, @elObj.opts)
-      elDataSet = @el.dataset
+      elDataSet = @el.dataset || []
+      if elDataSet.length == 0
+        (v = @el.getAttribute("data-video-#{k}"); if v then elDataSet[k] = v) for k in ['id', 'width', 'height']
       normalize = (k, v) => @opts[k.replace(/^video(.)(.*)/, (a, b, c)-> b.toLowerCase() + c)] = v
       normalize(k, v) for k, v of elDataSet
       @opts.width = if @opts.width then parseInt(@opts.width, 10) else 640

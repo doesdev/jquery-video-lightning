@@ -110,10 +110,20 @@
       }
 
       VideoLightning.prototype.buildOpts = function() {
-        var base, base1, elDataSet, i, k, key, len, name, normalize, remap, results, v;
+        var base, base1, elDataSet, i, j, k, key, len, len1, name, normalize, ref, remap, results, v;
         remap = [['backdrop_color', 'bdColor'], ['backdrop_opacity', 'bdOpacity'], ['ease_in', 'fadeIn'], ['ease_out', 'fadeOut'], ['glow_color', 'glowColor'], ['start_time', 'startTime'], ['z_index', 'zIndex'], ['rick_roll', 'rickRoll'], ['iv_load_policy', 'ivLoadPolicy']];
         _extObj(this.opts, this.elObj.opts);
-        elDataSet = this.el.dataset;
+        elDataSet = this.el.dataset || [];
+        if (elDataSet.length === 0) {
+          ref = ['id', 'width', 'height'];
+          for (i = 0, len = ref.length; i < len; i++) {
+            k = ref[i];
+            v = this.el.getAttribute("data-video-" + k);
+            if (v) {
+              elDataSet[k] = v;
+            }
+          }
+        }
         normalize = (function(_this) {
           return function(k, v) {
             return _this.opts[k.replace(/^video(.)(.*)/, function(a, b, c) {
@@ -143,8 +153,8 @@
         window.vlData[this.vendor] = true;
         this.id = this.opts.id.replace(/([vyf]-)/i, '');
         results = [];
-        for (i = 0, len = remap.length; i < len; i++) {
-          key = remap[i];
+        for (j = 0, len1 = remap.length; j < len1; j++) {
+          key = remap[j];
           results.push((base1 = this.opts)[name = key[1]] != null ? base1[name] : base1[name] = this.opts[key[0]]);
         }
         return results;
