@@ -1,22 +1,9 @@
 ![alt text](http://musocrat.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "Video Lightning Logo") Video Lightning [![Build Status](https://travis-ci.org/musocrat/jquery-video-lightning.png)](https://travis-ci.org/musocrat/jquery-video-lightning)   [![Pinkie Pie Approval Status](http://dosowisko.net/pinkiepieapproved.svg)](https://www.youtube.com/watch?v=FULyN9Ai-A0)
 ======================
 
-Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
+Turn any element into a lightbox or popover link for Youtube and Vimeo videos. 
 
-### MAJOR BUG IN (3.0.0 - 3.0.2)
-If you are using these versions you will be unable to initialize on elements specified by id rather than a class.
-
-**Corrected in version 3.0.3+ **, so upgrading is highly recommended. 
-
-### 3.0 is a significant update (complete re-write).
-Some things have changed, though the only real non-backward compatible change is a couple updated defaults.
-Everything else (such as renamed options and updated params) has shims in place to maintain compatibility.
-
-You can see a comprehensive list of all the changes below in the [changes](#changes) section.
-
-#### Going native
-Also of pretty significant note Video Lightning is no longer jQuery dependent though it still retains it's jQuery friendly API.
-See below for more info on the new non-jQuery API usage.
+Repo name is for posterity, Video Lightning is standalone so jQuery is optional.
 
 ### Table of Contents
 - [Why](#why)    
