@@ -289,7 +289,7 @@
   _extObj = (baseObj, extObj) -> (baseObj[k] = v) for k, v of extObj; return baseObj
   _isStr = (obj) -> return typeof obj == 'string'
   _isAry = (obj) -> return obj instanceof Array
-  _isElAry = (obj) -> return obj instanceof HTMLCollection
+  _isElAry = (obj) -> return (obj instanceof HTMLCollection || obj instanceof NodeList)
   _isObj = (obj) -> return obj != null && typeof obj == 'object'
   _topKeyOfObj = (obj) -> return k for k, v of obj
   _getEl = (el) ->

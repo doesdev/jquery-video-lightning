@@ -593,7 +593,7 @@
       return obj instanceof Array;
     };
     _isElAry = function(obj) {
-      return obj instanceof HTMLCollection;
+      return obj instanceof HTMLCollection || obj instanceof NodeList;
     };
     _isObj = function(obj) {
       return obj !== null && typeof obj === 'object';

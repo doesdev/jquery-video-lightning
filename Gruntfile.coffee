@@ -35,6 +35,8 @@ module.exports = (grunt) ->
       options: banner: '<%= meta.banner %>'
 
     coffee:
+      options:
+        sourceMap: true
       compile:
         files: 'src/videoLightning.js': 'src/videoLightning.coffee'
 
@@ -43,6 +45,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-mocha'
   grunt.registerTask 'default', ['coffee', 'jshint', 'concat', 'uglify', 'copy']
   grunt.registerTask 'travis', [ 'jshint' ]
 
