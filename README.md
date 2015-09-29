@@ -156,7 +156,7 @@ Video Lightning exposes all available basic API options for both Youtube and Vim
 	Video height in px
 
 - **autoplay** *(Boolean - default=true)*  
-	Start playback immediately (true,false)
+	Start playback immediately once the element is clicked (true,false)
 
 - **autoclose** *(Boolean - default=true)*  
 	Autoclose lightbox / popover once video is complete (true,false)
