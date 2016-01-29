@@ -44,6 +44,10 @@
       normalize(k, v) for k, v of elDataSet
       @opts.width = if @opts.width then parseInt(@opts.width, 10) else 640
       @opts.height = if @opts.height then parseInt(@opts.height, 10) else 390
+      display_ratio = this.opts.height / this.opts.width
+      if (@opts.width > (window.innerWidth - 90))
+        @opts.width = window.innerWidth - 90
+        @opts.height = Math.round(display_ratio * @opts.width)
       @opts.id ?= 'y-dQw4w9WgXcQ'
       if @opts.id.match(/^v/) then (@vendor = 'vimeo'; @vm = true)
       else if @opts.id.match(/^f/) then (@vendor = 'iframe'; @ifr = true)

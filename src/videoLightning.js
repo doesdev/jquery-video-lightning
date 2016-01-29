@@ -110,7 +110,7 @@
       }
 
       VideoLightning.prototype.buildOpts = function() {
-        var base, base1, elDataSet, i, j, k, key, len, len1, name, normalize, ref, remap, results, v;
+        var base, base1, display_ratio, elDataSet, i, j, k, key, len, len1, name, normalize, ref, remap, results, v;
         remap = [['backdrop_color', 'bdColor'], ['backdrop_opacity', 'bdOpacity'], ['ease_in', 'fadeIn'], ['ease_out', 'fadeOut'], ['glow_color', 'glowColor'], ['start_time', 'startTime'], ['z_index', 'zIndex'], ['rick_roll', 'rickRoll'], ['iv_load_policy', 'ivLoadPolicy']];
         _extObj(this.opts, this.elObj.opts);
         elDataSet = this.el.dataset || [];
@@ -137,6 +137,11 @@
         }
         this.opts.width = this.opts.width ? parseInt(this.opts.width, 10) : 640;
         this.opts.height = this.opts.height ? parseInt(this.opts.height, 10) : 390;
+        display_ratio = this.opts.height / this.opts.width;
+        if (this.opts.width > (window.innerWidth - 90)) {
+          this.opts.width = window.innerWidth - 90;
+          this.opts.height = Math.round(display_ratio * this.opts.width);
+        }
         if ((base = this.opts).id == null) {
           base.id = 'y-dQw4w9WgXcQ';
         }
