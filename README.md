@@ -1,4 +1,4 @@
-![alt text](http://musocrat.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "Video Lightning Logo") Video Lightning [![Build Status](https://travis-ci.org/musocrat/jquery-video-lightning.png)](https://travis-ci.org/musocrat/jquery-video-lightning)   [![Pinkie Pie Approval Status](http://dosowisko.net/pinkiepieapproved.svg)](https://www.youtube.com/watch?v=FULyN9Ai-A0)
+![alt text](http://doesdev.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "Video Lightning Logo") Video Lightning [![Build Status](https://travis-ci.org/doesdev/jquery-video-lightning.png)](https://travis-ci.org/doesdev/jquery-video-lightning)   [![Pinkie Pie Approval Status](http://dosowisko.net/pinkiepieapproved.svg)](https://www.youtube.com/watch?v=FULyN9Ai-A0)
 ======================
 
 Turn any element into a lightbox or popover link for Youtube and Vimeo videos. 
@@ -37,7 +37,7 @@ Features
 
 Demos
 ----
-Check the [GH Project Page](http://musocrat.github.io/jquery-video-lightning/) for demos.
+Check the [GH Project Page](http://doesdev.github.io/jquery-video-lightning/) for demos.
 
 Docs
 ----
@@ -284,7 +284,7 @@ Changes
 ### Patch [3.0.3]
 - [BUG FIX] corrects bug preventing initializing on element by id rather than class 
 - [FEATURE] by request bare iframe option was added for embedding a webpage in a VL driven iframe
-  - usage: set vendor + video id to `'f-{url}'`, for example `'f-http://musocrat.github.io/jquery-video-lightning/'`
+  - usage: set vendor + video id to `'f-{url}'`, for example `'f-http://doesdev.github.io/jquery-video-lightning/'`
 
 ### General Updates [3.0]
 - complete re-write removing the dependency on jQuery while still supporting jQuery initialization
@@ -334,11 +334,11 @@ Changes
 
 Alternate Builds
 ----
-[2.0.1 minified](https://github.com/musocrat/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/dist/jquery-video-lightning.min.js) (latest jQuery only build) (8.514 kb)  
-[2.0.1 Docs](https://github.com/musocrat/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/README.md)
+[2.0.1 minified](https://github.com/doesdev/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/dist/jquery-video-lightning.min.js) (latest jQuery only build) (8.514 kb)  
+[2.0.1 Docs](https://github.com/doesdev/jquery-video-lightning/blob/b0b2218812d4a2f9bd37f9262f7efb227088dc0e/README.md)
 
-[1.1.0 minified](https://github.com/musocrat/jquery-video-lightning/blob/87c0b9370dd3ea3ad09a82541ad295a543139e32/dist/jquery-video-lightning.min.js) (pre-popover, lightbox only) (4.646 kb)  
-[1.1.0 Docs](https://github.com/musocrat/jquery-video-lightning/blob/736846ef61a9e7f8d0c85f362ab791b19986ce1f/README.md)
+[1.1.0 minified](https://github.com/doesdev/jquery-video-lightning/blob/87c0b9370dd3ea3ad09a82541ad295a543139e32/dist/jquery-video-lightning.min.js) (pre-popover, lightbox only) (4.646 kb)  
+[1.1.0 Docs](https://github.com/doesdev/jquery-video-lightning/blob/736846ef61a9e7f8d0c85f362ab791b19986ce1f/README.md)
 
 Contributing
 ----
