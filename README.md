@@ -1,6 +1,8 @@
 ![alt text](http://doesdev.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "Video Lightning Logo") Video Lightning [![Build Status](https://travis-ci.org/doesdev/jquery-video-lightning.png)](https://travis-ci.org/doesdev/jquery-video-lightning)   [![Pinkie Pie Approval Status](http://dosowisko.net/pinkiepieapproved.svg)](https://www.youtube.com/watch?v=FULyN9Ai-A0)
 ======================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/doesdev/jquery-video-lightning.svg)](https://greenkeeper.io/)
+
 Turn any element into a lightbox or popover link for Youtube and Vimeo videos. 
 
 Repo name is for posterity, Video Lightning is standalone so jQuery is optional.
