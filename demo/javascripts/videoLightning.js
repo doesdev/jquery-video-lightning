@@ -1,5 +1,5 @@
 /*
- *  Video Lightning - v3.0.6
+ *  Video Lightning - v3.0.7
  *  Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
  *  https://github.com/musocrat/jquery-video-lightning/
  *
@@ -397,7 +397,7 @@
 
       VideoLightning.prototype.initPlayerYT = function() {
         _setSrc(this.iframe, {
-          url: location.protocol + "//www.youtube.com/embed/" + this.id,
+          url: "https://www.youtube.com/embed/" + this.id,
           params: {
             enablejsapi: 1,
             autoplay: _bitify(this.opts.autoplay, 1),
@@ -457,7 +457,10 @@
       VideoLightning.prototype.ytStop = function() {
         _ytReset(this.ytPlayer, this.opts.startTime);
         this.ytPlayer.stopVideo();
-        return this.ytPlayer.clearVideo();
+        this.ytPlayer.clearVideo();
+        if (this.opts.startTime) {
+          this.clear();
+        }
       };
 
       VideoLightning.prototype.ytState = function(e) {
@@ -472,7 +475,7 @@
 
       VideoLightning.prototype.initPlayerVM = function() {
         _setSrc(this.iframe, {
-          url: location.protocol + "//player.vimeo.com/video/" + this.id,
+          url: "https://player.vimeo.com/video/" + this.id,
           params: {
             autoplay: _bitify(this.opts.autoplay, 1),
             loop: _val(this.opts.loop, 0),
@@ -516,6 +519,9 @@
 
       VideoLightning.prototype.vmStop = function() {
         _postToVM(this.vmPlayer, this.id, 'pause');
+        if (this.opts.startTime) {
+          this.clear();
+        }
       };
 
       return VideoLightning;
@@ -682,7 +688,7 @@
       vScript = document.createElement('script');
       vScript.id = 'ytScript';
       vScript.async = true;
-      vScript.src = location.protocol + "//www.youtube.com/iframe_api";
+      vScript.src = "https://www.youtube.com/iframe_api";
       vFuncs.parentNode.insertBefore(vScript, vFuncs.nextSibling);
     };
     _ytReset = function(p, s) {
@@ -705,7 +711,7 @@
       } : {
         method: k
       };
-      return player.contentWindow.postMessage(JSON.stringify(data), location.protocol + "//player.vimeo.com/video/" + id);
+      return player.contentWindow.postMessage(JSON.stringify(data), "https://player.vimeo.com/video/" + id);
     };
     _coverEl = function(target, src) {
       var cover;

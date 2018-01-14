@@ -1,7 +1,7 @@
 ![alt text](http://doesdev.github.io/jquery-video-lightning/images/JqueryVideoLightningIcon45.png "Video Lightning Logo") Video Lightning [![Build Status](https://travis-ci.org/doesdev/jquery-video-lightning.png)](https://travis-ci.org/doesdev/jquery-video-lightning)   [![Pinkie Pie Approval Status](http://dosowisko.net/pinkiepieapproved.svg)](https://www.youtube.com/watch?v=FULyN9Ai-A0)
 ======================
 
-Turn any element into a lightbox or popover link for Youtube and Vimeo videos. 
+Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
 
 Repo name is for posterity, Video Lightning is standalone so jQuery is optional.
 
@@ -94,7 +94,7 @@ Alternatively, for a simple setup you could initialize on a class, set your opti
 ```
 
 ### Passing in Options
-Options can be passed in any of the following three ways. 
+Options can be passed in any of the following three ways.
 
 #### Options as attributes off the element object (local to element):
 
@@ -131,7 +131,7 @@ videoLightning({
 });
 ```
 
-#### Options as data attributes: 
+#### Options as data attributes:
 
 *(Note that data attributes are all prefixed with `data-video` and camel cased options should be dashed instead in data attributes. So `startTime` becomes `data-video-start-time`)*   
 
@@ -274,6 +274,10 @@ Some of Youtube's options are not listed below, but everything on their params p
 Changes
 ----
 
+### Patch [3.0.7]
+- [BUGFIX] start time ignored on subsequent opens ([#23](https://github.com/doesdev/jquery-video-lightning/issues/23))
+- [BUGFIX] protocol for YT and Vimeo are always https
+
 ### Patch [3.0.5]
 - [BUGFIX] backport `id`, `width`, and `height` data-attribute specification to work with IE<10
 - [BUGFIX] use CSS `border` property for borders instead of `outline` (note, will change aspect ratio if `frameBorder` enabled)
@@ -282,7 +286,7 @@ Changes
 - [FEATURE] added options for iframe background color `frameColor`, iframe border `frameBorder`, close button border `xBorder`
 
 ### Patch [3.0.3]
-- [BUG FIX] corrects bug preventing initializing on element by id rather than class 
+- [BUG FIX] corrects bug preventing initializing on element by id rather than class
 - [FEATURE] by request bare iframe option was added for embedding a webpage in a VL driven iframe
   - usage: set vendor + video id to `'f-{url}'`, for example `'f-http://doesdev.github.io/jquery-video-lightning/'`
 

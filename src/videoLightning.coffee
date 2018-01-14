@@ -189,7 +189,7 @@
 
     initPlayerYT: =>
       _setSrc(@iframe,
-        url: "#{location.protocol}//www.youtube.com/embed/#{@id}"
+        url: "https://www.youtube.com/embed/#{@id}"
         params:
           enablejsapi: 1
           autoplay: _bitify(@opts.autoplay, 1)
@@ -236,6 +236,8 @@
       _ytReset(@ytPlayer, @opts.startTime)
       @ytPlayer.stopVideo()
       @ytPlayer.clearVideo()
+      @clear() if @opts.startTime
+      return
 
     ytState: (e) => @stop(_val(@opts.fadeOut, 1000)) if e.data == 0 && _boolify(@opts.autoclose, true)
 
@@ -243,7 +245,7 @@
 
     initPlayerVM: =>
       _setSrc(@iframe,
-        url: "#{location.protocol}//player.vimeo.com/video/#{@id}"
+        url: "https://player.vimeo.com/video/#{@id}"
         params:
           autoplay: _bitify(@opts.autoplay, 1)
           loop: _val(@opts.loop, 0)
@@ -274,7 +276,10 @@
 
     vmPlay: => _postToVM(@vmPlayer, @id, 'play'); return
 
-    vmStop: => _postToVM(@vmPlayer, @id, 'pause'); return
+    vmStop: =>
+      _postToVM(@vmPlayer, @id, 'pause')
+      @clear() if @opts.startTime
+      return
 
   # HELPERS
   _val = (p, d) -> return if p in [false, 'false', 0, '0'] then p else p || d
@@ -329,13 +334,13 @@
     vScript = document.createElement('script')
     vScript.id = 'ytScript'
     vScript.async = true
-    vScript.src = "#{location.protocol}//www.youtube.com/iframe_api"
+    vScript.src = "https://www.youtube.com/iframe_api"
     vFuncs.parentNode.insertBefore(vScript, vFuncs.nextSibling)
     return
   _ytReset = (p, s = 0) -> if (p.getDuration() - 3) < p.getCurrentTime() then p.pauseVideo(); p.seekTo(s, false); return
   _postToVM = (player, id, k, v = null) ->
     data = if v then {method: k, value: v} else {method: k}
-    player.contentWindow.postMessage(JSON.stringify(data), "#{location.protocol}//player.vimeo.com/video/#{id}")
+    player.contentWindow.postMessage(JSON.stringify(data), "https://player.vimeo.com/video/#{id}")
   _coverEl = (target, src) ->
     cover = dom.createElement('img')
     cover.className = 'video-cover'

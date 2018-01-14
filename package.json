@@ -1,7 +1,7 @@
 {
   "name": "video-lightning",
   "title": "Video Lightning",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "Turn any element into a lightbox or popover link for Youtube and Vimeo videos.",
   "keywords": [
     "jquery",
@@ -44,7 +44,8 @@
     "should": "~5.2.0"
   },
   "scripts": {
-    "test": "grunt travis --verbose"
+    "test": "grunt travis --verbose",
+    "start": "grunt default"
   },
   "licenses": [
     {
