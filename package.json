@@ -3,6 +3,9 @@
   "title": "Video Lightning",
   "version": "3.0.6",
   "description": "Turn any element into a lightbox or popover link for Youtube and Vimeo videos.",
+  "files": ["index.js", "module.js"],
+  "main": "index.js",
+  "module": "module.js",
   "keywords": [
     "jquery",
     "jquery-plugin",
@@ -22,34 +25,16 @@
     "preview",
     "iframe"
   ],
-  "author": "Andrew Carpenter @ Musocrat",
+  "author": "Andrew Carpenter (https://github.com/doesdev)",
+  "license": "MIT",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/musocrat/jquery-video-lightning.git"
+    "type": "git",
+    "url": "https://github.com/doesdev/video-lightning.git"
   },
   "bugs": {
-    "url" : "https://github.com/musocrat/jquery-video-lightning/issues",
-    "email" : "info@musocrat.com"
+    "url": "https://github.com/doesdev/video-lightning/issues"
   },
-  "homepage": "https://github.com/musocrat/jquery-video-lightning/",
-  "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-cli": "~0.1.13",
-    "grunt-contrib-jshint": "~0.11.0",
-    "grunt-contrib-concat": "~0.5.0",
-    "grunt-contrib-uglify": "~0.8.0",
-    "grunt-contrib-coffee": "~0.13.0",
-    "grunt-contrib-copy": "~0.8.0",
-    "grunt-mocha": "~0.4.12",
-    "should": "~5.2.0"
-  },
-  "scripts": {
-    "test": "grunt travis --verbose"
-  },
-  "licenses": [
-    {
-      "name": "MIT",
-      "url": "http://www.opensource.org/licenses/mit-license.php"
-    }
-  ]
+  "homepage": "https://github.com/doesdev/video-lightning/",
+  "dependencies": {},
+  "devDependencies": {}
 }
