@@ -1,7 +1,7 @@
 {
   "name": "video-lightning",
   "title": "Video Lightning",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "Turn any element into a lightbox or popover link for Youtube and Vimeo videos.",
   "keywords": [
     "jquery",
@@ -24,24 +24,24 @@
   ],
   "author": "Andrew Carpenter @ Musocrat",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/musocrat/jquery-video-lightning.git"
+    "type": "git",
+    "url": "https://github.com/musocrat/jquery-video-lightning.git"
   },
   "bugs": {
-    "url" : "https://github.com/musocrat/jquery-video-lightning/issues",
-    "email" : "info@musocrat.com"
+    "url": "https://github.com/musocrat/jquery-video-lightning/issues",
+    "email": "info@musocrat.com"
   },
   "homepage": "https://github.com/musocrat/jquery-video-lightning/",
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-cli": "~0.1.13",
-    "grunt-contrib-jshint": "~0.11.0",
-    "grunt-contrib-concat": "~0.5.0",
-    "grunt-contrib-uglify": "~0.8.0",
-    "grunt-contrib-coffee": "~0.13.0",
-    "grunt-contrib-copy": "~0.8.0",
-    "grunt-mocha": "~0.4.12",
-    "should": "~5.2.0"
+    "grunt": "~1.0.1",
+    "grunt-cli": "~1.2.0",
+    "grunt-contrib-jshint": "~1.1.0",
+    "grunt-contrib-concat": "~1.0.1",
+    "grunt-contrib-uglify": "~3.3.0",
+    "grunt-contrib-coffee": "~1.0.0",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-mocha": "~1.0.4",
+    "should": "~13.2.1"
   },
   "scripts": {
     "test": "grunt travis --verbose",

@@ -274,9 +274,10 @@ Some of Youtube's options are not listed below, but everything on their params p
 Changes
 ----
 
-### Patch [3.0.7]
+### Patch [3.0.8]
 - [BUGFIX] start time ignored on subsequent opens ([#23](https://github.com/doesdev/jquery-video-lightning/issues/23))
 - [BUGFIX] protocol for YT and Vimeo are always https
+- [DEPS] update dev dependencies
 
 ### Patch [3.0.5]
 - [BUGFIX] backport `id`, `width`, and `height` data-attribute specification to work with IE<10
