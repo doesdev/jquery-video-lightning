@@ -1,5 +1,5 @@
 /*
- *  Video Lightning - v3.0.6
+ *  Video Lightning - v3.0.8
  *  Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
  *  https://github.com/musocrat/jquery-video-lightning/
  *
@@ -118,7 +118,7 @@
       }
 
       VideoLightning.prototype.buildOpts = function() {
-        var base, base1, elDataSet, i, j, k, key, len, len1, name, normalize, ref, remap, results, v;
+        var base, base1, display_ratio, elDataSet, i, j, k, key, len, len1, name, normalize, ref, remap, results, v;
         remap = [['backdrop_color', 'bdColor'], ['backdrop_opacity', 'bdOpacity'], ['ease_in', 'fadeIn'], ['ease_out', 'fadeOut'], ['glow_color', 'glowColor'], ['start_time', 'startTime'], ['z_index', 'zIndex'], ['rick_roll', 'rickRoll'], ['iv_load_policy', 'ivLoadPolicy']];
         _extObj(this.opts, this.elObj.opts);
         elDataSet = this.el.dataset || [];
@@ -145,6 +145,11 @@
         }
         this.opts.width = this.opts.width ? parseInt(this.opts.width, 10) : 640;
         this.opts.height = this.opts.height ? parseInt(this.opts.height, 10) : 390;
+        display_ratio = this.opts.height / this.opts.width;
+        if (this.opts.width > (window.innerWidth - 90)) {
+          this.opts.width = window.innerWidth - 90;
+          this.opts.height = Math.round(display_ratio * this.opts.width);
+        }
         if ((base = this.opts).id == null) {
           base.id = 'y-dQw4w9WgXcQ';
         }
@@ -392,7 +397,7 @@
 
       VideoLightning.prototype.initPlayerYT = function() {
         _setSrc(this.iframe, {
-          url: location.protocol + "//www.youtube.com/embed/" + this.id,
+          url: "https://www.youtube.com/embed/" + this.id,
           params: {
             enablejsapi: 1,
             autoplay: _bitify(this.opts.autoplay, 1),
@@ -452,7 +457,10 @@
       VideoLightning.prototype.ytStop = function() {
         _ytReset(this.ytPlayer, this.opts.startTime);
         this.ytPlayer.stopVideo();
-        return this.ytPlayer.clearVideo();
+        this.ytPlayer.clearVideo();
+        if (this.opts.startTime) {
+          this.clear();
+        }
       };
 
       VideoLightning.prototype.ytState = function(e) {
@@ -467,7 +475,7 @@
 
       VideoLightning.prototype.initPlayerVM = function() {
         _setSrc(this.iframe, {
-          url: location.protocol + "//player.vimeo.com/video/" + this.id,
+          url: "https://player.vimeo.com/video/" + this.id,
           params: {
             autoplay: _bitify(this.opts.autoplay, 1),
             loop: _val(this.opts.loop, 0),
@@ -511,6 +519,9 @@
 
       VideoLightning.prototype.vmStop = function() {
         _postToVM(this.vmPlayer, this.id, 'pause');
+        if (this.opts.startTime) {
+          this.clear();
+        }
       };
 
       return VideoLightning;
@@ -677,7 +688,7 @@
       vScript = document.createElement('script');
       vScript.id = 'ytScript';
       vScript.async = true;
-      vScript.src = location.protocol + "//www.youtube.com/iframe_api";
+      vScript.src = "https://www.youtube.com/iframe_api";
       vFuncs.parentNode.insertBefore(vScript, vFuncs.nextSibling);
     };
     _ytReset = function(p, s) {
@@ -700,7 +711,7 @@
       } : {
         method: k
       };
-      return player.contentWindow.postMessage(JSON.stringify(data), location.protocol + "//player.vimeo.com/video/" + id);
+      return player.contentWindow.postMessage(JSON.stringify(data), "https://player.vimeo.com/video/" + id);
     };
     _coverEl = function(target, src) {
       var cover;
