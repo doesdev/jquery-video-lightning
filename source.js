@@ -1,3 +1,5 @@
 'use strict'
 
-module.exports = () => { throw new Error('module not implemented') }
+module.exports = async ({element, elements = [], settings = {}} = {}) => {
+  return Promise.resolve(elements)
+}
