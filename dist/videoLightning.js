@@ -1,5 +1,5 @@
 /*
- *  Video Lightning - v3.0.8
+ *  Video Lightning - v3.0.9
  *  Turn any element into a lightbox or popover link for Youtube and Vimeo videos.
  *  https://github.com/musocrat/jquery-video-lightning/
  *
@@ -146,7 +146,7 @@
         this.opts.width = this.opts.width ? parseInt(this.opts.width, 10) : 640;
         this.opts.height = this.opts.height ? parseInt(this.opts.height, 10) : 390;
         display_ratio = this.opts.height / this.opts.width;
-        if (this.opts.width > (window.innerWidth - 90)) {
+        if (!this.opts.fullscreenAllowed && this.opts.width > (window.innerWidth - 90)) {
           this.opts.width = window.innerWidth - 90;
           this.opts.height = Math.round(display_ratio * this.opts.width);
         }
