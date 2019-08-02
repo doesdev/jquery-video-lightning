@@ -2,11 +2,14 @@
 
 /* API
 
+const videoLightning = require('video-lightning')
+
+videoLightning([elements Array], {options})
+
 WHAT IT SHOULD DO:
 - take global options
-- take HTMLElement(s) OR HTMLElement query selectors
+- take HTMLElement(s)
 - take options specific to element(s)
-- normalize all elements into an array of HTMLElements with their options
 - for each element do the following
   - wrap element in `.vl-video-target` with optional tag type (default `span`)
   - insert sibling el `.vl-video-wrapper` with optional tag type (default `div`)
