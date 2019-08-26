@@ -255,6 +255,7 @@ box-sizing: border-box;`
     cover () { if (this.yt) { this.coverYT() } }
 
     initPlayerYT () {
+      this.iframe.setAttribute('allowFullScreen', '')
       _setSrc(this.iframe, {
         url: `https://www.youtube.com/embed/${this.id}`,
         params: {
@@ -289,7 +290,6 @@ box-sizing: border-box;`
         }
       }
       )
-      this.iframe.setAttribute('allowFullScreen', '')
       if (window.vlData.ytAPIReady) { return this.setYTPlayer() }
     }
 
@@ -317,6 +317,7 @@ box-sizing: border-box;`
     coverYT () { this.ytCover = _coverEl(this.target, `//img.youtube.com/vi/${this.id}/hqdefault.jpg`) }
 
     initPlayerVM () {
+      this.iframe.setAttribute('allowFullScreen', '')
       _setSrc(this.iframe, {
         url: `https://player.vimeo.com/video/${this.id}`,
         params: {
@@ -336,7 +337,6 @@ box-sizing: border-box;`
         }
       }
       )
-      this.iframe.setAttribute('allowFullScreen', '')
       window.addEventListener('message', this.vmListen, false)
       return this.vmPlayer != null ? this.vmPlayer : (this.vmPlayer = this.iframe)
     }
